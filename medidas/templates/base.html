@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Solano Pillaca Jason Ennio">
+
+  <title>{% block title %}{% endblock title %}</title>
+
+  <!-- Bootstrap Css -->
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- Hoja de estilos -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  {% block styles %}{% endblock styles %}
+
+  <!-- Google fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Muli:400,700&display=swap" rel="stylesheet">
+
+  <!-- Ionic icons -->
+  <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/049f05bf2b.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+  <div class="d-flex" id="content-wrapper">
+
+    <!-- Sidebar -->
+    <div id="sidebar-container" class="bg-light border-right">
+      <div class="logo">
+        <h4 class="font-weight-bold mb-0">Kiwi Optic</h4>
+      </div>
+      <div class="menu list-group-flush">
+        <a href="{% url 'medidas:index' %}" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0"><i class="fas fa-ellipsis-v"></i><i class="fas fa-ellipsis-v"></i><i class="fas fa-ellipsis-v"></i> Dashboard</a>
+        <a href="{% url 'medidas:prescription' %}" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0"><i class="fas fa-file-medical"></i> Añadir prescripcion</a>
+        <a href="{% url 'medidas:prescription-list' %}" class="list-group-item list-group-item-action text-muted bg-light p-3 border-0"><i class="fas fa-file-medical"></i> Ver prescripciones</a>
+      </div>
+    </div>
+    <!-- Fin sidebar -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper" class="w-100 bg-light-blue">
+
+      <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container">
+          <button class="btn btn-primary text-primary" id="menu-toggle">Mostrar / esconder menu</button>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+              <li class="nav-item dropdown">
+                <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Esther
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#">Mi perfil</a>
+                  <a class="dropdown-item" href="#">Suscripciones</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Cerrar sesión</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div id="content" class="container-fluid px-0 px-sm-1 px-md-2 p-lg-3">
+        {% block content %}{% endblock content %}
+      </div>
+    </div>
+    <!-- Fin Page Content -->
+  </div>
+  
+  <!-- Fin wrapper -->
+
+  <!-- Bootstrap y JQuery -->
+  <script src="{% static 'js/jquery.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+  <!-- Abrir / cerrar menu -->
+  <script>
+    $("#menu-toggle").click(function (e) {
+      e.preventDefault();
+      $("#content-wrapper").toggleClass("toggled");
+    });
+  </script>
+  {% block script %}{% endblock script %}
+
+</body>
+
+</html>

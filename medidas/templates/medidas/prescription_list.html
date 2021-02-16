@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Optica - Prescripciones{% endblock title %}
+{% block styles %}
+
+{% endblock styles %}
+{% block content %}
+<section class='py-0 mb-5'>
+    {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{message.tags}}">
+            {{message}}
+          </div>
+        {% endfor %}
+      {% endif %}
+    <div class="row no-gutters">
+        <div class='col'>
+            <table class='table table-responsive m-0'>
+                <tr class="">
+                    <th class='text-center' scope='col'>Fecha</th>
+                    <th class='text-center' scope='col'>Nombres y apellidos</th>
+                    <th class='text-center' scope='col'>Dni</th>
+                    <th class='text-center' scope='col'>Celular</th>
+                    <th class='text-center' scope='col'>Precio</th>
+                    <th class='text-center' scope='col'>Opciones</th>
+                </tr>
+                {% for prescription in prescriptions %}
+                <tr class="">
+                    <td class='text-center' scope='col'>{{prescription.date|date:'d/m/Y'}}</td>
+                    <td class='text-center' scope='col'>{{prescription.patient}}</td>
+                    <td class='text-center' scope='col'>{{prescription.patient.dni|default_if_none:"-----"}}</td>
+                    <td class='text-center' scope='col'>{{prescription.patient.phone|default_if_none:"-----"}}</td>
+                    <td class='text-center' scope='col'>S/.{{prescription.price|default_if_none:"-----"}}</td>
+                    <td class='text-center' scope='col'><button name='id' type='submit' form='see' value='{{prescription.id}}' href="{% url 'medidas:prescription' %}" class='btn btn-primary text-primary'>Ver</button></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+<form method='get' action="{% url 'medidas:prescription' %}" id='see'>
+
+</form>
+</section>
+{% endblock content %}
+{% block script %}
+<script>
+function fillTable(button){
+    {% comment %} document.getElementById('prescription-table').innerHTML=button.value; {% endcomment %}
+}
+</script>
+{% endblock script %}

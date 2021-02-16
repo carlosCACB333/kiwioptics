@@ -1,0 +1,143 @@
+{% extends 'base.html' %} {% load static %} {% load widget_tweaks %} {% block title %} Optica - Receta
+medica {% endblock title %} 
+{% block styles %}
+<link href="{% static 'css/prescription.css' %}" rel="stylesheet" />
+<style>
+     table, th, td, tbody, thead {
+        border-collapse: collapse;
+    }
+    body {
+        line-height: 1.2;
+    }
+</style>
+{% endblock styles %}
+ {% block content %}
+<section class="py-0 mb-5">
+  <div class="row no-gutters">
+    <div class="col-lg-3 px-0 pr-lg-2">
+        <div class="card m-0">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-blind"></i> Paciente</h6>
+            </div>
+            <div class="card-body">
+                <form action="">
+                    {{patient_form}}
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9 px-0 pl-lg-2">
+        <div class="card">
+            <div class="card-header pt-2">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <h6 class='my-2 ml-2 mr-3'><i class="fas fa-file-medical"></i> Medidas</h6>
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#lejos">Lejos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#cerca">Cerca</a>
+                    </li>
+                </ul>
+            </div>
+            <div class='py-4 px-3'>
+                <div class="card-body table-responsive-md p-0 mb-4">
+                    <div class='tab-content'>
+                        <div class="tab-pane container active px-0" id="lejos">
+                            <table class='table table-bordered table-responsive m-0'>
+                                        <tr class="">
+                                            <th colspan='2' class='text-center bg-primary' style='width: 16%' scope='col'></th>
+                                            <th class='text-center' style='width: 21%' scope='col'>&nbsp;&nbsp;&nbsp;&nbsp;Esfera&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                            <th class='text-center' style='width: 21%' scope='col'>&nbsp;&nbsp;&nbsp;Cilindro&nbsp;&nbsp;&nbsp;</th>
+                                            <th class='text-center' style='width: 21%' scope='col'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eje&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                            <th class='text-center' style='width: 21%' scope='col'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Av.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                        </tr>
+                                        <tr class="">
+                                            <th class='text-center px-0' rowspan='3' scope='row'><span class='my-5' style='writing-mode: vertical-rl; transform: rotate(180deg);'>Lejos</span></th>
+                                            <th class='text-center px-0' scope='row'>OD</th>
+                                            <td>{{prescription_form.far_spherical_right|attr:"form:prescription_form"}}</td>
+                                            <td>{{prescription_form.far_cylinder_right|attr:"form:prescription_form"}}</td>
+                                            <td>{{prescription_form.far_axis_right|attr:"form:prescription_form"}}</td>
+                                            <td>{{prescription_form.far_av_right|attr:"form:prescription_form"}}</td>
+                                        </tr>
+                                        <tr class="">
+                                            <th class='text-center px-0' scope='row'>OI</th>
+                                            <td>{{prescription_form.far_spherical_left|attr:"form:prescription_form"}}</td>
+                                            <td>{{prescription_form.far_cylinder_left|attr:"form:prescription_form"}}</td>
+                                            <td>{{prescription_form.far_axis_left|attr:"form:prescription_form"}}</td>
+                                            <td>{{prescription_form.far_av_left|attr:"form:prescription_form"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class='text-center px-0' scope='row'>DIP</th>
+                                            <td colspan='1'>{{prescription_form.far_dip|attr:"form:prescription_form"}}</td>
+                                        </tr>
+                            </table>
+                        </div>
+                        <div class="tab-pane container fade px-0" id="cerca">
+                            <table class='table table-bordered table-responsive m-0'>
+                                        <tr class="">
+                                            <th colspan='2' class='text-center bg-primary' style='width: 16%' scope='col'></th>
+                                            <th class='text-center' style='width: 21%' scope='col'>&nbsp;&nbsp;&nbsp;&nbsp;Esfera&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                            <th class='text-center' style='width: 21%' scope='col'>&nbsp;&nbsp;&nbsp;Cilindro&nbsp;&nbsp;&nbsp;</th>
+                                            <th class='text-center' style='width: 21%' scope='col'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eje&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                            <th class='text-center' style='width: 21%' scope='col'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Av.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                        </tr>
+                                        <tr class="">
+                                            <th class='text-center px-0' rowspan='3' scope='row'><span class='my-5' style='writing-mode: vertical-rl; transform: rotate(180deg);'>Cerca</span></th>
+                                            <th class='text-center px-0' scope='row'>OD</th>
+                                            <td>{{prescription_form.near_spherical_right|attr:"form:prescription_form"}}</td>
+                                            <td>{{prescription_form.near_cylinder_right|attr:"form:prescription_form"}}</td>
+                                            <td>{{prescription_form.near_axis_right|attr:"form:prescription_form"}}</td>
+                                            <td>{{prescription_form.near_av_right|attr:"form:prescription_form"}}</td>
+                                        </tr>
+                                        <tr class="">
+                                            <th class='text-center px-0' scope='row'>OI</th>
+                                            <td>{{prescription_form.near_spherical_left|attr:"form:prescription_form"}}</td>
+                                            <td>{{prescription_form.near_cylinder_left|attr:"form:prescription_form"}}</td>
+                                            <td>{{prescription_form.near_axis_left|attr:"form:prescription_form"}}</td>
+                                            <td>{{prescription_form.near_av_left|attr:"form:prescription_form"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class='text-center px-0' scope='row'>DIP</th>
+                                            <td colspan='1'>{{prescription_form.near_dip|attr:"form:prescription_form"}}</td>
+                                        </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class='form-row justify-content-around my-3 mx-0'>
+                    <div class='col-3'>
+                        {{prescription_form.intermediate_add.label_tag}}
+                        {{prescription_form.intermediate_add|attr:"form:prescription_form"}}
+                    </div>
+                    <div class='col-3'>
+                        {{prescription_form.near_add.label_tag}}
+                        {{prescription_form.near_add|attr:"form:prescription_form"}}
+                    </div>
+                </div>
+                <div class=''>
+                    <div class="form-group">
+                        {{prescription_form.observation.label_tag}}
+                        {{prescription_form.observation|attr:"rows:3"|attr:"form:prescription_form"}}
+                    </div>
+                    <div class="form-row">
+                        <div class='col-2'>
+                            {{prescription_form.price.label_tag}}
+                            {{prescription_form.price|attr:"form:prescription_form"}}
+                        </div>
+                        <div class='col-2'>
+                            {{prescription_form.date.label_tag}}                        
+                            {{prescription_form.date|attr:"form:prescription_form"|attr:"readonly"}}                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+    <div class='row no-gutters justify-content-end'>
+        <input class="btn btn-primary text-primary" form='prescription_form' type="submit" value="Guardar Historia">
+    </div>
+    <form action="" method='POST' id='prescription_form'>{% csrf_token %}
+    </form>
+</section>
+{% endblock content %}
