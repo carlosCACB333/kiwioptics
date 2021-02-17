@@ -31,3 +31,4 @@ class PrescriptionForm(ModelForm):
         # you can iterate all fields here
         for fname, f in self.fields.items():
             f.widget.attrs['class'] = 'form-control form-control-sm'
+            f.widget.attrs['form'] = 'prescription_form'

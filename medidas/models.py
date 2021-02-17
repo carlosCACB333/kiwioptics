@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from datetime import date
+from django.utils.timezone import now
 import decimal
 from termcolor import colored
 
@@ -17,6 +17,7 @@ class Patient(models.Model):
     dni = models.CharField("Dni",max_length=20, unique=True, blank=True, null=True)    
     gender = models.CharField("Genero", max_length=20, blank=True, choices=Gender.choices)
     phone = models.CharField("Celular",max_length=30, blank=True)
+    job = models.CharField('Ocupacion', max_length=50, blank=True)
     age = models.IntegerField("Edad", blank=True, null=True)
 
     class Meta:
@@ -63,7 +64,7 @@ class Prescription(models.Model):
 
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, verbose_name="Paciente")
     # laboratory = models.ForeignKey(Laboratory, on_delete=models.SET_NULL,verbose_name="Laboratorio", blank=True, null=True)
-    date = models.DateField(verbose_name='Fecha', default=date.today)
+    date = models.DateTimeField(verbose_name='Fecha', default=now)
     far_spherical_right = models.DecimalField("Esf. derecho Lejos", max_digits=4, decimal_places=2, blank=True, null=True,choices=spherical_choices)
     far_cylinder_right = models.DecimalField("Cil. derecho Lejos", max_digits=4, decimal_places=2, blank=True, null=True, choices=cylinder_choices)
     far_axis_right = models.PositiveSmallIntegerField("Eje derecho Lejos", validators=[MaxValueValidator(180,'El eje solo permite valores entre 0° y 180°')], blank=True, null=True, choices=axis_choices)
