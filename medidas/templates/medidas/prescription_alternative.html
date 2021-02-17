@@ -21,17 +21,7 @@ medica {% endblock title %}
             </div>
             <div class="card-body">
                 <form action="">
-                    {% for field in patient_form %}
-                    {{field.label_tag}}
-                        {% if field.errors %}
-                            {{field|attr:"class:form-control form-control-sm is-invalid"}}
-                            <div id="{{ field.id_for_label }}" class="invalid-feedback">
-                            {{field.errors}}
-                            </div>
-                        {% else %}
-                            {{field}}
-                        {% endif %}
-                    {% endfor %}
+                    {{patient_form}}
                 </form>
             </div>
         </div>
@@ -51,43 +41,36 @@ medica {% endblock title %}
             </div>
             <div class='py-4 px-3'>
                 <div class="card-body table-responsive-md p-0 mb-4">
-                    <div class='tab-content'>
-                        <div class="tab-pane container active px-0" id="lejos">
+                        <div class="container active px-0" id="lejos">
                             {% include 'medidas/far_table.html' %}
                         </div>
-                        <div class="tab-pane container fade px-0" id="cerca">
+                        <div class="container px-0" id="cerca">
                             {% include 'medidas/near_table.html' %}
                         </div>
-                    </div>
                 </div>
                 <div class='form-row justify-content-around my-3 mx-0'>
                     <div class='col-3'>
-                        {{prescription_form.intermediate_add.errors}}
                         {{prescription_form.intermediate_add.label_tag}}
-                        {{prescription_form.intermediate_add}}
+                        {{prescription_form.intermediate_add|attr:"form:prescription_form"}}
                     </div>
                     <div class='col-3'>
-                        {{prescription_form.near_add.errors}}
                         {{prescription_form.near_add.label_tag}}
-                        {{prescription_form.near_add}}
+                        {{prescription_form.near_add|attr:"form:prescription_form"}}
                     </div>
                 </div>
                 <div class=''>
                     <div class="form-group">
-                        {{prescription_form.observation.errors}}
                         {{prescription_form.observation.label_tag}}
-                        {{prescription_form.observation|attr:"rows:3"}}
+                        {{prescription_form.observation|attr:"rows:3"|attr:"form:prescription_form"}}
                     </div>
                     <div class="form-row">
                         <div class='col-2'>
-                            {{prescription_form.price.errors}}
                             {{prescription_form.price.label_tag}}
-                            {{prescription_form.price}}
+                            {{prescription_form.price|attr:"form:prescription_form"}}
                         </div>
                         <div class='col-2'>
-                            {{prescription_form.date.errors}} 
                             {{prescription_form.date.label_tag}}                        
-                            {{prescription_form.date|attr:"readonly"}}                        
+                            {{prescription_form.date|attr:"form:prescription_form"|attr:"readonly"}}                        
                         </div>
                     </div>
                 </div>
@@ -102,13 +85,3 @@ medica {% endblock title %}
     </form>
 </section>
 {% endblock content %}
-{% block script %}
-    {% if editable %}
-        <script>
-            var inputs = document.querySelectorAll("[form='prescription_form']");
-            inputs.forEach((input) => {
-                input.disabled = true;
-            })
-        </script>
-    {% endif %}
-{% endblock script %}
