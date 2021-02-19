@@ -9,6 +9,10 @@
 {% endblock styles %} {% block content %}
 <section class="py-0 mb-5">
   <div class="col-md-12">
+    <form action="">
+      <label for="search">Buscar</label>
+      <input class='form form-control' placeholder='Apellidos, nombres o dni' type="search" name="q" id='search'>
+    </form>
       <table class="table table-condensed table-striped">
         <thead>
           <tr>
@@ -27,7 +31,7 @@
             <tr
             
           >
-            <td>{{patient.first_name}} {{patient.last_name}}</td>
+            <td>{{patient.last_name}} {{patient.first_name}} </td>
             <td>{{patient.dni|default_if_none:'--------'}}</td>
             <td>{{patient.gender}}</td>
             <td>{{patient.phone}}</td>

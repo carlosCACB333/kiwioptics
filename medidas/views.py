@@ -3,10 +3,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic import ListView, UpdateView, TemplateView
+from django.db.models.functions import Concat
 from .forms import PatientForm, PrescriptionForm
 from .models import Patient, Prescription
 from termcolor import colored
 from django.contrib import messages
+from .custom_functions import django_admin_keyword_search
 
 # Create your views here.
 def index(request):
@@ -38,7 +40,6 @@ def prescription(request):
     else:
         patient_form = PatientForm()
         prescription_form = PrescriptionForm()
-        context['editable'] = False
     context['patient_form'] = patient_form
     context['prescription_form'] = prescription_form
     return render(request, 'medidas/prescription.html', context)
@@ -92,18 +93,28 @@ def prescription_update(request, pk):
 
 class PrescriptionListView(ListView):
     model = Prescription
-    queryset = Prescription.objects.order_by('-date')
     context_object_name = 'prescriptions'
     template_name = 'medidas/prescription_list.html'
+    def get_queryset(self):
+        q = self.request.GET.get('q','')
+        return django_admin_keyword_search(Prescription, q, ['patient__first_name','patient__last_name','patient__dni']).order_by('-date')
+    
 
 class PatientListView(ListView):
     model = Patient
     context_object_name = 'patients'
     template_name = "medidas/patients.html"
+    def get_queryset(self):
+        q = self.request.GET.get('q','')
+        return django_admin_keyword_search(Patient, q, ['first_name','last_name','dni']).order_by('last_name')
 
 # class PrescriptionUpdateView(UpdateView):
 #     model = Prescription
 #     fields = '__all__'
 #     template_name = "medidas/prescription_update.html"
+
+class TestView(TemplateView):
+    template_name = "medidas/test.html"
+
 
 

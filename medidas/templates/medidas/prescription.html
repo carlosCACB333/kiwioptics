@@ -46,7 +46,7 @@ medica {% endblock title %}
     <div class="col-lg-9 px-0 pl-lg-2">
         <div class="card">
             <div class="card-header pt-2">
-                <ul class="nav nav-tabs card-header-tabs">
+                {% comment %} <ul class="nav nav-tabs card-header-tabs">
                     <h6 class='my-2 ml-2 mr-3'><i class="fas fa-file-medical"></i> Medidas</h6>
                     <li class="nav-item">
                         <a class="nav-link active" data-toggle="tab" href="#lejos">Lejos</a>
@@ -54,17 +54,34 @@ medica {% endblock title %}
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="tab" href="#cerca">Cerca</a>
                     </li>
-                </ul>
+                </ul> {% endcomment %}
+                <h6 class='my-2 ml-2 mr-3'><i class="fas fa-file-medical"></i> Medidas</h6>
             </div>
             <div class='py-4 px-3'>
                 <div class="card-body table-responsive-md p-0 mb-4">
-                    <div class='tab-content'>
+                    {% comment %} <div class='tab-content'>
                         <div class="tab-pane container active px-0" id="lejos">
                             {% include 'medidas/far_table.html' %}
                         </div>
                         <div class="tab-pane container fade px-0" id="cerca">
                             {% include 'medidas/near_table.html' %}
                         </div>
+                    </div> {% endcomment %}
+                    <div class='accordion'>
+                        <ul class="list-group list-group-flush">
+                            <button class="list-group-item btn btn-primary text-primary text-left" data-toggle='collapse' data-target='#lejos' aria-expanded='true' aria-controls='lejos'>Mostrar / esconder Lejos</button>
+                            <div id='lejos' class='collapse show'>
+                            {% include 'medidas/far_table.html' %}
+                            </div>
+                            {% comment %} <button class="list-group-item btn btn-link text-left" data-toggle='collapse' data-target='#intermedio' aria-expanded='true' aria-controls='lejos'>Intermedio</button>
+                            <div id='intermedio' class='collapse'>
+                            {% include 'medidas/intermediate_table.html' %}
+                            </div> {% endcomment %}
+                            <button class="list-group-item btn btn-primary text-primary text-left" data-toggle='collapse' data-target='#cerca' aria-expanded='true' aria-controls='lejos'>Mostrar / esconder Cerca</button>
+                            <div id='cerca' class='collapse'>
+                            {% include 'medidas/near_table.html' %}
+                            </div>
+                        </ul>
                     </div>
                 </div>
                 <div class='form-row justify-content-around my-3 mx-0'>
