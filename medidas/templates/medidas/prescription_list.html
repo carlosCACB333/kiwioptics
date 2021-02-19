@@ -30,15 +30,12 @@
                     <td class='text-center' scope='col'>{{prescription.patient.dni|default_if_none:"-----"}}</td>
                     <td class='text-center' scope='col'>{{prescription.patient.phone|default_if_none:"-----"}}</td>
                     <td class='text-center' scope='col'>S/.{{prescription.price|default_if_none:"-----"}}</td>
-                    <td class='text-center' scope='col'><button name='id' type='submit' form='see' value='{{prescription.id}}' href="{% url 'medidas:prescription' %}" class='btn btn-primary text-primary'>Ver</button></td>
+                    <td class='text-center' scope='col'><a class='btn btn-primary text-primary' href="{% url 'medidas:prescription-detail' prescription.id %}">Ver</a></td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
     </div>
-<form method='get' action="{% url 'medidas:prescription' %}" id='see'>
-
-</form>
 </section>
 {% endblock content %}
 {% block script %}

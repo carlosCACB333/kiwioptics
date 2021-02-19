@@ -13,6 +13,13 @@ medica {% endblock title %}
 {% endblock styles %}
  {% block content %}
 <section class="py-0 mb-5">
+{% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{message.tags}}">
+            {{message}}
+          </div>
+        {% endfor %}
+{% endif %}
   <div class="row no-gutters">
     <div class="col-lg-3 px-0 pr-lg-2">
         <div class="card m-0">
@@ -20,7 +27,7 @@ medica {% endblock title %}
                 <h6 class="mb-0"><i class="fas fa-blind"></i> Paciente</h6>
             </div>
             <div class="card-body">
-                <form action="">
+                <form action="" name='patient_form'>
                     {% for field in patient_form %}
                     {{field.label_tag}}
                         {% if field.errors %}
@@ -96,19 +103,33 @@ medica {% endblock title %}
     </div>
   </div>
     <div class='row no-gutters justify-content-end'>
-        <input class="btn btn-primary text-primary" form='prescription_form' type="submit" value="Guardar Historia">
+        {% if detail %}
+        <a class='btn btn-success text-primary' href="{% url 'medidas:prescription-update' prescription_form.instance.id %}">Editar Prescripcion</a>
+        {% else %}
+        <input class="btn btn-primary text-primary" form='prescription_form' type="submit" value="Guardar Prescripcion">
+        {% endif %}
     </div>
     <form action="" method='POST' id='prescription_form'>{% csrf_token %}
     </form>
 </section>
 {% endblock content %}
 {% block script %}
-    {% if editable %}
-        <script>
+    <script>
+    {% if detail %}
             var inputs = document.querySelectorAll("[form='prescription_form']");
             inputs.forEach((input) => {
                 input.disabled = true;
             })
-        </script>
     {% endif %}
+    {% if update %}
+            var inputs = document.forms["patient_form"].getElementsByTagName("input");
+            var selects = document.forms["patient_form"].getElementsByTagName("select");
+            for (i=0;i<inputs.length;i++){
+            inputs[i].disabled = true;
+            }       
+            for (i=0;i<selects.length;i++){
+            selects[i].disabled = true;
+            }  
+    {% endif %}
+    </script>
 {% endblock script %}

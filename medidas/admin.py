@@ -9,7 +9,6 @@ class PatientAdmin(admin.ModelAdmin):
         'dni',
         'full_name',
         'phone',
-        'age',
     )
     list_display_links = (
         'id',
@@ -20,9 +19,6 @@ class PatientAdmin(admin.ModelAdmin):
         'dni',
         'first_name',
         'last_name',
-    )
-    list_filter = (
-        'age',
     )
 
     def full_name(self, obj):

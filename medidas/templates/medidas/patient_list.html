@@ -1,0 +1,81 @@
+{% extends 'base.html' %} {% block styles %}
+<style>
+  body {
+  }
+  .hiddenRow {
+    padding: 0 !important;
+  }
+</style>
+{% endblock styles %} {% block content %}
+<section class="py-0 mb-5">
+  <div class="col-md-12">
+      <table class="table table-condensed table-striped">
+        <thead>
+          <tr>
+            <th>Paciente</th>
+            <th>Dni</th>
+            <th>Genero</th>
+            <th>Celular</th>
+            <th>Ocupacion</th>
+            <th>Numero de Prescripciones</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for patient in patients %}
+            <tr
+            
+          >
+            <td>{{patient.first_name}} {{patient.last_name}}</td>
+            <td>{{patient.dni|default_if_none:'--------'}}</td>
+            <td>{{patient.gender}}</td>
+            <td>{{patient.phone}}</td>
+            <td>{{patient.job}}</td>
+            <td>{{patient.prescription_set.count}}</td>
+            <td>
+              <button data-toggle="collapse"
+            data-target="#patient{{forloop.counter}}"
+            class="btn accordion-toggle">
+                <i class="far fa-eye text-primary">Ver</i>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="12" class="hiddenRow">
+              <div class="accordian-body collapse" id="patient{{forloop.counter}}">
+                <table class="table table-striped">
+                  <thead>
+                    <tr class="info">
+                      <th>N°</th>
+                      <th>Fecha</th>
+                      <th>Precio</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {% for prescription in patient.prescription_set.all %}
+                        <tr
+                    >
+                      <td>{{forloop.counter}}</td>
+                      <td>{{prescription.date|date:'d/m/Y'}}</td>
+                      <td>S/.{{prescription.price}}</td>
+                      <td>
+                        <a href="{% url 'medidas:prescription-detail' prescription.id %}" class="btn btn-default btn-sm">
+                          <i class="far fa-eye text-secondary">Ver Prescripcion</i>
+                        </a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+          
+        </tbody>
+      </table>
+</section>
+{% endblock content %}

@@ -18,7 +18,6 @@ class Patient(models.Model):
     gender = models.CharField("Genero", max_length=20, blank=True, choices=Gender.choices)
     phone = models.CharField("Celular",max_length=30, blank=True)
     job = models.CharField('Ocupacion', max_length=50, blank=True)
-    age = models.IntegerField("Edad", blank=True, null=True)
 
     class Meta:
         verbose_name = "Paciente"
