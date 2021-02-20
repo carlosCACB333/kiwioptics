@@ -5,43 +5,75 @@
   .hiddenRow {
     padding: 0 !important;
   }
+  table, th, td, tbody, thead {
+        border-collapse: collapse;
+    }
+    body {
+        line-height: 1.2;
+    }
 </style>
 {% endblock styles %} {% block content %}
 <section class="py-0 mb-5">
   <div class="col-md-12">
-    <form action="">
-      <label for="search">Buscar</label>
-      <input class='form form-control' placeholder='Apellidos, nombres o dni' type="search" name="q" id='search'>
-    </form>
-      <table class="table table-condensed table-striped">
-        <thead>
-          <tr>
-            <th>Paciente</th>
-            <th>Dni</th>
-            <th>Genero</th>
-            <th>Celular</th>
-            <th>Ocupacion</th>
-            <th>Numero de Prescripciones</th>
-            <th></th>
+    <form class="" action="">
+  <div class="input-group mb-3">
+    <input
+      class="form-control"
+      placeholder="Apellidos, nombres o dni"
+      type="search"
+      name="q"
+      id="search"
+    />
+    <div class="input-group-append">
+      <button class="btn btn-primary text-primary" type="submit" value="Buscar">
+        <i class="fas fa-search"></i> Buscar
+      </button>
+    </div>
+  </div>
+  </form>
+      <table class="table table-hover table-responsive-sm">
+          <thead class='table-primary'>
+            <tr>
+            <th class="text-center" scope="col">N°</th>
+            <th class="text-center" scope="col">Paciente</th>
+            <th class="text-center" scope="col">Dni</th>
+            <th class="text-center" scope="col">Celular</th>
+            <th class="text-center" scope="col">Ocupacion</th>
+            <th class="text-center" scope="col">Prescripciones</th>
+            <th class="text-center" scope="col" colspan='3'>Opciones</th>
           </tr>
-        </thead>
+          </thead>
 
-        <tbody>
           {% for patient in patients %}
-            <tr
+            <tr class='table-light'
             
           >
-            <td>{{patient.last_name}} {{patient.first_name}} </td>
-            <td>{{patient.dni|default_if_none:'--------'}}</td>
-            <td>{{patient.gender}}</td>
-            <td>{{patient.phone}}</td>
-            <td>{{patient.job}}</td>
-            <td>{{patient.prescription_set.count}}</td>
-            <td>
+            <th class='text-center px-0'>{{patient.id}}</th>
+            <td class="text-center px-0">{{patient|truncatechars:25}}</td>
+            <td class="text-center px-0">{{patient.dni|default_if_none:'--------'|truncatechars:12}}</td>
+            <td class="text-center px-0">{{patient.phone|truncatechars:12}}</td>
+            <td class="text-center px-0">{{patient.job|truncatechars:12}}</td>
+            <td class="text-center px-0">{{patient.prescription_set.count}}</td>
+            <td class="text-center px-0" >
+            <button
+              data-toggle="modal"
+              data-id="{{patient.id}}"
+              data-target="#patient_view"
+              class="btn btn-primary text-primary"
+            >
+              <i class="far fa-eye"></i>
+            </button>
+          </td>
+            <td class='text-center px-0'>
+              <a href='{% url 'medidas:patient-add' patient.id %}' class='btn btn-primary text-primary'>
+                <i class="fas fa-file-medical"></i>
+              </a>
+            </td>
+            <td class="text-center pl-0">
               <button data-toggle="collapse"
             data-target="#patient{{forloop.counter}}"
-            class="btn accordion-toggle">
-                <i class="far fa-eye text-primary">Ver</i>
+            class="btn btn-primary text-primary accordion-toggle">
+                <i style='transform: rotate(180deg);' class="fas fa-chevron-up"></i>
               </button>
             </td>
           </tr>
@@ -50,36 +82,142 @@
               <div class="accordian-body collapse" id="patient{{forloop.counter}}">
                 <table class="table table-striped">
                   <thead>
-                    <tr class="info">
-                      <th>N°</th>
-                      <th>Fecha</th>
-                      <th>Precio</th>
-                      <th></th>
+                    <tr class="table table-primary border">
+                      <th class='text-center px-0'>N°</th>
+                      <th class='text-center px-0'>Fecha</th>
+                      <th class='text-center px-0'>Precio</th>
+                      <th class='text-center px-0' colspan='1'>Opciones</th>
                     </tr>
                   </thead>
 
                   <tbody>
                     {% for prescription in patient.prescription_set.all %}
-                        <tr
+                        <tr class=''
                     >
-                      <td>{{forloop.counter}}</td>
-                      <td>{{prescription.date|date:'d/m/Y'}}</td>
-                      <td>S/.{{prescription.price}}</td>
-                      <td>
-                        <a href="{% url 'medidas:prescription-detail' prescription.id %}" class="btn btn-default btn-sm">
-                          <i class="far fa-eye text-secondary">Ver Prescripcion</i>
+                      <td class='text-center px-0'>{{forloop.counter}}</td>
+                      <td class='text-center px-0'>{{prescription.date|date:'d/m/Y'}}</td>
+                      <td class='text-center px-0'>S/.{{prescription.price}}</td>
+                      <td class='text-center px-0'>
+                        <a class='btn btn-primary text-primary' href="{% url 'medidas:prescription-detail' prescription.id %}" class="btn btn-default btn-sm">
+                          <i class="far fa-eye"></i>
                         </a>
-                      </td>
+                        <a
+              class="btn btn-primary text-primary"
+              href="{% url 'medidas:prescription-update' prescription.id %}"
+              ><i class="far fa-edit"></i
+            ></a>
+            <button
+              data-toggle="modal"
+              data-id="{{prescription.id}}"
+              data-target="#prescription_delete"
+              class="btn btn-primary text-primary"
+            >
+              <i class="far fa-trash-alt"></i>
+            </button>
                     </tr>
                     {% endfor %}
-                  </tbody>
                 </table>
               </div>
             </td>
           </tr>
           {% endfor %}
-          
         </tbody>
       </table>
+<div
+          class="modal fade"
+          id="patient_view"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="patient_view_title"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Datos del paciente</h5>
+              </div>
+              <div class="modal-body">
+              <form action="">
+                {{patient_form}}
+              </form>
+              </div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+                  {% comment %} {% csrf_token %}
+                  <button
+                    val=""
+                    id="prescription_button_id"
+                    type="submit"
+                    name="prescription_id"
+                    class="btn btn-danger text-light"
+                  >
+                    Eliminar
+                  </button> {% endcomment %}
+              </div>
+            </div>
+          </div>
+        </div>
+<div
+          class="modal fade"
+          id="prescription_delete"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="prescription_delete_title"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Confirmar eliminación</h5>
+              </div>
+              <div class="modal-body"></div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+                <form
+                  method="POST"
+                  action="{% url 'medidas:prescription-delete' %}"
+                >
+                  {% csrf_token %}
+                  <button
+                    val=""
+                    id="prescription_button_id"
+                    type="submit"
+                    name="prescription_id"
+                    class="btn btn-danger text-light"
+                  >
+                    Eliminar
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
 </section>
 {% endblock content %}
+{% block script %}
+<script>
+  $("#prescription_delete").on("show.bs.modal", function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var recipient = button.data("id"); // Extract info from data-* attributes
+    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    var modal = $(this);
+    modal
+      .find(".modal-body")
+      .text("¿Seguro que desea eliminar la Prescripcion N°" + recipient + "?");
+    modal.find("#prescription_button_id").val(recipient);
+  });
+</script>
+{% endblock script %}

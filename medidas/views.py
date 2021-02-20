@@ -82,6 +82,35 @@ def prescription_update(request, pk):
         else:
             print(colored(prescription_form.errors,'red'))
 
+def prescription_delete(request):
+    if request.method == 'POST':
+        pk = request.POST['prescription_id']
+        prescription = Prescription.objects.get(id=pk)
+        prescription.delete()
+        return redirect('medidas:prescriptions')
+
+def patient_add_prescription(request, pk):
+    if request.method=='GET':
+        patient = Patient.objects.get(pk=pk)
+        patient_form = PatientForm(instance=patient)
+        prescription_form = PrescriptionForm()
+        return render(request, 'medidas/prescription.html', context={
+            'patient_form': patient_form,
+            'prescription_form': prescription_form,
+            'update': True,
+        })
+    if request.method=='POST':
+        patient = Patient.objects.get(pk=pk)
+        updated_request = request.POST.copy()
+        updated_request.update({'patient':patient})
+        prescription_form = PrescriptionForm(updated_request)
+        if prescription_form.is_valid():
+            prescription_form.save()
+            return redirect('medidas:prescriptions')
+        else:
+            print(colored(prescription_form.errors,'red'))
+        
+
 # def prescription_list(request):
 #     prescriptions = Prescription.objects.order_by(
 #         '-date'
@@ -106,7 +135,12 @@ class PatientListView(ListView):
     template_name = "medidas/patients.html"
     def get_queryset(self):
         q = self.request.GET.get('q','')
-        return django_admin_keyword_search(Patient, q, ['first_name','last_name','dni']).order_by('last_name')
+        return django_admin_keyword_search(Patient, q, ['first_name','last_name','dni']).order_by('-id')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["patient_form"] = PatientForm()
+        return context
+    
 
 # class PrescriptionUpdateView(UpdateView):
 #     model = Prescription

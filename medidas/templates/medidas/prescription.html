@@ -73,11 +73,11 @@ medica {% endblock title %}
                             <div id='lejos' class='collapse show'>
                             {% include 'medidas/far_table.html' %}
                             </div>
-                            {% comment %} <button class="list-group-item btn btn-link text-left" data-toggle='collapse' data-target='#intermedio' aria-expanded='true' aria-controls='lejos'>Intermedio</button>
+                            <button class="list-group-item btn btn-primary text-primary text-left" data-toggle='collapse' data-target='#intermedio' aria-expanded='true' aria-controls='intermedio'>Mostrar / esconder Intermedio</button>
                             <div id='intermedio' class='collapse'>
                             {% include 'medidas/intermediate_table.html' %}
-                            </div> {% endcomment %}
-                            <button class="list-group-item btn btn-primary text-primary text-left" data-toggle='collapse' data-target='#cerca' aria-expanded='true' aria-controls='lejos'>Mostrar / esconder Cerca</button>
+                            </div>
+                            <button class="list-group-item btn btn-primary text-primary text-left" data-toggle='collapse' data-target='#cerca' aria-expanded='true' aria-controls='cerca'>Mostrar / esconder Cerca</button>
                             <div id='cerca' class='collapse'>
                             {% include 'medidas/near_table.html' %}
                             </div>
@@ -111,7 +111,7 @@ medica {% endblock title %}
                         <div class='col-2'>
                             {{prescription_form.date.errors}} 
                             {{prescription_form.date.label_tag}}                        
-                            {{prescription_form.date|attr:"readonly"}}                        
+                            {{prescription_form.date}}                        
                         </div>
                     </div>
                 </div>
@@ -121,7 +121,7 @@ medica {% endblock title %}
   </div>
     <div class='row no-gutters justify-content-end'>
         {% if detail %}
-        <a class='btn btn-success text-primary' href="{% url 'medidas:prescription-update' prescription_form.instance.id %}">Editar Prescripcion</a>
+        <a class='btn btn-success text-light' href="{% url 'medidas:prescription-update' prescription_form.instance.id %}">Editar Prescripcion</a>
         {% else %}
         <input class="btn btn-primary text-primary" form='prescription_form' type="submit" value="Guardar Prescripcion">
         {% endif %}
