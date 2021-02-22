@@ -60,7 +60,7 @@
               data-id="{{patient.id}}"
               data-target="#patient_view"
               class="btn btn-primary text-primary"
-              onclick="update_patent({{patient.id}});"
+              onclick="update_patient({{patient.id}},'{% url 'medidas:rest-patient-detail' patient.id %}')"
             >
               <i class="far fa-eye"></i>
             </button>
