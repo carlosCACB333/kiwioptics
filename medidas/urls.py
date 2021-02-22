@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from . import  rest
 
 app_name = 'medidas'
 urlpatterns = [
@@ -12,4 +13,5 @@ urlpatterns = [
     path('prescription/<int:pk>/change/', views.prescription_update, name='prescription-update'),
     path('prescription/delete/', views.prescription_delete, name='prescription-delete'),
     path('test/', views.TestView.as_view()),
+    path('api/patients/<id>/', rest.PatientListApiView.as_view()),
 ]

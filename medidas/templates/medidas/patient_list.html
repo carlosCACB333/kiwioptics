@@ -60,6 +60,7 @@
               data-id="{{patient.id}}"
               data-target="#patient_view"
               class="btn btn-primary text-primary"
+              onclick="update_patent({{patient.id}});"
             >
               <i class="far fa-eye"></i>
             </button>
@@ -207,6 +208,7 @@
 </section>
 {% endblock content %}
 {% block script %}
+
 <script>
   $("#prescription_delete").on("show.bs.modal", function (event) {
     var button = $(event.relatedTarget); // Button that triggered the modal
@@ -220,4 +222,7 @@
     modal.find("#prescription_button_id").val(recipient);
   });
 </script>
+{% load static%}
+<script src="{% static 'js/app.js' %}"></script>
+
 {% endblock script %}
