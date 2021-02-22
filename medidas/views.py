@@ -1,9 +1,10 @@
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic import ListView, UpdateView, TemplateView
 from django.db.models.functions import Concat
+from django.core.serializers import serialize
 from .forms import PatientForm, PrescriptionForm
 from .models import Patient, Prescription
 from termcolor import colored
@@ -14,7 +15,20 @@ from .custom_functions import django_admin_keyword_search
 def index(request):
     return render(request, 'medidas/index.html')
 
-def prescription(request):
+# def patient_detail(request, pk):
+#     if request.method == 'GET':
+#         patient = get_object_or_404(Patient, pk=pk)
+#         data = {
+#             'first_name':patient.first_name,
+#             'last_name':patient.last_name,
+#             'dni':patient.dni,
+#             'gender':patient.gender,
+#             'phone':patient.phone,
+#             'job':patient.job,
+#         }
+#         return JsonResponse(data, safe=False)
+
+def add_prescription(request):
     context = {}
     if request.method == 'POST':
         patient_form = PatientForm(request.POST)
@@ -132,7 +146,6 @@ class PrescriptionListView(ListView):
 class PatientListView(ListView):
     model = Patient
     context_object_name = 'patients'
-    template_name = "medidas/patients.html"
     def get_queryset(self):
         q = self.request.GET.get('q','')
         return django_admin_keyword_search(Patient, q, ['first_name','last_name','dni']).order_by('-id')
@@ -149,6 +162,7 @@ class PatientListView(ListView):
 
 class TestView(TemplateView):
     template_name = "medidas/test.html"
+    
 
 
 

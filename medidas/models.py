@@ -42,18 +42,21 @@ class Prescription(models.Model):
     
     @staticmethod
     def generateChoices(start, end):
-        choices = [( decimal.Decimal(f'{i*0.25}0') if i%2==0 else decimal.Decimal(f'{i*0.25}'), (f'{i*0.25}0' if i <= 0 else f'+{i*0.25}0') if i%2==0 else (f'{i*0.25}' if i <= 0 else f'+{i*0.25}')) for i in range(start,end)]
+        choices = [( decimal.Decimal(f'{i*0.25}0') if i%2==0 else decimal.Decimal(f'{i*0.25}'), (f'{i*0.25}0' if i <= 0 else f'+{i*0.25}0') if i%2==0 else (f'{i*0.25}' if i <= 0 else f'+{i*0.25}')) for i in range(end-1,start-1,-1)]
         for i, (value, name) in enumerate(choices):
             if value == decimal.Decimal(0):
-                choices.insert(i+1, ('','---------'))
+                choices.insert(i, ('','---------'))
                 break
         return choices
 
     spherical_choices = generateChoices.__func__(-100,101)
     cylinder_choices = generateChoices.__func__(-29, 1)
-    axis_choices = [(i,f'{i}°') for i in range(0,181)]
-    dip_choices = [(i,f'{i}mm') for i in range(50,81)]
+    axis_choices = [(i,f'{i}°') for i in range(180,-1,-1)]
+    axis_choices.append(('','---------'))
+    dip_choices = [(i,f'{i}mm') for i in range(80,49,-1)]
+    dip_choices.append(('','---------'))
     add_choices = generateChoices.__func__(1, 25)
+    add_choices.append(('','---------'))
 
     # print(colored(spherical_choices,'green'))
     # print(colored(cylinder_choices,'red'))

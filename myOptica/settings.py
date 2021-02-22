@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'medidas.apps.MedidasConfig',
+    'users.apps.UsersConfig',
     'widget_tweaks',
 ]
 

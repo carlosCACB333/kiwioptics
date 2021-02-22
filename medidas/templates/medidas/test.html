@@ -1,48 +1,5 @@
 {% extends 'base.html' %} {% block content %}
-<div class="accordion" id="accordionExample">
-      <h2 class="mb-0">
-        <button
-          class="btn btn-link btn-block text-left"
-          type="button"
-          data-toggle="collapse"
-          data-target="#collapseOne"
-          aria-expanded="true"
-          aria-controls="collapseOne"
-        >
-          Collapsible Group Item #1
-        </button>
-      </h2>
-
-    <div
-      id="collapseOne"
-      class="collapse show"
-      aria-labelledby="headingOne"
-      data-parent="#accordionExample"
-    >
-        Some placeholder content for the first accordion panel. This panel is
-        shown by default, thanks to the <code>.show</code> class.
-    </div>
-  </div>
-      <h2 class="mb-0">
-        <button
-          class="btn btn-link btn-block text-left collapsed"
-          type="button"
-          data-toggle="collapse"
-          data-target="#collapseTwo"
-          aria-expanded="false"
-          aria-controls="collapseTwo"
-        >
-          Collapsible Group Item #2
-        </button>
-      </h2>
-    <div
-      id="collapseTwo"
-      class="collapse"
-      aria-labelledby="headingTwo"
-      data-parent="#accordionExample"
-    >
-        Some placeholder content for the second accordion panel. This panel is
-        hidden by default.
-    </div>
-</div>
+<form action="{% url 'medidas:patient' %}" method='POST'> {% csrf_token %}
+<input type="submit" value="patient">
+</form>
 {% endblock content %}

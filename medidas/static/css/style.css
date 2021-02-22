@@ -43,7 +43,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #sidebar-container {
   min-height: 100vh;
-  margin-left: -18rem;
+  margin-left: -12rem;
   -webkit-box-shadow: 5px 0px 5px 0px rgba(0,0,0,0.1);
   -moz-box-shadow: 5px 0px 5px 0px rgba(0,0,0,0.1);
   box-shadow: 5px 0px 5px 0px rgba(0,0,0,0.1);
@@ -58,7 +58,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #sidebar-container .menu {
-  width: 18rem;
+  width: 12rem;
 }
 
 #content-wrapper.toggled #sidebar-container {
@@ -124,6 +124,6 @@ table tbody td {
     margin-left: 0;
   }
   #content-wrapper.toggled #sidebar-container {
-    margin-left: -18rem;
+    margin-left: -12rem;
   }
 }
