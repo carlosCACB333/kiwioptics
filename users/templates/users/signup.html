@@ -1,0 +1,267 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up</title>
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <style>
+.border-md {
+    border-width: 2px;
+}
+
+.btn-facebook {
+    background: #405D9D;
+    border: none;
+}
+
+.btn-facebook:hover, .btn-facebook:focus {
+    background: #314879;
+}
+
+.btn-twitter {
+    background: #42AEEC;
+    border: none;
+}
+
+.btn-twitter:hover, .btn-twitter:focus {
+    background: #1799e4;
+}
+
+body {
+    min-height: 100vh;
+}
+
+.form-control {
+    padding: 0.8rem 0.5rem;
+}
+
+select .form-control {
+    height: 52px;
+    padding-left: 0.5rem;
+}
+
+.form-control::placeholder {
+    color: #ccc;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+.form-control:focus {
+    box-shadow: none;
+}
+
+    </style>
+<script src="https://kit.fontawesome.com/049f05bf2b.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <!-- Navbar-->
+    <header class="header">
+      <nav class="navbar navbar-expand-lg navbar-light pt-3 pb-0">
+        <div class="container">
+          <!-- Navbar Brand -->
+          <a href="#" class="navbar-brand">
+            <h2>Kiwi Optics</h2>
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container">
+      <div class="row py-0 mt-0 align-items-center">
+        <!-- For Demo Purpose -->
+        <div class="col-md-5 pr-lg-5 mb-5 mb-md-0">
+          <img
+            src="https://res.cloudinary.com/mhmd/image/upload/v1569543678/form_d9sh6m.svg"
+            alt=""
+            class="img-fluid mb-2 d-none d-md-block"
+          />
+          <h1>Registra tu optica</h1>
+          <p class="font-italic text-muted mb-0">
+            Administra las prescripciones de los pacientes de tu Optica desde cualquier lugar del mundo y más
+          </p>
+        </div>
+
+        <!-- Registeration Form -->
+        <div class="col-md-7 col-lg-6 ml-auto">
+          <form action="#">
+            <div class="row">
+              <!-- First Name -->
+              <div class="input-group col-lg-6 mb-4">
+                <div class="input-group-prepend">
+                  <span
+                    class="input-group-text bg-white px-3 border-md border-right-0"
+                  >
+                    <i class="fa fa-user text-muted"></i>
+                  </span>
+                </div>
+                <input
+                  id="firstName"
+                  type="text"
+                  name="firstname"
+                  placeholder="Nombres"
+                  class="form-control form-control-sm bg-white border-left-0 border-md"
+                />
+              </div>
+
+              <!-- Last Name -->
+              <div class="input-group col-lg-6 mb-4">
+                <div class="input-group-prepend">
+                  <span
+                    class="input-group-text bg-white px-3 border-md border-right-0"
+                  >
+                    <i class="fa fa-user text-muted"></i>
+                  </span>
+                </div>
+                <input
+                  id="lastName"
+                  type="text"
+                  name="lastname"
+                  placeholder="Apellidos"
+                  class="form-control form-control-sm bg-white border-left-0 border-md"
+                />
+              </div>
+
+              <!-- Email Address -->
+              <div class="input-group col-lg-12 mb-4">
+                <div class="input-group-prepend">
+                  <span
+                    class="input-group-text bg-white px-3 border-md border-right-0"
+                  >
+                    <i class="fa fa-envelope text-muted"></i>
+                  </span>
+                </div>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="Correo electronico"
+                  class="form-control form-control-sm bg-white border-left-0 border-md"
+                />
+              </div>
+              <!-- Empresa -->
+              <div class="input-group col-lg-12 mb-4">
+                <div class="input-group-prepend">
+                  <span
+                    class="input-group-text bg-white px-3 border-md border-right-0"
+                  >
+                    <i class="fa fa-eye text-muted"></i>
+                  </span>
+                </div>
+                <input
+                  id="optic"
+                  type="text"
+                  name="optic"
+                  placeholder="Nombre de tú optica"
+                  class="form-control form-control-sm bg-white border-left-0 border-md"
+                />
+              </div>
+
+              <!-- Phone Number -->
+              {% comment %} <div class="input-group col-lg-12 mb-4">
+                <div class="input-group-prepend">
+                  <span
+                    class="input-group-text bg-white px-3 border-md border-right-0"
+                  >
+                    <i class="fa fa-phone-square text-muted"></i>
+                  </span>
+                </div>
+                <select
+                  id="countryCode"
+                  name="countryCode"
+                  style="max-width: 80px"
+                  class="custom-select form-control form-control-sm bg-white border-left-0 border-md h-100 font-weight-bold text-muted"
+                >
+                  <option value="">+12</option>
+                  <option value="">+10</option>
+                  <option value="">+15</option>
+                  <option value="">+18</option>
+                </select>
+                <input
+                  id="phoneNumber"
+                  type="tel"
+                  name="phone"
+                  placeholder="Número de contacto"
+                  class="form-control form-control-sm bg-white border-md border-left-0 pl-3"
+                />
+              </div> {% endcomment %}
+              <!-- Password -->
+              <div class="input-group col-lg-6 mb-4">
+                <div class="input-group-prepend">
+                  <span
+                    class="input-group-text bg-white px-3 border-md border-right-0"
+                  >
+                    <i class="fa fa-lock text-muted"></i>
+                  </span>
+                </div>
+                <input
+                  id="password"
+                  type="password"
+                  name="password"
+                  placeholder="Contraseña"
+                  class="form-control form-control-sm bg-white border-left-0 border-md"
+                />
+              </div>
+
+              <!-- Password Confirmation -->
+              <div class="input-group col-lg-6 mb-4">
+                <div class="input-group-prepend">
+                  <span
+                    class="input-group-text bg-white px-3 border-md border-right-0"
+                  >
+                    <i class="fa fa-lock text-muted"></i>
+                  </span>
+                </div>
+                <input
+                  id="passwordConfirmation"
+                  type="text"
+                  name="passwordConfirmation"
+                  placeholder="Confirmar Contraseña"
+                  class="form-control form-control-sm bg-white border-left-0 border-md"
+                />
+              </div>
+
+              <!-- Submit Button -->
+              <div class="form-group col-lg-12 mx-auto mb-0">
+                <a href="#" class="btn btn-primary btn-block py-2">
+                  <span class="font-weight-bold">Create your account</span>
+                </a>
+              </div>
+
+              <!-- Divider Text -->
+              <div
+                class="form-group col-lg-12 mx-auto d-flex align-items-center my-1"
+              >
+                <div class="border-bottom w-100 ml-5"></div>
+                <span class="px-2 small text-muted font-weight-bold text-muted"
+                  >O</span
+                >
+                <div class="border-bottom w-100 mr-5"></div>
+              </div>
+
+              <!-- Social Login -->
+              <div class="form-group col-lg-12 mx-auto">
+                <a href="#" class="btn btn-primary btn-block py-2 btn-facebook">
+                  <i class="fa fa-facebook-f mr-2"></i>
+                  <span class="font-weight-bold">Registrate con Facebook</span>
+                </a>
+              </div>
+
+              <!-- Already Registered -->
+              <div class="text-center w-100">
+                <p class="text-muted font-weight-bold">
+                  ¿Ya estás registrado?
+                  <a href="{% url 'users:login' %}" class="text-primary ml-2">Login</a>
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+  </body>
+
+</html>
