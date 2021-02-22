@@ -14,5 +14,10 @@ urlpatterns = [
     path('prescriptions/<int:pk>/change/', views.prescription_update, name='prescription-update'),
     path('prescriptions/delete/', views.prescription_delete, name='prescription-delete'),
     path('test/', views.TestView.as_view()),
-    path('api/patients/<id>/', rest.PatientListApiView.as_view(),name='rest-patient-detail'),
+    # api rest-framework
+    path('api/patientList/', rest.PatientListApiView.as_view(),name='rest-patient-list'),
+    path('api/patientCreate/', rest.PatientCreateApiView.as_view(),name='rest-patient-create'),
+    path('api/patientDetail/<pk>/', rest.PatientDetailApiView.as_view(),name='rest-patient-detail'),
+    path('api/patientDelete/<pk>/', rest.PatientDeleteApiView.as_view(),name='rest-patient-delete'),
+    path('api/patientUpdate/<pk>/', rest.PatientUpdateApiWiew.as_view(),name='rest-patient-update'),
 ]
