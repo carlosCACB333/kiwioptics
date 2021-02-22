@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'medidas.apps.MedidasConfig',
     'users.apps.UsersConfig',
     'widget_tweaks',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -79,7 +80,7 @@ WSGI_APPLICATION = 'myOptica.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'myoptica',
+        'NAME': 'myoptica'  ,
         'USER': 'root',
         'PASSWORD': '011235813213455',
         'HOST': '127.0.0.1',
