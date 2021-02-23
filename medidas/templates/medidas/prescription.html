@@ -3,14 +3,15 @@ medica {% endblock title %}
 {% block styles %}
 <link href="{% static 'css/prescription.css' %}" rel="stylesheet" />
 <style>
-     table, th, td, tbody, thead {
+    table, th, td, tbody, thead {
         border-collapse: collapse;
     }
-    body {
+    section {
         line-height: 1.2;
     }
 </style>
 {% endblock styles %}
+{% block prescription-add %}active{% endblock prescription-add %}
  {% block content %}
 <section class="py-0 mb-5">
 {% if messages %}
