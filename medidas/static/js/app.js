@@ -1,14 +1,13 @@
-
-function get_patient( url){
-// obtiene los datos de una persona con la api rest-framewowrk
+function get_patient(url) {
+    // obtiene los datos de una persona con la api rest-framewowrk
     $.ajax({
         type: "GET",
         // url: "/app/api/patients/"+id+"/?format=json",
         url: url,
         dataType: "json",
-        success: function (data) {
+        success: function(data) {
             console.log(data)
-             dato=data
+            dato = data
             $("#id_patient").val(data.id)
             $("#id_first_name").val(data.first_name)
             $("#id_last_name").val(data.last_name)
@@ -22,40 +21,40 @@ function get_patient( url){
 
 
 
-function update_patient(){
-    id_patient=$("#id_patient").val()
-    datos=$("#prescription_form").serialize()
+function update_patient() {
+    id_patient = $("#id_patient").val()
+    datos = $("#prescription_form").serialize()
     console.log(datos)
-     url="/app/api/patientUpdate/"+$("#id_patient").val()+"/"
+    url = "/app/api/patientUpdate/" + $("#id_patient").val() + "/"
 
     $.ajax({
         type: "PUT",
         // url: "/app/api/patients/"+id+"/?format=json",
         url: url,
-        data:datos,
+        data: datos,
         dataType: "json",
-        success: function (data) {
-        location.reload()
+        success: function(data) {
+            location.reload()
         }, //End of AJAX Success function
-    }).fail(function(e){
-    console.log(e.message)
+    }).fail(function(e) {
+        console.log(e.message)
     });
 
 }
 
-function delete_patient(){
-  url="/app/api/patientDelete/"+$("#id_patient").val()+"/"
- $.ajax({
+function delete_patient() {
+    url = "/app/api/patientDelete/" + $("#id_patient").val() + "/"
+    $.ajax({
         type: "DELETE",
         // url: "/app/api/patients/"+id+"/?format=json",
         url: url,
         dataType: "json",
-        success: function (data) {
-        location.reload()
+        success: function(data) {
+            location.reload()
             console.log(data)
 
         }, //End of AJAX Success function
-    }).fail(function(e){
-    console.log(e.message)
+    }).fail(function(e) {
+        console.log(e.message)
     });
 }
