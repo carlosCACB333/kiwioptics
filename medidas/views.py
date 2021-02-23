@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, UpdateView, TemplateView
 from django.db.models.functions import Concat
 from django.core.serializers import serialize
@@ -12,6 +14,8 @@ from django.contrib import messages
 from .custom_functions import django_admin_keyword_search
 
 # Create your views here.
+
+@login_required
 def index(request):
     return render(request, 'medidas/index.html')
 
@@ -28,6 +32,7 @@ def index(request):
 #         }
 #         return JsonResponse(data, safe=False)
 
+@login_required
 def add_prescription(request):
     context = {}
     if request.method == 'POST':
@@ -58,6 +63,7 @@ def add_prescription(request):
     context['prescription_form'] = prescription_form
     return render(request, 'medidas/prescription.html', context)
 
+@login_required
 def prescription_detail(request, pk):
     context = {}
     if request.method=='GET':
@@ -71,6 +77,7 @@ def prescription_detail(request, pk):
             'detail': True,
         })
 
+@login_required
 def prescription_update(request, pk):
     context = {}
     if request.method=='GET':
@@ -96,6 +103,7 @@ def prescription_update(request, pk):
         else:
             print(colored(prescription_form.errors,'red'))
 
+@login_required
 def prescription_delete(request):
     if request.method == 'POST':
         pk = request.POST['prescription_id']
@@ -103,6 +111,7 @@ def prescription_delete(request):
         prescription.delete()
         return redirect('medidas:prescriptions')
 
+@login_required
 def patient_add_prescription(request, pk):
     if request.method=='GET':
         patient = Patient.objects.get(pk=pk)
@@ -134,7 +143,7 @@ def patient_add_prescription(request, pk):
 #     }
 #     return render(request, 'medidas/prescription_list.html', context)
 
-class PrescriptionListView(ListView):
+class PrescriptionListView(LoginRequiredMixin,ListView):
     model = Prescription
     context_object_name = 'prescriptions'
     template_name = 'medidas/prescription_list.html'
@@ -142,8 +151,7 @@ class PrescriptionListView(ListView):
         q = self.request.GET.get('q','')
         return django_admin_keyword_search(Prescription, q, ['patient__first_name','patient__last_name','patient__dni']).order_by('-date')
     
-
-class PatientListView(ListView):
+class PatientListView(LoginRequiredMixin,ListView):
     model = Patient
     context_object_name = 'patients'
     def get_queryset(self):

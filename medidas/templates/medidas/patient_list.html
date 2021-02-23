@@ -1,18 +1,18 @@
 {% extends 'base.html' %} {% block styles %}
 <style>
-  body {
-  }
   .hiddenRow {
     padding: 0 !important;
   }
   table, th, td, tbody, thead {
         border-collapse: collapse;
     }
-    body {
+    section {
         line-height: 1.2;
     }
 </style>
-{% endblock styles %} {% block content %}
+{% endblock styles %}
+{% block patients %}active{% endblock patients %}
+ {% block content %}
 <section class="py-0 mb-5">
   <div class="col-md-12">
     <form class="" action="">
