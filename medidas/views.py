@@ -149,14 +149,14 @@ class PrescriptionListView(LoginRequiredMixin,ListView):
     template_name = 'medidas/prescription_list.html'
     def get_queryset(self):
         q = self.request.GET.get('q','')
-        return django_admin_keyword_search(Prescription, q, ['patient__first_name','patient__last_name','patient__dni']).order_by('-date')
+        return django_admin_keyword_search(Prescription, q, ['patient__full_name','patient__dni']).order_by('-date')
     
 class PatientListView(LoginRequiredMixin,ListView):
     model = Patient
     context_object_name = 'patients'
     def get_queryset(self):
         q = self.request.GET.get('q','')
-        return django_admin_keyword_search(Patient, q, ['first_name','last_name','dni']).order_by('-id')
+        return django_admin_keyword_search(Patient, q, ['full_name','dni']).order_by('-id')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["patient_form"] = PatientForm()
