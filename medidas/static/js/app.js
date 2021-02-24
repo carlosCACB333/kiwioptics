@@ -25,7 +25,7 @@ function update_patient() {
     id_patient = $("#id_patient").val()
     datos = $("#prescription_form").serialize()
     console.log(datos)
-    url = "/app/api/patientUpdate/" + $("#id_patient").val() + "/"
+    url = "/api/patientUpdate/" + $("#id_patient").val() + "/"
 
     $.ajax({
         type: "PUT",
@@ -37,13 +37,13 @@ function update_patient() {
             location.reload()
         }, //End of AJAX Success function
     }).fail(function(e) {
-        console.log(e.message)
+
     });
 
 }
 
 function delete_patient() {
-    url = "/app/api/patientDelete/" + $("#id_patient").val() + "/"
+    url = "/api/patientDelete/" + $("#id_patient").val() + "/"
     $.ajax({
         type: "DELETE",
         // url: "/app/api/patients/"+id+"/?format=json",

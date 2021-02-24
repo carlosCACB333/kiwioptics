@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "kiwioptics",
+  "private_key_id": "c58f68b325a2bc30b6b7994fb0b9e7114e9e9c82",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDeSV5UBzaMaXpk\nIo4B2VFCFBMoZfQHKj+lQht3OBgF1K5y/qgVhOBGtq7gAXfg9i9y6yezH+X0lJC1\ncZ5N11T0yZ0wn7/jDF1tJTEwewd/DXCGuzBkl1v8wu6Ifi92gDqkKFS79XK0AVI3\nT/XPpfqg7yvmxLSl6NsmgMDF7IOoRWmjPnfuAb0LZSZfp5QGm3ds39IqN8155bgu\nAe1dbQpmTK5uPoME6H1IBiiB6/pURndHrfjYi42qz4l9SKjpze1Svm61KA+0UsIz\n+OwTaQ/BH4G74+fp+lI9r4Qc8ooeScGlW+VAsQP60VfNiHMpte5pCLI2TD0P8MRO\nML7EPJ5FAgMBAAECggEAAIc8m+cDfGxwv8WsQDlfvdA15nHtlUnGqnIghhVCS1tA\nyeGsjRaKgOiEvGAMhKKZJMUFzGFuRrlGqcO6HFW/bDCBeODcUCISo8SDnCmisCzc\nQFm4CPkqHQzqi7T/EGFIImU9JFA2RFK/ewWr4CE1GgZPfKYphr5prOr/6kiAXJlC\nfsZHIVXKoX2wSRnAED8dMmiV5bvZ3m7hihy/d8avvGBBeb/9uaESQ0SrFFCARUeW\ndV/KGaH2nswO72PtgF2BMCMTkdqsVWpBAHF8QYg6Dc8yOnAAf3un/D4rhNzfsA2C\ntAcqMX6ZZwpv8vLXnfhgHa4l4FtsVqFZVF8QBc54IQKBgQD/9XfkNx2eObHhIlhl\n8r/6ZUFn8lpGSMPMpnniF8laGeMaNUcCK4uZXYn5m5MCslmh2ldRAkTMGRaHjfuv\noQtJ8hBeAK0swp/HQgvzUK9GpUUYbvG4AweFS90Ga3vme4kx8c5HJhTlWB27Tm+W\n3KRAaSitvh9sM8jlV4+k1CZl5QKBgQDeUoPBI+mErDFgtNOiyF5AlpBaFB5IrTqe\nswbijUu7s5DcH4t5QT97ZXZFHhmL7B9lT1hXbPpSMa+V8tA7yCJLNYKUT9FH4lny\n0EB4hsKvKWnCP9RL3noLKKEpZtpolbAdZ1cDVoiQo8loFj73usuuutGK1IymCXWZ\nkU+A4bfQ4QKBgQCO1JCpliP99l4PrpW7liGQ/c3oznGXxOUWH1PmWbWvhMCZEF/m\nkxwcYfkrg6gemh2wVuHgv65aYimTTSTElc5x3hVKD4CTeKuminGWvlCA0JrlDovu\nTip1NKdK/NGwBQHDEBc21sZUUL6Oli9o9QjnNIdRpMVuINubNyheJ1CiDQKBgELu\nMIAq4ZhxhoQIrFYrYEStj1OvDtbuX+F7IC2AQDaH/qpmTMT6YbQyfYKdZy96rJEB\nbCUVx96K2sOX0BzPSZO+zkr8JJMxj8bL7zzZxS6alx5FvRICLlfBqZMfRc2KkvSn\nMcjtejuhM3dEizxlXgCCeacECjvKST8sQfUY/w/BAoGBAPdaFmWmWq9G7x4hlrUD\nVWPEfCuG6BsC11ashOz6icljJsypwC0VreSereEbFm31N+NA9xC9JQV5PSjCTCuV\n4jdErXx815811FeDtNA6e+dS0oRsgomM37wB6RDvWClAzDEZJRc6qdsW5fJKfzfz\nJIB5uc8rsmRPrudCNHjwGi7q\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-ftqav@kiwioptics.iam.gserviceaccount.com",
+  "client_id": "102932962388019734679",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-ftqav%40kiwioptics.iam.gserviceaccount.com"
+}

@@ -96,8 +96,8 @@ select .form-control {
                   <div class='col-1 '>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-                    </button> 
-                  </div>               
+                    </button>
+                  </div>
                 </div>
               {% endif %}
             <div class="row">
@@ -123,7 +123,7 @@ select .form-control {
                 </div>
                 {{form.password|attr:"placeholder:Correo electronico"|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"}}
               </div>
-              
+
 
               <!-- Submit Button -->
               <div class="form-group col-lg-12 mx-auto mb-0">
@@ -143,13 +143,12 @@ select .form-control {
                 <div class="border-bottom w-100 mr-5"></div>
               </div>
 
-              <!-- Social Login -->
-              <div class="form-group col-lg-12 mx-auto">
-                <a href="#" class="btn btn-primary btn-block py-2 btn-facebook">
-                  <i class="fa fa-facebook-f mr-2"></i>
-                  <span class="font-weight-bold">Entrar con Facebook</span>
-                </a>
-              </div>
+             <!-- Social Login -->
+                    <div class="form-group col-lg-12 mx-auto">
+                        <a id="btn-login-facebook" class="btn btn-primary" style="width:100%" href="#!" role="button"
+                        ><i class="fab fa-google"></i
+                        > Iniciar Sesion Con Google</a>
+                    </div>
 
               <!-- Already Registered -->
               <div class="text-center w-100">
@@ -165,6 +164,25 @@ select .form-control {
     </div>
 <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+
+
+<!--  CDN PARA FIREBASE-->
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-app.js"></script>
+
+  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-analytics.js"></script>
+
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-firestore.js"></script>
+
+  <script src="{% static 'js/firebase-google-login.js' %}"></script>
+
+<!--  FIN CDN PARA FIREBASE-->
   </body>
 
 </html>

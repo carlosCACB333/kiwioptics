@@ -13,9 +13,12 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 from django.urls import reverse_lazy
 
+# paquetes para firebase()
+import firebase_admin
+from firebase_admin import credentials
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -27,7 +30,6 @@ SECRET_KEY = 'hp2!&1c3f#0-$#*+x*qdfql_t=&19(d$%(g_-==)unien#3p_m'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -42,6 +44,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'widget_tweaks',
     'rest_framework',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -74,21 +77,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'myOptica.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'myoptica'  ,
+        'NAME': 'myoptica',
         'USER': 'root',
         'PASSWORD': '011235813213455',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -108,7 +109,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -122,10 +122,14 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'users.OpticUser'
 LOGIN_URL = reverse_lazy('users:login')
+
+
+#configuracion para firebase
+cred = credentials.Certificate("firebase-key.json")
+firebase_admin.initialize_app(cred)
