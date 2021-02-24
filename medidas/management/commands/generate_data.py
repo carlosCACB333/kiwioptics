@@ -11,8 +11,8 @@ from medidas.factories import (
     PrescriptionFactory,
 )
 
-NUM_PATIENTS = 100
-NUM_PRESCRIPTIONS = 500
+NUM_PATIENTS = 300
+NUM_PRESCRIPTIONS = 1000
 
 class Command(BaseCommand):
     help = "Generates test data"
@@ -27,8 +27,11 @@ class Command(BaseCommand):
         # Create all the patients
         patients = []
         for _ in range(NUM_PATIENTS):
-            patient = PatientFactory()
-            patients.append(patient)
+            try:
+                patient = PatientFactory()
+                patients.append(patient)
+            except DataError:
+                print('DataError')
 
         # Create all the prescriptions
         for _ in range(NUM_PRESCRIPTIONS):
@@ -39,5 +42,3 @@ class Command(BaseCommand):
                 print('ValidationError')
             except ValueError:
                 print('ValueError')
-            except DataError:
-                print('DataError')
