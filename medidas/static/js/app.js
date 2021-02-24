@@ -10,8 +10,7 @@ function get_patient( url){
             console.log(data)
              dato=data
             $("#id_patient").val(data.id)
-            $("#id_first_name").val(data.first_name)
-            $("#id_last_name").val(data.last_name)
+            $("#id_full_name").val(data.full_name)
             $("#id_dni").val(data.dni)
             $("#id_gender").val(data.gender)
             $("#id_phone").val(data.phone)

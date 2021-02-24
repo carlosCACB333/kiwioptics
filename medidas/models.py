@@ -12,8 +12,7 @@ class Patient(models.Model):
         FEMALE = 'FEMALE','Femenino'
         OTHER = 'OTHER','Otro'
     
-    first_name = models.CharField("Nombres",max_length=100)    
-    last_name = models.CharField("Apellidos",max_length=100)    
+    full_name = models.CharField("Nombre completo", max_length=100)  
     dni = models.CharField("Dni",max_length=20, unique=True, blank=True, null=True)    
     gender = models.CharField("Genero", max_length=20, blank=True, choices=Gender.choices)
     phone = models.CharField("Celular",max_length=30, blank=True)
@@ -24,7 +23,7 @@ class Patient(models.Model):
         verbose_name_plural = "Pacientes"
     
     def __str__(self):
-        return f"{self.last_name} {self.first_name}"
+        return f"{self.full_name}"
 
 # class Laboratory(models.Model):
 

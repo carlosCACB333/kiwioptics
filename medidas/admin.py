@@ -17,12 +17,11 @@ class PatientAdmin(admin.ModelAdmin):
     )
     search_fields = (
         'dni',
-        'first_name',
-        'last_name',
+        'full_name',
     )
 
     def full_name(self, obj):
-        return f"{obj.last_name} {obj.first_name}"
+        return f"{obj.full_name}"
 
 
 # @admin.register(Laboratory)
@@ -86,8 +85,7 @@ class PrescriptionAdmin(admin.ModelAdmin):
 
     search_fields = (
         'patient__dni',
-        'patient__first_name',
-        'patient__last_name',
+        'patient__full_name',
     )
     # list_filter = ('job','habilidades')
     # filter_vertical = ('habilidades',)

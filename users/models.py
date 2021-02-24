@@ -18,7 +18,10 @@ from .managers import CustomUserManager
 
 class OpticUser(AbstractUser):
     username = None
+    first_name = None
+    last_name = None
     email = models.EmailField('Correo electronico', unique=True)
+    full_name = models.CharField("Nombre completo", max_length=100)
     optic = models.CharField('Optica', max_length=50)
 
     USERNAME_FIELD = 'email'
