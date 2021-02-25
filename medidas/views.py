@@ -147,6 +147,7 @@ class PrescriptionListView(LoginRequiredMixin,ListView):
     model = Prescription
     context_object_name = 'prescriptions'
     template_name = 'medidas/prescription_list.html'
+    paginate_by = 20
     def get_queryset(self):
         q = self.request.GET.get('q','')
         return django_admin_keyword_search(Prescription, q, ['patient__full_name','patient__dni']).order_by('-date')
@@ -154,6 +155,7 @@ class PrescriptionListView(LoginRequiredMixin,ListView):
 class PatientListView(LoginRequiredMixin,ListView):
     model = Patient
     context_object_name = 'patients'
+    paginate_by = 20
     def get_queryset(self):
         q = self.request.GET.get('q','')
         return django_admin_keyword_search(Patient, q, ['full_name','dni']).order_by('-id')

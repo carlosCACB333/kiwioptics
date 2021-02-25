@@ -16,7 +16,7 @@ class Patient(models.Model):
     dni = models.CharField("Dni",max_length=20, unique=True, blank=True, null=True)    
     gender = models.CharField("Genero", max_length=20, blank=True, choices=Gender.choices)
     phone = models.CharField("Celular",max_length=30, blank=True)
-    job = models.CharField('Ocupacion', max_length=50, blank=True)
+    job = models.CharField('Ocupacion', max_length=70, blank=True)
 
     class Meta:
         verbose_name = "Paciente"
