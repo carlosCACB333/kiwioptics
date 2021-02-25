@@ -61,13 +61,13 @@
               <li class="nav-item dropdown">
                 <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarDropdown" role="button"
                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Esther
+                  {{user}}
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="#">Mi perfil</a>
                   <a class="dropdown-item" href="#">Suscripciones</a>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Cerrar sesión</a>
+                  <a class="dropdown-item" href="{% url 'users:logout'%}">Cerrar sesión</a>
                 </div>
               </li>
             </ul>
