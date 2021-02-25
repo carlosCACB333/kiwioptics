@@ -130,7 +130,6 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'users.OpticUser'
 LOGIN_URL = reverse_lazy('users:login')
 
-
 #configuracion para firebase
 cred = credentials.Certificate("firebase-key.json")
 firebase_admin.initialize_app(cred)
