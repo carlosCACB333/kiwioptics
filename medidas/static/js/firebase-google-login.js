@@ -53,18 +53,16 @@ function signup(idToken, user) {
     mi_token = idToken
     user = user
     console.log(user)
-    $("#full_name").val(user.displayName)
-    $("#email").val(user.email)
+    $("#id_full_name").val(user.displayName)
+    $("#id_email").val(user.email)
     $("#container-password").hide()
     $("#container-passwordConfirmation").hide()
     $("#account").hide()
     $("#register-google").hide()
     $("#register").show()
 
-    $('#full_name').attr("disabled", true);
-    $('#email').attr("disabled", true);
-
-
+    $('#id_full_name').attr("disabled", true);
+    $('#id_email').attr("disabled", true);
 }
 
 function get_id_token(options) {
@@ -113,7 +111,7 @@ function get_id_token(options) {
 
 
 function register() {
-    var optica = $("#optic").val().trim();
+    var optica = $("#id_optic").val().trim();
     if (optica.length > 0) {
 
         datos = {
@@ -132,7 +130,7 @@ function register() {
                 window.location="/"
             }, //End of AJAX Success function
         }).fail(function() {
-
+            
         });
     }
 }
