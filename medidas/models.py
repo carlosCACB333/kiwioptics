@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.timezone import now
+from users.models import OpticUser
 import decimal
 from termcolor import colored
 
@@ -12,6 +13,8 @@ class Patient(models.Model):
         FEMALE = 'FEMALE','Femenino'
         OTHER = 'OTHER','Otro'
     
+    patient_optic_id = models.PositiveIntegerField(blank=True)
+    optic = models.ForeignKey(OpticUser, verbose_name="Optica", on_delete=models.CASCADE, null=False)
     full_name = models.CharField("Nombre completo", max_length=100)  
     dni = models.CharField("Dni",max_length=20, unique=True, blank=True, null=True)    
     gender = models.CharField("Genero", max_length=20, blank=True, choices=Gender.choices)
@@ -21,21 +24,21 @@ class Patient(models.Model):
     class Meta:
         verbose_name = "Paciente"
         verbose_name_plural = "Pacientes"
+        unique_together = (('optic','dni'),('optic','patient_optic_id'))
     
     def __str__(self):
         return f"{self.full_name}"
 
-# class Laboratory(models.Model):
-
-#     name = models.CharField("Nombre", max_length=50)
-
-#     class Meta:
-#         verbose_name = ("Laboratorio")
-#         verbose_name_plural = ("Laboratorios")
-
-#     def __str__(self):
-#         return self.name
-
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if self._state.adding is True:
+            optic = OpticUser.objects.get(pk=self.optic.id)
+            last_patient = optic.patient_set.last()
+            if last_patient:
+                patient_optic_id = last_patient.patient_optic_id + 1
+            else:
+                patient_optic_id = 1
+            self.patient_optic_id = patient_optic_id
+        return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
 class Prescription(models.Model):
     
@@ -63,6 +66,8 @@ class Prescription(models.Model):
     # print(colored(dip_choices,'red'))
     # print(colored(add_choices,'green'))
 
+    optic = models.ForeignKey(OpticUser, verbose_name="Optica", on_delete=models.CASCADE, null=False)
+    prescription_optic_id = models.PositiveIntegerField(blank=True)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, verbose_name="Paciente")
     # laboratory = models.ForeignKey(Laboratory, on_delete=models.SET_NULL,verbose_name="Laboratorio", blank=True, null=True)
     date = models.DateTimeField(verbose_name='Fecha', default=now)
@@ -100,6 +105,7 @@ class Prescription(models.Model):
     class Meta:
         verbose_name = "Receta"
         verbose_name_plural = "Recetas"
+        unique_together = ('optic','prescription_optic_id')
 
     def __str__(self):
         return f"""{self.patient} S/{self.price}
@@ -108,6 +114,17 @@ class Prescription(models.Model):
         ODC:{self.near_spherical_right if self.near_spherical_right is not None else '?'}({self.near_cylinder_right if self.near_cylinder_right is not None else '?'}){self.near_axis_right if self.near_axis_right is not None else '?'}° 
         OIC:{self.near_spherical_left if self.near_spherical_left is not None else '?'}({self.near_cylinder_left if self.near_cylinder_left is not None else '?'}){self.near_axis_left if self.near_axis_left is not None else '?'}° 
         """
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if self._state.adding is True:
+            optic = OpticUser.objects.get(pk=self.optic.id)
+            last_prescription = optic.prescription_set.last()
+            if last_prescription:
+                prescription_optic_id = last_prescription.prescription_optic_id + 1
+            else:
+                prescription_optic_id = 1
+            self.prescription_optic_id = prescription_optic_id
+        return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
 
 

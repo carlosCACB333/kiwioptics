@@ -5,7 +5,7 @@ from termcolor import colored
 class PatientForm(ModelForm):
     class Meta:
         model = Patient
-        fields = '__all__'
+        exclude = ('optic','patient_optic_id')
     
     def __init__(self, *args, **kwargs):
         super(PatientForm, self).__init__(*args, **kwargs)
@@ -21,7 +21,7 @@ class PrescriptionForm(ModelForm):
     
     class Meta:
         model = Prescription
-        fields = '__all__'
+        exclude = ('optic','prescription_optic_id')
 
     def __init__(self, *args, **kwargs):
         super(PrescriptionForm, self).__init__(*args, **kwargs)

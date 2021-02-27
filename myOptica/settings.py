@@ -128,7 +128,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'users.OpticUser'
-LOGIN_URL = reverse_lazy('users:login')
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'medidas:index'
 
 #configuracion para firebase
 cred = credentials.Certificate("firebase-key.json")

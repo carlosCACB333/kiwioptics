@@ -52,7 +52,7 @@
         </thead>
         {% for prescription in prescriptions %}
         <tr class="">
-          <th class="text-center align-middle p-auto" >{{prescription.id}}</th>
+          <th class="text-center align-middle p-auto" >{{prescription.prescription_optic_id}}</th>
           <td class="align-middle" >
             {{prescription.date|date:'d/m/Y'}}
           </td>
@@ -78,6 +78,7 @@
           <td class="align-middle text-center px-0"><button
               data-toggle="modal"
               data-id="{{prescription.id}}"
+              data-prescription-optic-id="{{prescription.prescription_optic_id}}"
               data-target="#prescription_delete"
               class="btn btn-primary text-primary"
             >
@@ -168,12 +169,13 @@
   $("#prescription_delete").on("show.bs.modal", function (event) {
     var button = $(event.relatedTarget); // Button that triggered the modal
     var recipient = button.data("id"); // Extract info from data-* attributes
+    var prescription_optic_id = button.data("prescription-optic-id")
     // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
     // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
     var modal = $(this);
     modal
       .find(".modal-body")
-      .text("¿Seguro que desea eliminar la Prescripcion N°" + recipient + "?");
+      .text("¿Seguro que desea eliminar la Prescripcion N°" + prescription_optic_id + "?");
     modal.find("#prescription_button_id").val(recipient);
   });
 </script>
