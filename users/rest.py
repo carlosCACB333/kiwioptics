@@ -30,18 +30,15 @@ class GoogleLRegisterView(APIView):
         name = decode_token['name']
 
         optic = request.POST["optic"]
-        try:
-            usuario = OpticUser.objects.get(email=email)
-            token = Token.objects.get(user=usuario)
-        except OpticUser.DoesNotExist:
-            usuario = OpticUser.objects.create(
-                email=email,
-                full_name=name,
-                optic=optic,
-                is_staff=True,
 
-            )
-            token = Token.objects.create(user=usuario)
+        usuario = OpticUser.objects.create(
+            email=email,
+            full_name=name,
+            optic=optic,
+            is_staff=True,
+
+        )
+        token = Token.objects.create(user=usuario)
 
 
         login(self.request, usuario)

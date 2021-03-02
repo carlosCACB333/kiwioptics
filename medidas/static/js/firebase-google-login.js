@@ -19,16 +19,12 @@ $(document).ready(function() {
 
 
 function login(idToken) {
+
     console.log(idToken)
     datos = {
         'token_id': idToken,
     }
 
-    //        axios.post("/accounts/api/loginGoogle",datos).then(
-    //        function(response){
-    //        console.log(response)
-    //        }
-    //        )
     $.ajax({
         method: 'POST',
         // url: "/app/api/patients/"+id+"/?format=json",
@@ -38,9 +34,9 @@ function login(idToken) {
         success: function(data) {
             console.log(data)
             if (data.user != null) {
-                window.location="/"
+                window.location = "/"
             } else {
-                alert("no se encuentra registrado")
+                show_registry_controls();
             }
         }, //End of AJAX Success function
     }).fail(function() {
@@ -49,23 +45,28 @@ function login(idToken) {
 }
 
 
-function signup(idToken, user) {
-    mi_token = idToken
-    user = user
-    console.log(user)
+function show_registry_controls() {
+
     $("#id_full_name").val(user.displayName)
     $("#id_email").val(user.email)
+    $("#container-optic").show()
+    $("#id_optic").focus();
     $("#container-password").hide()
+    $(".close").click();
+
+    $("#message-form").show();
+
     $("#container-passwordConfirmation").hide()
-    $("#account").hide()
-    $("#register-google").hide()
+    $("#container-account").hide()
+    $("#container-register-google").hide()
     $("#register").show()
 
-    $('#id_full_name').attr("disabled", true);
     $('#id_email').attr("disabled", true);
+    $('#id_full_name').attr("disabled", true);
+
 }
 
-function get_id_token(options) {
+function get_id_token() {
 
 
     //  Crea una instancia del objeto del proveedor de Google
@@ -86,11 +87,8 @@ function get_id_token(options) {
             user.getIdToken().then(function(idToken) {
                 // Send token to your backend via HTTPS
                 // obtenemos el toquen id para hacer la validacion
-                if (options == 1) {
-                    login(idToken)
-                } else if (options == 2) {
-                    signup(idToken, user)
-                }
+                mi_token = idToken
+                login(idToken);
             }).catch(function(error) {
                 // Handle error
                 console.log(error)
@@ -127,10 +125,10 @@ function register() {
             data: datos,
             dataType: "json",
             success: function(data) {
-                window.location="/"
+                window.location = "/"
             }, //End of AJAX Success function
         }).fail(function() {
-            
+
         });
     }
 }
