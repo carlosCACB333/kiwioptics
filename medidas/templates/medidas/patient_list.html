@@ -139,14 +139,13 @@
               </div>
               <div class="modal-body">
               <form action="" id="prescription_form">
-                  {% csrf_token %}
-                  <input type="hidden" id="id_patient" name="id">
+                  <input type="hidden" id="id_patient" name="id" data-url-update="{% url 'medidas:rest-patient-update' 0 %}" data-url-delete="{% url 'medidas:rest-patient-delete' 0 %}">
                 {{patient_form}}
               </form>
               </div>
               <div class="modal-footer">
 
-                  <button type="submit" name="" class="btn btn-success text-light" onclick="update_patient()">actualizar</button>
+                  <button type="submit" name="" class="btn btn-success text-light" onclick="update_patient()" >actualizar</button>
                   <button type="submit" name="prescription_id" class="btn btn-danger text-light" onclick="delete_patient()">Eliminar</button>
                   <input type="reset" form="prescription_form" value="limpiar datos" class="btn">
                 <button
@@ -252,6 +251,6 @@
   });
 </script>
 {% load static%}
-<script src="{% static 'js/app.js' %}"></script>
+<script src="{% static 'js/app-patients.js' %}"></script>
 
 {% endblock script %}

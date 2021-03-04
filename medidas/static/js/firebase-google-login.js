@@ -31,6 +31,7 @@ function login(idToken) {
         url: '/accounts/api/loginGoogle',
         data: datos,
         dataType: "json",
+        headers: { 'X-CSRFToken': getCookie('csrftoken') },
         success: function(data) {
             console.log(data)
             if (data.user != null) {
@@ -124,6 +125,7 @@ function register() {
             url: '/accounts/api/registerGoogle',
             data: datos,
             dataType: "json",
+            headers: { 'X-CSRFToken': getCookie('csrftoken') },
             success: function(data) {
                 window.location = "/"
             }, //End of AJAX Success function
