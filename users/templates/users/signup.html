@@ -111,11 +111,11 @@
                     <i class="fa fa-envelope text-muted"></i>
                   </span>
                             </div>
-                            {% if form.email.errors %} {{form.email|attr:"class:form-control form-control-sm bg-white border-left-0 border-md is-invalid"}}
-                            <div id="{{ form.email.id_for_label }}" class="invalid-feedback">
-                                {% for error in form.email.errors %} {{error}} {% endfor %}
+                            {% if form.username.errors %} {{form.username|attr:"class:form-control form-control-sm bg-white border-left-0 border-md is-invalid"}}
+                            <div id="{{ form.username.id_for_label }}" class="invalid-feedback">
+                                {% for error in form.username.errors %} {{error}} {% endfor %}
                             </div>
-                            {% else %} {{form.email|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"}} {% endif %}
+                            {% else %} {{form.username|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"}} {% endif %}
                         </div>
                         <!-- Empresa -->
                         <div class="input-group col-lg-12 mb-4">
@@ -124,11 +124,11 @@
                     <i class="fa fa-eye text-muted"></i>
                   </span>
                             </div>
-                            {% if form.optic.errors %} {{form.optic|attr:"class:form-control form-control-sm bg-white border-left-0 border-md is-invalid"}}
-                            <div id="{{ form.optic.id_for_label }}" class="invalid-feedback">
-                                {% for error in form.optic.errors %} {{error}} {% endfor %}
+                            {% if form.optic_name.errors %} {{form.optic_name|attr:"class:form-control form-control-sm bg-white border-left-0 border-md is-invalid"}}
+                            <div id="{{ form.optic_name.id_for_label }}" class="invalid-feedback">
+                                {% for error in form.optic_name.errors %} {{error}} {% endfor %}
                             </div>
-                            {% else %} {{form.optic|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"}} {% endif %}
+                            {% else %} {{form.optic_name|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"}} {% endif %}
                         </div>
 
                         <!-- Phone Number -->

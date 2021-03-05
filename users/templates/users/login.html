@@ -100,6 +100,17 @@
                     </div>
                     {% endif %}
                     <div class="row">
+                        <div class='input-group col-12 mb-4'>
+                            <div class='input-group-prepend'>
+                                <label class='input-group-text px-3' for="user_type">
+                                Perfil:
+                                </label>
+                            </div>
+                            <select class='custom-select' name="user_type" id="user_type">
+                                <option selected value="">Optica</option>
+                                <option value="">Usuario</option>
+                            </select>
+                        </div>
                         <!-- Email Address -->
                         <div class="input-group col-lg-12 mb-4">
                             <div class="input-group-prepend">
@@ -116,7 +127,7 @@
                     <i class="fa fa-lock text-muted"></i>
                   </span>
                             </div>
-                            {{form.password|attr:"placeholder:contraseña"|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"}}
+                            {{form.password|attr:"placeholder:Contraseña"|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"}}
                         </div>
 
                         <!--optic-->

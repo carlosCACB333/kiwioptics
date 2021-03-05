@@ -39,7 +39,8 @@ def add_prescription(request):
         patient_form = PatientForm(request.POST)
         if patient_form.is_valid():
             new_patient = patient_form.save(commit=False)
-            new_patient.optic = request.user
+            account = request.user
+            new_patient.optic = account.opticuser
             new_patient.save()
             updated_request = request.POST.copy()
             updated_request.update({'patient': new_patient})
@@ -47,7 +48,7 @@ def add_prescription(request):
             # print(colored(patient_form.cleaned_data,'yellow'))
             if prescription_form.is_valid():
                 new_prescription = prescription_form.save(commit=False)
-                new_prescription.optic = request.user
+                new_prescription.optic = account.opticuser
                 new_prescription.save()
                 print(colored(prescription_form.cleaned_data,'blue'))
                 messages.success(request, f'Historia añadida exitosamente')

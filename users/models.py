@@ -2,37 +2,50 @@ from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 from .managers import CustomUserManager
 
-# Create your models here.
-# class Optica(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     optica = models.CharField(("Optica"), max_length=50)
-#     phone = models.CharField("Celular",max_length=30)
+class Account(AbstractUser):
+    class Types(models.TextChoices):
+        Optic = 'OPTIC','Optic'
+        Employee = 'EMPLOYEE','Employee'
 
-
-#     class Meta:
-#         verbose_name = "Optica"
-#         verbose_name_plural = "Opticas"
-
-#     def __str__(self):
-#         return f'{self.optica}'
-
-class OpticUser(AbstractUser):
-    username = None
     first_name = None
     last_name = None
-    email = models.EmailField('Correo electronico', unique=True)
+    email = None
     full_name = models.CharField("Nombre completo", max_length=100)
-    optic = models.CharField('Optica', max_length=50)
-
-    USERNAME_FIELD = 'email'
+    user_type = models.CharField(choices=Types.choices, max_length=10, blank=False, null=False)
+    USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
 
     class Meta:
-        verbose_name = "Usuario Optica"
-        verbose_name_plural = "Usuarios Optica"
+        verbose_name = "Cuenta"
+        verbose_name_plural = "Cuentas"
 
     def __str__(self):
-        return self.email
+        return self.username
+
+class OpticUser(models.Model):
+    account = models.OneToOneField(Account, on_delete=models.CASCADE, null=False)
+    optic_name = models.CharField("Nombre de la optica", max_length=50, null=False)
+
+    class Meta:
+        verbose_name = "OpticUser"
+        verbose_name_plural = "OpticUsers"
+
+    def __str__(self):
+        return str(self.account)
+
+
+class EmployeeUser(models.Model):
+    account = models.OneToOneField(Account, on_delete=models.CASCADE)
+    optic = models.ForeignKey(OpticUser, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "EmployeeUser"
+        verbose_name_plural = "EmployeeUsers"
+
+    def __str__(self):
+        return str(self.account)
+
+
 
