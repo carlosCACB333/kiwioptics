@@ -32,7 +32,9 @@
     <!-- Sidebar -->
     <div id="sidebar-container" class="bg-light border-right">
       <div class="logo">
-        <h4 class="font-weight-bold mb-0">Kiwi Optic</h4>
+        <div>
+        <h4 style='width:10px' class="font-weight-bold mb-0 overflow-auto">{{user.get_opticuser|upper|truncatechars:9}}</h4>
+        </div>
       </div>
       <div class="menu list-group-flush">
         <a href="{% url 'medidas:index' %}" class="list-group-item list-group-item-action p-3 border-0 {% block dashboard %}{% endblock dashboard %}"><i class="fas fa-ellipsis-v"></i><i class="fas fa-ellipsis-v"></i><i class="fas fa-ellipsis-v"></i> Dashboard</a>
@@ -55,7 +57,6 @@
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
               <li class="nav-item dropdown">

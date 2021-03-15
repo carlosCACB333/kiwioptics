@@ -100,7 +100,7 @@
                     </div>
                     {% endif %}
                     <div class="row">
-                        <div class='input-group col-12 mb-4'>
+                        {% comment %} <div class='input-group col-12 mb-4'>
                             <div class='input-group-prepend'>
                                 <label class='input-group-text px-3' for="user_type">
                                 Perfil:
@@ -110,7 +110,7 @@
                                 <option selected value="">Optica</option>
                                 <option value="">Usuario</option>
                             </select>
-                        </div>
+                        </div> {% endcomment %}
                         <!-- Email Address -->
                         <div class="input-group col-lg-12 mb-4">
                             <div class="input-group-prepend">
@@ -118,7 +118,7 @@
                     <i class="fa fa-envelope text-muted"></i>
                   </span>
                             </div>
-                            {{form.username|attr:"placeholder:Correo electronico"|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"|attr:"id:id_email"}}
+                            {{form.username|attr:"placeholder:Correo electronico o Nombre de usuario"|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"|attr:"id:id_email"}}
                         </div>
                         <!-- Password -->
                         <div class="input-group col-lg-12 mb-4" id="container-password">

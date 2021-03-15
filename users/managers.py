@@ -32,3 +32,5 @@ class CustomUserManager(BaseUserManager):
         user.is_active = True
         user.save(using=self._db)
         return user
+
+    

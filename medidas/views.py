@@ -40,7 +40,7 @@ def add_prescription(request):
         if patient_form.is_valid():
             new_patient = patient_form.save(commit=False)
             account = request.user
-            new_patient.optic = account.opticuser
+            new_patient.optic = account.get_opticuser()
             new_patient.save()
             updated_request = request.POST.copy()
             updated_request.update({'patient': new_patient})
@@ -48,7 +48,7 @@ def add_prescription(request):
             # print(colored(patient_form.cleaned_data,'yellow'))
             if prescription_form.is_valid():
                 new_prescription = prescription_form.save(commit=False)
-                new_prescription.optic = account.opticuser
+                new_prescription.optic = account.get_opticuser()
                 new_prescription.save()
                 print(colored(prescription_form.cleaned_data,'blue'))
                 messages.success(request, f'Historia añadida exitosamente')
@@ -133,7 +133,9 @@ def patient_add_prescription(request, pk):
         updated_request.update({'patient':patient})
         prescription_form = PrescriptionForm(updated_request)
         if prescription_form.is_valid():
-            prescription_form.save()
+            new_prescription = prescription_form.save(commit=False)
+            new_prescription.optic = request.user.get_opticuser()
+            new_prescription.save()
             return redirect('medidas:prescriptions')
         else:
             print(colored(prescription_form.errors,'red'))
@@ -155,7 +157,7 @@ class PrescriptionListView(LoginRequiredMixin,ListView):
     paginate_by = 20
     def get_queryset(self):
         q = self.request.GET.get('q','')
-        opticUser = self.request.user.id
+        opticUser = self.request.user.get_opticuser().id
         return django_admin_keyword_search(Prescription, q, ['patient__full_name','patient__dni']).filter(optic_id=opticUser).order_by('-date')
     
 class PatientListView(LoginRequiredMixin,ListView):
@@ -164,7 +166,7 @@ class PatientListView(LoginRequiredMixin,ListView):
     paginate_by = 20
     def get_queryset(self):
         q = self.request.GET.get('q','')
-        opticUser = self.request.user.id
+        opticUser = self.request.user.get_opticuser().id
         return django_admin_keyword_search(Patient, q, ['full_name','dni']).filter(optic_id=opticUser).order_by('-id')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
