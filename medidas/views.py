@@ -4,16 +4,17 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, UpdateView, TemplateView
+from django.views.generic import ListView, UpdateView, TemplateView, CreateView
 from django.db.models.functions import Concat
 from django.core.serializers import serialize
-from .forms import PatientForm, PrescriptionForm
-from .models import Patient, Prescription
+from .forms import PatientForm, PrescriptionForm, CrystalPruebaForm
+from .models import Patient, Prescription, Crystal, CrystalTreatments
 from termcolor import colored
 from django.contrib import messages
 from .custom_functions import django_admin_keyword_search
 
 # Create your views here.
+
 
 @login_required
 def index(request):
@@ -31,6 +32,7 @@ def index(request):
 #             'job':patient.job,
 #         }
 #         return JsonResponse(data, safe=False)
+
 
 @login_required
 def add_prescription(request):
@@ -50,17 +52,17 @@ def add_prescription(request):
                 new_prescription = prescription_form.save(commit=False)
                 new_prescription.optic = account.get_opticuser()
                 new_prescription.save()
-                print(colored(prescription_form.cleaned_data,'blue'))
+                print(colored(prescription_form.cleaned_data, 'blue'))
                 messages.success(request, f'Historia añadida exitosamente')
                 return redirect('medidas:prescriptions')
             else:
-                print(colored(prescription_form.errors,'red'))
+                print(colored(prescription_form.errors, 'red'))
                 new_patient.delete()
         else:
             prescription_form = PrescriptionForm(request.POST)
             prescription_form.is_valid()
-            print(colored(patient_form.errors,'red'))
-            print(colored(prescription_form.errors,'red'))
+            print(colored(patient_form.errors, 'red'))
+            print(colored(prescription_form.errors, 'red'))
     else:
         patient_form = PatientForm()
         prescription_form = PrescriptionForm()
@@ -68,10 +70,11 @@ def add_prescription(request):
     context['prescription_form'] = prescription_form
     return render(request, 'medidas/prescription.html', context)
 
+
 @login_required
 def prescription_detail(request, pk):
     context = {}
-    if request.method=='GET':
+    if request.method == 'GET':
         prescription = Prescription.objects.get(pk=pk)
         patient = prescription.patient
         patient_form = PatientForm(instance=patient)
@@ -82,10 +85,11 @@ def prescription_detail(request, pk):
             'detail': True,
         })
 
+
 @login_required
 def prescription_update(request, pk):
     context = {}
-    if request.method=='GET':
+    if request.method == 'GET':
         prescription = Prescription.objects.get(pk=pk)
         patient = prescription.patient
         patient_form = PatientForm(instance=patient)
@@ -95,18 +99,20 @@ def prescription_update(request, pk):
             'prescription_form': prescription_form,
             'update': True,
         })
-    if request.method=='POST':
+    if request.method == 'POST':
         prescription = Prescription.objects.get(pk=pk)
         patient = prescription.patient
         updated_request = request.POST.copy()
         updated_request.update({'patient': patient})
-        prescription_form = PrescriptionForm(updated_request,instance=prescription)
+        prescription_form = PrescriptionForm(
+            updated_request, instance=prescription)
         if prescription_form.is_valid():
             prescription_form.save()
             messages.success(request, 'Prescripcion actualizada exitosamente!')
             return redirect('medidas:prescription-detail', pk=pk)
         else:
-            print(colored(prescription_form.errors,'red'))
+            print(colored(prescription_form.errors, 'red'))
+
 
 @login_required
 def prescription_delete(request):
@@ -116,9 +122,10 @@ def prescription_delete(request):
         prescription.delete()
         return redirect('medidas:prescriptions')
 
+
 @login_required
 def patient_add_prescription(request, pk):
-    if request.method=='GET':
+    if request.method == 'GET':
         patient = Patient.objects.get(pk=pk)
         patient_form = PatientForm(instance=patient)
         prescription_form = PrescriptionForm()
@@ -127,10 +134,10 @@ def patient_add_prescription(request, pk):
             'prescription_form': prescription_form,
             'update': True,
         })
-    if request.method=='POST':
+    if request.method == 'POST':
         patient = Patient.objects.get(pk=pk)
         updated_request = request.POST.copy()
-        updated_request.update({'patient':patient})
+        updated_request.update({'patient': patient})
         prescription_form = PrescriptionForm(updated_request)
         if prescription_form.is_valid():
             new_prescription = prescription_form.save(commit=False)
@@ -138,8 +145,8 @@ def patient_add_prescription(request, pk):
             new_prescription.save()
             return redirect('medidas:prescriptions')
         else:
-            print(colored(prescription_form.errors,'red'))
-        
+            print(colored(prescription_form.errors, 'red'))
+
 
 # def prescription_list(request):
 #     prescriptions = Prescription.objects.order_by(
@@ -150,29 +157,33 @@ def patient_add_prescription(request, pk):
 #     }
 #     return render(request, 'medidas/prescription_list.html', context)
 
-class PrescriptionListView(LoginRequiredMixin,ListView):
+class PrescriptionListView(LoginRequiredMixin, ListView):
     model = Prescription
     context_object_name = 'prescriptions'
     template_name = 'medidas/prescription_list.html'
     paginate_by = 20
+
     def get_queryset(self):
-        q = self.request.GET.get('q','')
+        q = self.request.GET.get('q', '')
         opticUser = self.request.user.get_opticuser().id
-        return django_admin_keyword_search(Prescription, q, ['patient__full_name','patient__dni']).filter(optic_id=opticUser).order_by('-date')
-    
-class PatientListView(LoginRequiredMixin,ListView):
+        return django_admin_keyword_search(Prescription, q, ['patient__full_name', 'patient__dni']).filter(optic_id=opticUser).order_by('-date')
+
+
+class PatientListView(LoginRequiredMixin, ListView):
     model = Patient
     context_object_name = 'patients'
     paginate_by = 20
+
     def get_queryset(self):
-        q = self.request.GET.get('q','')
+        q = self.request.GET.get('q', '')
         opticUser = self.request.user.get_opticuser().id
-        return django_admin_keyword_search(Patient, q, ['full_name','dni']).filter(optic_id=opticUser).order_by('-id')
+        return django_admin_keyword_search(Patient, q, ['full_name', 'dni']).filter(optic_id=opticUser).order_by('-id')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["patient_form"] = PatientForm()
         return context
-    
+
 
 # class PrescriptionUpdateView(UpdateView):
 #     model = Prescription
@@ -181,7 +192,16 @@ class PatientListView(LoginRequiredMixin,ListView):
 
 class TestView(TemplateView):
     template_name = "medidas/test.html"
-    
 
 
+class PruebaCreateView(CreateView):
+    model = Crystal
+    template_name = "prueba.html"
+    form_class = CrystalPruebaForm
 
+    def get_form_kwargs(self):
+        kwargs = super(PruebaCreateView, self).get_form_kwargs()
+        kwargs.update({
+            'id': "aqui va el id del usario"
+        })
+        return kwargs

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Prescription, Patient
+from .models import Prescription, Patient,CrystalTreatments,CrystalMaterial,Crystal
 # Register your models here.
 
 @admin.register(Patient)
@@ -89,3 +89,7 @@ class PrescriptionAdmin(admin.ModelAdmin):
     )
     # list_filter = ('job','habilidades')
     # filter_vertical = ('habilidades',)
+
+admin.site.register(CrystalTreatments)
+admin.site.register(CrystalMaterial)
+admin.site.register(Crystal)

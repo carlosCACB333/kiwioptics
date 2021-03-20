@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
 {% block content %}
-<div class="card mb-5 shadow-sm border-0 shadow-hover p-3" id="employee_update">
+<div class="card mb-5 shadow-sm border-0 shadow-hover p-5" id="employee_update">
     <h2>Tus datos</h2>
 
     <form action="{% url 'users:employeeUpdate' user.get_opticuser.id %}"  method="POST" id="form_employee_update">
