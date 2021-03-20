@@ -189,17 +189,8 @@
                     <!-- Social Login -->
 
                     <div class="form-group col-lg-12 mx-auto" id="container-register-google">
-                        <a class="btn btn-primary" style="width:100%" href="#" role="button"
-                           onclick="get_id_token()"><i class="fab fa-google"></i
+                        <a class="btn btn-primary" style="width:100%" href="{% url 'users:google' %}" role="button"><i class="fab fa-google"></i
                         > Iniciar Sesión Con Google</a>
-                    </div>
-
-
-
-                     <div class="form-group col-lg-12 mx-auto" id="register" style="display: none">
-                        <a class="btn btn-primary" style="width:100%" href="#" role="button"
-                           onclick="register()"><i class="fab fa-google"></i
-                        > Continuar</a>
                     </div>
 
 
@@ -218,22 +209,7 @@
 <script src="{% static 'js/jquery.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 
-<!--  CDN PARA FIREBASE-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.js"></script>
-<!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
 
-<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-<script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-app.js"></script>
-
-<!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
-<script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-analytics.js"></script>
-
-<!-- Add Firebase products that you want to use -->
-<script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-firestore.js"></script>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="{% static 'js/getCookie.js' %}"></script>
-<script src="{% static 'js/firebase-google-login.js' %}"></script>
 
 
 </body>

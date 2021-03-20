@@ -18,9 +18,9 @@ $(document).ready(function() {
 })
 
 
-function login(idToken) {
+function login(url,idToken) {
 
-    console.log(idToken)
+    console.log(url)
     datos = {
         'token_id': idToken,
     }
@@ -28,7 +28,7 @@ function login(idToken) {
     $.ajax({
         method: 'POST',
         // url: "/app/api/patients/"+id+"/?format=json",
-        url: '/accounts/api/loginGoogle',
+        url: url,
         data: datos,
         dataType: "json",
         headers: { 'X-CSRFToken': getCookie('csrftoken') },
@@ -40,7 +40,8 @@ function login(idToken) {
                 show_registry_controls();
             }
         }, //End of AJAX Success function
-    }).fail(function() {
+    }).fail(function(e) {
+        console.log(e.responseText)
 
     });
 }
@@ -48,26 +49,19 @@ function login(idToken) {
 
 function show_registry_controls() {
 
-    $("#id_full_name").val(user.displayName)
-    $("#id_email").val(user.email)
-    $("#container-optic").show()
-    $("#id_optic").focus();
-    $("#container-password").hide()
+    $("#id_full_name.full_name").val(user.displayName)
+    $("#id_username.username").val(user.email)
+    $("#token_id").val(mi_token)
     $(".close").click();
-
     $("#message-form").show();
 
-    $("#container-passwordConfirmation").hide()
-    $("#container-account").hide()
-    $("#container-register-google").hide()
-    $("#register").show()
-
-    $('#id_email').attr("disabled", true);
-    $('#id_full_name').attr("disabled", true);
+    $("#container-register").show();
+    $("#container-register-google").hide();
+   
 
 }
 
-function get_id_token() {
+function get_id_token(url) {
 
 
     //  Crea una instancia del objeto del proveedor de Google
@@ -89,7 +83,7 @@ function get_id_token() {
                 // Send token to your backend via HTTPS
                 // obtenemos el toquen id para hacer la validacion
                 mi_token = idToken
-                login(idToken);
+                login(url,idToken);
             }).catch(function(error) {
                 // Handle error
                 console.log(error)

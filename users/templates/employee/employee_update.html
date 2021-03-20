@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="card mb-5 shadow-sm border-0 shadow-hover p-3" id="employee_update">
+    <h2>Tus datos</h2>
+
+    <form action="{% url 'users:employeeUpdate' user.get_opticuser.id %}"  method="POST" id="form_employee_update">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="col-md-12 mb-3">
+                <label for="validationDefault01">optica</label>
+                {{ form.optic|attr:"disabled" }}
+                {{ form.optic|attr:"hidden" }}
+                <div class='col-12 invalid-feedback d-block'>
+                    {% for error in form.optic.errors %} {{error}} {% endfor %}
+                </div>
+            </div>
+            
+            <div class="col-md-12 mb-3">
+                <label for="validationDefault02">cuenta</label>
+                {{ form.account|attr:"disabled"}}
+                {{ form.account|attr:"hidden"}}
+                <div class='col-12 invalid-feedback d-block'>
+                    {% for error in form.account.errors %} {{error}} {% endfor %}
+                </div>
+                
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-6 mb-3">
+                <label for="validationDefault01">Correo Electrónico</label>
+                {{ form.email }}
+                <div class='col-12 invalid-feedback d-block'>
+                    {% for error in form.email.errors %} {{error}} {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="validationDefault02">Nombre en la prescripcion</label>
+                {{ form.prescription_name }}
+                <div class='col-12 invalid-feedback d-block'>
+                    {% for error in form.prescription_name.errors %} {{error}} {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-6 mb-3">
+                <label for="validationDefault01">Teléfono</label>
+                {{form.phone}}
+                <div class='col-12 invalid-feedback d-block'>
+                    {% for error in form.phone.errors %} {{error}} {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="validationDefault02">celular</label>
+                {{form.other_phone}}
+                <div class='col-12 invalid-feedback d-block'>
+                    {% for error in form.other_phone.errors %} {{error}} {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-12 mb-3">
+                <button class="btn btn-success btn-block" type="submit" form="form_employee_update">actualizar datos</button>
+            </div>
+        </div>
+
+
+
+
+    </form>
+</div>
+
+{% endblock content %}

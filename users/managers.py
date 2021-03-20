@@ -1,5 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import ugettext_lazy as _
+from django.db import models
 
 class CustomUserManager(BaseUserManager):
     """
@@ -33,4 +34,8 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    
+
+class EmployeeUserManager(models.Manager):
+
+    def get_employee_for_account(self,user):
+        return self.filter(account=user)

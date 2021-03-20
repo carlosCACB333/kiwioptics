@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block styles %}
+<style>
+    .container {
+        height: 100%;
+        align-content: center;
+    }
+
+    .image_outer_container {
+        margin-top: auto;
+        margin-bottom: auto;
+        border-radius: 50%;
+        position: relative;
+    }
+
+    .image_inner_container {
+        border-radius: 50%;
+        padding: 5px;
+        background: #833ab4;
+        background: -webkit-linear-gradient(to bottom, #fcb045, #fd1d1d, #833ab4);
+        background: linear-gradient(to bottom, #fcb045, #fd1d1d, #833ab4);
+    }
+
+    .image_inner_container img {
+        height: 200px;
+        width: 200px;
+        border-radius: 50%;
+        border: 5px solid white;
+    }
+
+    .image_outer_container .green_icon {
+        background-color: #4cd137;
+        position: absolute;
+        right: 30px;
+        bottom: 10px;
+        height: 30px;
+        width: 30px;
+        border: 5px solid white;
+        border-radius: 50%;
+    }
+
+    /* formulario */
+    .form-control {
+        padding: 0.8rem 0.5rem
+    }
+
+    .border-md {
+        border-width: 2px;
+    }
+
+    .invalid-border {
+        border-color: #dc3545;
+    }
+    select.form-control{
+        height: auto !important;
+    }
+    
+</style>
+
+{% endblock styles %}
+
+
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{message.tags}}">
+    {{message}}
+</div>
+
+{{context}}
+{% endfor %}
+{% endif %}
+<div class="row">
+    <div class="col-xl-5 col-lg-12">
+        <div class="card mb-5 shadow-sm border-0 shadow-hover p-3">
+            <div class="p-3 mb-2 bg-info text-white"> <h1>Empresa: {{user.get_opticuser}}</h1></div>
+           
+            <h2 class="d-flex justify-content-between">Editar perfil
+              
+                
+        </h2>
+            <div class="container mt-5">
+                <div class="d-flex justify-content-center h-100">
+                    <div class="image_outer_container">
+                        <div class="green_icon"></div>
+                        <div class="image_inner_container">
+                            {% if user.picture %}
+                            
+                            {% if user.picture|truncatechars:7 == 'http...' %}
+                            <img src="{{user.picture}}" alt="No tiene foto de perfil">
+                            {% else %}
+                            <img src="{{user.picture.url}}" alt="No tiene foto de perfil">
+                            {% endif %}
+                                
+                           
+                            {% else %}
+                            <img src="https://cdn.pixabay.com/photo/2018/11/13/22/01/instagram-3814081_960_720.png" alt="No tiene foto de perfil">
+                            {% endif %}
+                                
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                tipo de usuario: <span class="badge badge-primary text-primary"><strong>{{user.user_type }}</strong></span>
+                <p>
+                    <a class="text-primary font-weight-bold" data-toggle="collapse" href="#collapseExample"
+                        role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Actualizar contraseña
+                    </a>
+
+                </p>
+                <div class="collapse" id="collapseExample">
+                    <div class="card card-body">
+                        <!-- form update password-->
+                        <form  method="post" id="form_update_password">
+                            {% csrf_token %}
+
+
+                            <!-- Password old -->
+                            <div class="input-group col-lg-12" id="container-passwordConfirmation">
+                                <div class="input-group-prepend">
+                                    <span
+                                        class="input-group-text bg-white px-3 border-md border-right-0 {% if form_change_password.old_password.errors %}invalid-border{% endif %}">
+                                        <i class="fa fa-lock text-muted"></i>
+                                    </span>
+                                </div>
+
+
+                                {% if form_change_password.old_password.errors %}
+                                {{form_change_password.old_password|attr:"class:form-control border-md is-invalid border-left-0"|attr:"placeholder:Contraseña Antigua"}}
+                                {% else %}
+                                {{form_change_password.old_password|attr:"class:form-control border-md border-left-0"|attr:"placeholder:Contraseña Antigua"}}
+                                {% endif %}
+
+                            </div>
+                            <div class='col-12 invalid-feedback d-block'>
+                                {% for error in form_change_password.old_password.errors %} {{error}} {% endfor %}
+                            </div>
+
+
+                            <!-- Password new -->
+                            <div class="input-group col-lg-12" id="container-passwordConfirmation">
+                                <div class="input-group-prepend">
+                                    <span
+                                        class="input-group-text bg-white px-3 border-md border-right-0 {% if form_change_password.new_password1.errors %}invalid-border{% endif %}">
+                                        <i class="fa fa-lock text-muted"></i>
+                                    </span>
+                                </div>
+                                {% if form_change_password.new_password1.errors %}
+                                {{form_change_password.new_password1|attr:"class:form-control border-md is-invalid border-left-0"|attr:"placeholder:Contraseña Nueva"}}
+                                {% else %}
+                                {{form_change_password.new_password1|attr:"class:form-control border-md border-left-0"|attr:"placeholder:Contraseña Nueva"}}
+                                {% endif %}
+
+                            </div>
+                            <div class='col-12 invalid-feedback d-block'>
+
+                                {% for error in form_change_password.new_password1.errors %} {{error}} {% endfor %}
+                            </div>
+
+
+
+                            <!-- Password Confirmation -->
+                            <div class="input-group col-lg-12" id="container-passwordConfirmation">
+                                <div class="input-group-prepend">
+                                    <span
+                                        class="input-group-text bg-white px-3 border-md border-right-0 {% if form_change_password.new_password2.errors %}invalid-border{% endif %}">
+                                        <i class="fa fa-lock text-muted"></i>
+                                    </span>
+                                </div>
+                                {% if form_change_password.new_password2.errors %}
+                                {{form_change_password.new_password2|attr:"class:form-control border-md is-invalid border-left-0"|attr:"placeholder:Confirmar Contraseña"}}
+                                {% else %}
+                                {{form_change_password.new_password2|attr:"class:form-control border-md border-left-0"|attr:"placeholder:Confirmar Contraseña"}}
+                                {% endif %}
+                            </div>
+                            <div class='col-12 invalid-feedback d-block'>
+                                {% for error in form_change_password.new_password2.errors %} {{error}} {% endfor %}
+                            </div>
+
+                            <div class="input-group col-lg-12 mb-4">
+                                <button class="btn btn-success" type="submit" form="form_update_password">Actualizar</button>
+                            </div>
+
+                        </form>
+                        <!-- ***** -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+ 
+
+    <div class="col-xl-7 col-lg-12" id="employee_update_container">
+        
+        
+    </div>
+
+</div>
+{% endblock content %}
+
+
+{% block script %}
+{% if form_change_password.new_password2.errors or form_change_password.new_password1.errors or form_change_password.old_password.errors %}
+<script>
+    $(document).ready(function () {
+        $('#collapseExample').collapse('show');
+    });
+</script>
+{% endif %}
+
+
+
+
+{% if user.user_type == 'EMPLOYEE' %}
+    <script>
+        $(document).ready(function () {
+            $("#employee_update_container").load("{% url 'users:employeeUpdate' user.get_optic_type.id %} #employee_update");
+        });
+    </script>
+    
+{% endif %}
+
+
+{% if user.user_type == 'OPTIC' %}
+    <script>
+        $(document).ready(function () {
+            $("#employee_update_container").load("{% url 'users:opticUpdate' user.get_optic_type.id %} #employee_update",function(){
+                // $("#id_username").val('{{user}}');
+                //  $("#id_full_name").val('{{user.full_name}}');
+            });
+           
+        });
+    </script>
+{% endif %}
+
+
+{% endblock script %}
