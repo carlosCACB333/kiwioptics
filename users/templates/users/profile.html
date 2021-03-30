@@ -25,6 +25,7 @@
     .image_inner_container img {
         height: 200px;
         width: 200px;
+        object-fit: cover;
         border-radius: 50%;
         border: 5px solid white;
     }
@@ -57,7 +58,7 @@
     }
 
    #profile_image:hover{
-    filter: brightness(50%);
+    filter: brightness(80%);
    }
     
 </style>
@@ -78,11 +79,6 @@
 <div class="row">
     <div class="col-xl-5 col-lg-12">
         <div class="card  shadow-sm border-0 shadow-hover ">
-            
-           
-              
-                
-        </h2>
             <div class="container   bg-info">
                 <div class="d-flex justify-content-center h-100 mt-5">
                     <div class="image_outer_container">
@@ -111,8 +107,8 @@
                    <h5 class="text-white"> {{user.full_name}}</h5>
                 </div>
 
-                <form action="">
-                    <input type="file" name="myImage" accept="image/jpeg"  id="id_picture" name="picture" hidden/>
+                <form action="" method="POST" enctype="multipart/form-data" id="form_change_picture">
+                    <input type="file" onchange='updatePicture("{% url 'users:rest-picture-update' user.id%}")' accept="image/*"  id="id_picture" name="picture" hidden/>
                 </form>
 
                 
@@ -243,23 +239,52 @@
 {% endif %}
 
 
+
+
 {% if user.user_type == 'OPTIC' %}
     <script>
         $(document).ready(function () {
             $("#employee_update_container").load("{% url 'users:opticUpdate' user.get_optic_type.id %} #employee_update",function(){
                 // $("#id_username").val('{{user}}');
                 //  $("#id_full_name").val('{{user.full_name}}');
-            });
-
-            //actualizamos la foro de perfil
-
-            $("#profile_image").click(function(){
-                $("#id_picture").click();
-            })
-           
+            });           
         });
+
+        
     </script>
 {% endif %}
+
+<script>
+    $(document).ready(function(){
+         //actualizamos la foro de perfil
+         $("#profile_image").click(function(){
+                $("#id_picture").click();
+         });
+    });
+    function updatePicture(url){
+            
+            var formData = new FormData(document.getElementById("form_change_picture"));
+            console.log(formData)
+
+            if($("#id_picture").val()){
+                $.ajax({
+                url: url,
+                type: "PATCH",
+                dataType: "json",
+                headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false
+                }).done(function (res) {
+                    perfil=res
+                    $("#profile_image").attr('src',res.picture)
+                    console.log(res.picture);
+
+                });
+            }
+        }
+</script>
 
 
 {% endblock script %}

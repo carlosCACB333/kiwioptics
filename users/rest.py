@@ -1,14 +1,16 @@
 from rest_framework.views import APIView
+from rest_framework.generics import UpdateAPIView
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from firebase_admin import auth
+from rest_framework.permissions import IsAuthenticated
 
 from django.views.generic import View
 from django.http import HttpResponseRedirect
 from django.contrib.auth import login, logout
 from django.urls import reverse_lazy
 
-from .serializer import LoginSocialSerializer
+from .serializer import LoginSocialSerializer,PictureSerializer
 from .models import OpticUser,Account
 
 
@@ -101,3 +103,10 @@ class LogoutUser(View):
     def get(self, request, *args, **kwargs):
         logout(self.request)
         return HttpResponseRedirect(reverse_lazy('users:login'))
+
+
+
+class PictureUpdateAPIView(UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class=PictureSerializer
+    queryset=Account.objects.all()

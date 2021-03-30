@@ -33,7 +33,7 @@
     <div id="sidebar-container" class="bg-light border-right">
       <div class="logo">
         <div>
-        <h4 style='width:10px' class="font-weight-bold mb-0 overflow-auto">{{user.get_opticuser|upper|truncatechars:9}}</h4>
+        <h6 style='width:10px' class="font-weight-bold mb-0 overflow-auto">{{user.get_opticuser|upper|truncatechars:20}}</h6>
         </div>
       </div>
       <div class="menu list-group-flush">
@@ -42,6 +42,7 @@
         <a href="{% url 'medidas:prescriptions' %}" class="list-group-item list-group-item-action p-3 border-0 {% block prescriptions %}{% endblock prescriptions %}"><i class="fas fa-book-medical"></i> Prescripciones</a>
         <a href="{% url 'medidas:patients' %}" class="list-group-item list-group-item-action p-3 border-0 {% block patients %}{% endblock patients %}"><i class="fas fa-blind"></i> Pacientes</a>
         <a href="{% url 'medidas:patients' %}" class="list-group-item list-group-item-action p-3 border-0 {% block office %}{% endblock office %}"><i class="fas fa-store-alt"></i> Sucursales</a>
+        <a href="{% url 'users:userOfOptic' %}" class="list-group-item list-group-item-action p-3 border-0 {% block user_of_optic %}{% endblock user_of_optic %}"><i class="fas fa-users"></i> usuarios</a>
       </div>  
     </div>
     <!-- Fin sidebar -->
