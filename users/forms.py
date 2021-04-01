@@ -94,6 +94,9 @@ class UserOfOpticForm(forms.ModelForm):
                     'value':''
                 },
             ),
+
+            'user_permissions':forms.CheckboxSelectMultiple(),
+            'groups':forms.CheckboxSelectMultiple(),
         }
 
     def __init__(self, *args, **kwargs):

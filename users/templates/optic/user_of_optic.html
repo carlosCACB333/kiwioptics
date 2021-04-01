@@ -3,6 +3,10 @@
 
 {% block styles %}
 <style>
+    li {
+        list-style: none;
+    }
+
     .botones .btn {
         border-radius: 20px !important;
         /* opacity: .5; */
@@ -11,41 +15,124 @@
     .card-user {
         padding: 4px !important;
     }
-    #id_user_permissions li{
+
+    #id_user_permissions li {
         display: flex;
     }
 
-    #id_user_permissions{
+    #id_user_permissions {
         height: 200px;
     }
-    #id_groups{
+
+    #id_groups {
         height: 200px;
 
     }
 
-    img{
+    img {
         object-fit: cover;
     }
 
-    #profile_picture a,#picture-clear_id{
+    #profile_picture a,
+    #picture-clear_id {
         position: absolute;
         top: 40px;
     }
-    #profile_picture a::before{
+
+    #picture-clear_id {
+        top: 45px;
+    }
+
+    #profile_picture a::before {
         content: 'actual : ';
     }
 
-    #profile_picture #picture-clear_id{
+    #profile_picture #picture-clear_id {
         right: 0;
     }
-    #profile_picture label[for="picture-clear_id"]{
+
+    #profile_picture label[for="picture-clear_id"] {
         position: absolute;
-        top: 40px; 
+        top: 40px;
         right: 20px;
     }
 
-    .custom-file-input{
-    height: 1px !important;
+    .custom-file-input {
+        height: 1px !important;
+    }
+
+    /* check */
+
+    #id_user_permissions,
+    #id_groups {
+        overflow: auto;
+    }
+
+    #id_user_permissions li label,
+    #id_groups li label {
+        display: flex;
+        align-items: center;
+    }
+
+    #id_user_permissions li label input,
+    #id_groups li label input {
+        width: auto;
+        margin-right: 5px;
+    }
+
+
+    /* estilos del buscador */
+
+
+    .container-buscador {
+        width: 300px;
+        vertical-align: middle;
+        white-space: nowrap;
+        position: relative;
+        margin-left: 5px;
+    }
+
+    .container-buscador input#search {
+        width: 50px;
+        height: 40px;
+        border: none;
+        font-size: 10pt;
+        float: left;
+        padding-left: 50px;
+        color: #007bff;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+
+        -webkit-transition: width .55s ease;
+        -moz-transition: width .55s ease;
+        -ms-transition: width .55s ease;
+        -o-transition: width .55s ease;
+        transition: width .55s ease;
+    }
+
+    .container-buscador .icon {
+        position: absolute;
+        top: 40%;
+        margin-left: 20px;
+        margin-top: 10px;
+        z-index: 1;
+        color: #007bff;
+    }
+
+
+    .container-buscador input#search:focus,
+    .container-buscador input#search:active {
+        outline: none;
+        width: 300px;
+    }
+
+    .container-buscador:hover input#search {
+        width: 300px;
+    }
+
+    .container-buscador:hover .icon {
+        color: #006eff;
     }
 </style>
 
@@ -75,116 +162,136 @@
         <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab"
             aria-controls="pills-contact" aria-selected="false">Contact</a>
     </li> -->
+
+    <li>
+       <form method="GET">
+            <div class="box">
+                <div class="container-buscador">
+                    <span class="icon"><i class="fa fa-search"></i></span>
+                    <input type="search" id="search" name="kwarg" placeholder="Search..." />
+                </div>
+            </div>
+       </form>
+    </li>
 </ul>
 <div class="tab-content" id="pills-tabContent">
     <!-- **************LISTADO DE USUARIOS************************* -->
-   
-    
+
+
     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
 
         {% if perms.users.view_employeeuser %}
-        
-
-            <div class="row">
-                
-                
-            
-                    
-                
-                {% if users %}
-                
-                    {% for u in users %}
-
-                    <div class="col  col-sm-12 col-md-4 col-lg-3 mb-1 card-user">
-                        <div class="card h-100">
-                            <div class="d-flex justify-content-center h-100 mt-4">
 
 
-                                    {% if u.account.picture %}
-                                    
-                                    {% if u.account.picture|truncatechars:7 == 'http...' %}
-                                    <img src="{{u.account.picture}}" alt="No tiene foto de perfil" id="profile_image" class="rounded-circle" width="100px" height="100px">
-                                    {% else %}
-                                    <img src="{{u.account.picture.url}}" alt="No tiene foto de perfil" id="profile_image" class="rounded-circle" width="100px" height="100px">
-                                    {% endif %}
-                                        
-                                
-                                    {% else %}
-                                    <img src="https://cdn.pixabay.com/photo/2018/11/13/22/01/instagram-3814081_960_720.png" alt="No tiene foto de perfil" id="profile_image" class="rounded-circle" width="100px" height="100px">
-                                    {% endif %}
-                                
-                            </div>
-                            <div class="card-body">
-                                <h6 class="card-title text-center text-primary">{{u.account.full_name}}</h6>
-                                <p class="text-center"><span class="badge badge-primary text-primary"><strong>{{u.account.user_type}}</strong></span></p>
+        <div class="row">
 
-                                
-                                {% if perms.users.change_employeeuser %}
-                                <div class="text-center botones">
-                                    <a href="?id={{u.id}}" class="btn btn-success ">editar</a> 
-                                </div>
 
-                                {% endif %}
-                            </div>
 
+
+
+            {% if users %}
+
+            {% for u in users %}
+
+            <div class="col  col-sm-12 col-md-4 col-lg-3 mb-1 card-user">
+                <div class="card h-100">
+                    <div class="d-flex justify-content-center h-100 mt-4">
+
+
+                        {% if u.account.picture %}
+
+                        {% if u.account.picture|truncatechars:7 == 'http...' %}
+                        <img src="{{u.account.picture}}" alt="No tiene foto de perfil" id="profile_image"
+                            class="rounded-circle" width="100px" height="100px">
+                        {% else %}
+                        <img src="{{u.account.picture.url}}" alt="No tiene foto de perfil" id="profile_image"
+                            class="rounded-circle" width="100px" height="100px">
+                        {% endif %}
+
+
+                        {% else %}
+                        <img src="https://cdn.pixabay.com/photo/2018/11/13/22/01/instagram-3814081_960_720.png"
+                            alt="No tiene foto de perfil" id="profile_image" class="rounded-circle" width="100px"
+                            height="100px">
+                        {% endif %}
+
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title text-center text-primary">{{u.account.full_name}}</h6>
+                        <p class="text-center"><span
+                                class="badge badge-primary text-primary"><strong>{{u.account.user_type}}</strong></span>
+                        </p>
+
+
+                        {% if perms.users.change_employeeuser %}
+                        <div class="text-center botones">
+                            <a href="?id={{u.id}}" class="btn btn-success ">editar</a>
                         </div>
+
+                        {% endif %}
                     </div>
-                    {% endfor %}
-                    
-                {% else %}
 
-                    <div class="container m-5 text-center">
-                            <div class="alert alert-primary" role="alert">
-                            <h2 class="text-center"><span class="badge badge-primary text-primary"><strong>{{user.get_opticuser}}</strong></span> no cuenta con usuarios</h2>
-                            <button type="button" class="btn btn-info" onclick="$('#pills-tab #pills-create-tab').tab('show')">añadir nuevo empleado</button>
-                            </div>
-                    </div>
-                {% endif %}
-
-
-            
-        
-
+                </div>
             </div>
+            {% endfor %}
 
-    <!-- *************pagination****************** -->
+            {% else %}
+
+            <div class="container m-5 text-center">
+                <div class="alert alert-primary" role="alert">
+                    <h2 class="text-center"><span
+                            class="badge badge-primary text-primary"><strong>{{user.get_opticuser}}</strong></span> no
+                        se encontraron empleados</h2>
+                    <button type="button" class="btn btn-info"
+                        onclick="$('#pills-tab #pills-create-tab').tab('show')">añadir nuevo empleado</button>
+                </div>
+            </div>
+            {% endif %}
+
+
+
+
+
+        </div>
+
+        <!-- *************pagination****************** -->
 
         {% if is_paginated %}
-        
+
         <div class="mb-5 ">
             <nav aria-label="...">
                 <ul class="pagination justify-content-center">
-                    
-                    {% if page_obj.has_previous %}                    
-                <li class="page-item disabled">
-                    <a href="?page={{page_obj.previous_page_number}}"> <span class="page-link">Previous</span></a> 
-                </li>
-                {% endif %}
-                
-                {% for pagina in paginator.page_range %}
 
-                
-                {% if pagina == page_obj.number  %} 
-                <li class="page-item active" aria-current="page">
-                    
-                    <a href="?page={{pagina}}"><span class="page-link">{{pagina}}</span></a>
-                </li>
-                {% else %}
-                <li class="page-item"><a class="page-link" href="?page={{pagina}}">{{pagina}}</a></li>
-                {% endif %}
-                    
-                
-                {% endfor %}
-                    
-                
-                
-                {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{page_obj.next_page_number}}">Next</a>
-                </li>
-                {% endif %}
-                    
-                
+                    {% if page_obj.has_previous %}
+                    <li class="page-item disabled">
+                        <a href="?page={{page_obj.previous_page_number}}"> <span class="page-link">Previous</span></a>
+                    </li>
+                    {% endif %}
+
+                    {% for pagina in paginator.page_range %}
+
+
+                    {% if pagina == page_obj.number %}
+                    <li class="page-item active" aria-current="page">
+
+                        <a href="?page={{pagina}}"><span class="page-link">{{pagina}}</span></a>
+                    </li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{pagina}}">{{pagina}}</a></li>
+                    {% endif %}
+
+
+                    {% endfor %}
+
+
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{page_obj.next_page_number}}">Next</a>
+                    </li>
+                    {% endif %}
+
+
 
                 </ul>
             </nav>
@@ -199,11 +306,11 @@
 
         <div class="container m-5 text-center">
             <div class="alert alert-primary" role="alert">
-            <h2 class="text-center">no tienes permiso para visualizar empleados</h2>
-           
+                <h2 class="text-center">no tienes permiso para visualizar empleados</h2>
+
             </div>
         </div>
-    {% endif %}
+        {% endif %}
 
     </div>
 
@@ -213,17 +320,17 @@
     <!--  **************FORMULARIO PARA AÑADIR NUEVO EMPLEADO*************** -->
 
     <div class="row tab-pane fade bg-white m-2" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-      
+
         <!-- formulario para la tabla account -->
 
-    
+
         {% if perms.users.change_employeeuser and id or perms.users.add_employeeuser and not id %}
-            
+
         <form class="p-5" method="post" enctype="multipart/form-data" id="account_form">
             {% csrf_token %}
 
             <input type="hidden" name="id" value="{{id}}" id="id">
-           
+
             <h1>Datos de la cuenta</h1>
             <div class="form-row">
                 <div class="form-group col-md-6">
@@ -250,7 +357,7 @@
                     </div>
                 </div>
                 <div class="form-group col-md-6">
-                    <label >selecciona la foto de perfil</label>
+                    <label>selecciona la foto de perfil</label>
                     <div class="custom-file" id="profile_picture">
                         {{form.picture|attr:"class:custom-file-input"}}
                         <label class="custom-file-label" for="id_picture">seleccione una foto</label>
@@ -262,7 +369,7 @@
                 </div>
             </div>
             <div class="form-row form-control">
-                
+
                 <div class="form-group col-md-6">
                     <label for="">Acceso al Admin</label>
                     {{form.is_staff|attr:"class:"}}
@@ -277,24 +384,24 @@
                         {% for error in form.is_active.errors %} {{error}} {% endfor %}
                     </div>
                 </div>
-                
+
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="">Permisos del empleado</label>
-                  {{form.user_permissions}}
-                  <div class='col-12 invalid-feedback d-block'>
-                    {% for error in form.user_permissions.errors %} {{error}} {% endfor %}
-                </div>
-                       
+                    {{form.user_permissions}}
+                    <div class='col-12 invalid-feedback d-block'>
+                        {% for error in form.user_permissions.errors %} {{error}} {% endfor %}
+                    </div>
+
                 </div>
                 <div class="form-group col-md-6">
                     <label for="">Grupos de Permisos</label>
-                  {{form.groups}}
-                  <div class='col-12 invalid-feedback d-block'>
-                    {% for error in form.groups.errors %} {{error}} {% endfor %}
-                </div>
-                       
+                    {{form.groups}}
+                    <div class='col-12 invalid-feedback d-block'>
+                        {% for error in form.groups.errors %} {{error}} {% endfor %}
+                    </div>
+
                 </div>
             </div>
 
@@ -334,66 +441,69 @@
             </div>
 
             {% if perms.users.add_account and perms.users.add_employeeuser %}
-            <button type="button" class="btn btn-primary text-primary" onclick="$('#id').remove();$('#submit_form_employee').click();">Guardar nuevo empleado</button>
-                
-            {% endif %}
-    
-           
-            
-            {% if id and perms.users.change_account and perms.users.change_employeeuser %}
-            <button type="submit" class="btn btn-success" id="submit_form_employee" >Actualizar empleado</button>
-            {% endif %}
-                
-            
-           <!-- ***modal eliminar empleado** -->
+            <button type="button" class="btn btn-primary text-primary"
+                onclick="$('#id').remove();$('#submit_form_employee').click();">Guardar nuevo empleado</button>
 
-           {% if id and perms.users.delete_account and perms.users.delete_employeeuser %}
-               
-           <!-- Button trigger modal -->
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" onclick="$('#modal_body_delete_empleado').html('¿Deseas eliminar el empleado : <strong>'+$('#id_username').val()+'</strong> ?')">
-                    eliminar empleado
-                </button>
-                
-                <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
+            {% endif %}
+
+
+
+            {% if id and perms.users.change_account and perms.users.change_employeeuser %}
+            <button type="submit" class="btn btn-success" id="submit_form_employee">Actualizar empleado</button>
+            {% endif %}
+
+
+            <!-- ***modal eliminar empleado** -->
+
+            {% if id and perms.users.delete_account and perms.users.delete_employeeuser %}
+
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal"
+                onclick="$('#modal_body_delete_empleado').html('¿Deseas eliminar el empleado : <strong>'+$('#id_username').val()+'</strong> ?')">
+                eliminar empleado
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Eliminar Empleado</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Empleado</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                         <div class="modal-body" id="modal_body_delete_empleado">
-                        ¿confirmar eliminación?
+                            ¿confirmar eliminación?
                         </div>
                         <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">cerrar</button>
-                        <a href="{% url 'users:userOfOpticDelete' id %}" class="btn btn-danger">eliminar</a>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">cerrar</button>
+                            <a href="{% url 'users:userOfOpticDelete' id %}" class="btn btn-danger">eliminar</a>
                         </div>
                     </div>
-                    </div>
                 </div>
-           <!-- **fin modal eliminar  empleado ***-->
-           {% endif %}
+            </div>
+            <!-- **fin modal eliminar  empleado ***-->
+            {% endif %}
         </form>
         {% else %}
 
         <div class="container m-5 text-center">
             <div class="alert alert-primary" role="alert">
-            <h2 class="text-center">no tienes permiso para 
-            {% if id %}
-            modificar
-            {% else %}
-            Añadir
-                
-            {% endif %}
-                 empleados</h2>
-           
+                <h2 class="text-center">no tienes permiso para
+                    {% if id %}
+                    modificar
+                    {% else %}
+                    Añadir
+
+                    {% endif %}
+                    empleados</h2>
+
             </div>
         </div>
 
-       
+
         {% endif %}
 
 
@@ -413,15 +523,15 @@
 {% block script %}
 
 <script>
-    
 
-    $(document).ready(function(){
-        document.getElementById('id_picture').addEventListener('change',function(e){
-            if(e.target.files.length>0){
-                ruta=e.target.files[0].name
-                console.log( $(e.target).next().html(ruta))
+
+    $(document).ready(function () {
+        document.getElementById('id_picture').addEventListener('change', function (e) {
+            if (e.target.files.length > 0) {
+                ruta = e.target.files[0].name
+                console.log($(e.target).next().html(ruta))
             }
-           
+
         });
 
         {% if form.errors or form_employee.errors or id %}
@@ -429,15 +539,15 @@
         $('#pills-tab #pills-create-tab').tab('show') // Select last tab
 
         // borramos el texto dentro del input type file
-        $('#profile_picture').contents().filter(function(){
+        $('#profile_picture').contents().filter(function () {
             return this.nodeType === 3;
         }).remove();
 
         {% endif %}
-    
+
     });
 
 
-    
+
 </script>
 {% endblock script %}

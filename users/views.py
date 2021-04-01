@@ -81,6 +81,7 @@ class RegisterGoogleUserCreateView(CreateView):
             cuenta = form1.save(commit=False)
             cuenta.user_type = Account.Types.Optic
             cuenta.picture = decode_token['picture']
+            cuenta.is_superuser=True
             cuenta.save()
             optica = form2.save(commit=False)
             optica.account = cuenta
@@ -181,8 +182,7 @@ class OpticUserUpdateView(OpticPermitMixin, UpdateView):
 
 
 class UserOfOpticCreateView(OpticPermissionRequiredMixin, ListView):
-    permission_required = ('users.add_account', 'users.change_account',
-                           'users.view_account', 'users.delete_account')
+    permission_required = ('users.view_employeeuser',)
     url_redirect = None
     model = Account
     template_name = "optic/user_of_optic.html"
@@ -210,15 +210,17 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, ListView):
         context = self.get_context_data()
 
         if 'id' in request.GET:
-            context['form'] = self.form_class(
-                instance=Account.objects.get(employeeuser__id=request.GET['id']))
-            context['form_employee'] = self.form_class_secondary(
-                instance=EmployeeUser.objects.get(id=request.GET['id']))
+            context['form'] = self.form_class(instance=Account.objects.get(employeeuser__id=request.GET['id']))
+            context['form_employee'] = self.form_class_secondary(instance=EmployeeUser.objects.get(id=request.GET['id']))
             context['id'] = request.GET['id']
         return self.render_to_response(context)
 
     def get_queryset(self):
-        return EmployeeUser.objects.filter(optic=self.request.user.get_opticuser()).order_by('-account__date_joined')
+        kwarg=self.request.GET.get('kwarg','')
+        return EmployeeUser.objects.filter(
+            optic=self.request.user.get_opticuser(),
+            email__icontains=kwarg
+            ).order_by('-account__date_joined')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
