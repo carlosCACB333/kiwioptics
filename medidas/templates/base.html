@@ -42,6 +42,18 @@
         <a href="{% url 'medidas:prescriptions' %}" class="list-group-item list-group-item-action p-3 border-0 {% block prescriptions %}{% endblock prescriptions %}"><i class="fas fa-book-medical"></i> Prescripciones</a>
         <a href="{% url 'medidas:patients' %}" class="list-group-item list-group-item-action p-3 border-0 {% block patients %}{% endblock patients %}"><i class="fas fa-blind"></i> Pacientes</a>
         <a href="{% url 'medidas:patients' %}" class="list-group-item list-group-item-action p-3 border-0 {% block office %}{% endblock office %}"><i class="fas fa-store-alt"></i> Sucursales</a>
+        <a href="#crystalsSubMenu" data-toggle='collapse' aria-expanded='false' class="dropdown-toggle list-group-item list-group-item-action p-3 border-0"><i class="fas fa-adjust"></i> Lunas </a>
+        <ul class="collapse list-unstyled my-0" id="crystalsSubMenu">
+            <li>
+                <a href="{% url 'medidas:crystals' %}" class="list-group-item list-group-item-action pl-4 p-3 border-0 {% block crystals %}{% endblock crystals %}">Tipos</a>
+            </li>
+            <li>
+                <a href="{% url 'medidas:materials' %}" class='list-group-item list-group-item-action pl-4 p-3 border-0'>Materiales</a>
+            </li>
+            <li>
+                <a href="{% url 'medidas:treatments' %}" class='list-group-item list-group-item-action pl-4 p-3 border-0'>Tratamientos</a>
+            </li>
+        </ul>
       </div>  
     </div>
     <!-- Fin sidebar -->
@@ -76,7 +88,10 @@
         </div>
       </nav>
       <div id="content" class="container-fluid px-0 px-sm-1 px-md-2 p-lg-3">
-        {% block content %}{% endblock content %}
+		<section class="py-0 mb-5">
+			{% block content %}
+			{% endblock content %}
+		</section>
       </div>
     </div>
     <!-- Fin Page Content -->

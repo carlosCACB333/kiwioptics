@@ -13,7 +13,6 @@
 {% endblock styles %}
 {% block patients %}active{% endblock patients %}
  {% block content %}
-<section class="py-0 mb-5">
   <div class="col-md-12">
     <form class="" action="">
   <div class="input-group mb-3">
@@ -25,7 +24,7 @@
       id="search"
     />
     <div class="input-group-append">
-      <button class="btn btn-primary text-primary" type="submit" value="Buscar">
+      <button class="btn btn-primary border border-primary text-primary" type="submit" value="Buscar">
         <i class="fas fa-search"></i> Buscar
       </button>
     </div>
@@ -59,21 +58,21 @@
               data-toggle="modal"
               data-id="{{patient.id}}"
               data-target="#patient_view"
-              class="btn btn-primary text-primary"
+              class="btn btn-primary border border-primary text-primary"
               onclick="get_patient('{% url 'medidas:rest-patient-detail' patient.id %}')"
             >
               <i class="far fa-eye"></i>
             </button>
           </td>
             <td class='text-center px-0'>
-              <a href='{% url 'medidas:patient-add' patient.id %}' class='btn btn-primary text-primary'>
+              <a href='{% url 'medidas:patient-add' patient.id %}' class='btn btn-primary border border-primary text-primary'>
                 <i class="fas fa-file-medical"></i>
               </a>
             </td>
             <td class="text-center pl-0">
               <button data-toggle="collapse"
             data-target="#patient{{forloop.counter}}"
-            class="btn btn-primary text-primary accordion-toggle">
+            class="btn btn-primary border border-primary text-primary accordion-toggle">
                 <i style='transform: rotate(180deg);' class="fas fa-chevron-up"></i>
               </button>
             </td>
@@ -99,11 +98,11 @@
                       <td class='text-center px-0'>{{prescription.date|date:'d/m/Y'}}</td>
                       <td class='text-center px-0'>S/.{{prescription.price}}</td>
                       <td class='text-center px-0'>
-                        <a class='btn btn-primary text-primary' href="{% url 'medidas:prescription-detail' prescription.id %}" class="btn btn-default btn-sm">
+                        <a class='btn btn-primary border border-primary text-primary' href="{% url 'medidas:prescription-detail' prescription.id %}" class="btn btn-default btn-sm">
                           <i class="far fa-eye"></i>
                         </a>
                         <a
-              class="btn btn-primary text-primary"
+              class="btn btn-primary border border-primary text-primary"
               href="{% url 'medidas:prescription-update' prescription.id %}"
               ><i class="far fa-edit"></i
             ></a>
@@ -112,7 +111,7 @@
               data-id="{{prescription.id}}"
               data-prescription-optic-id="{{prescription.prescription_optic_id}}"
               data-target="#prescription_delete"
-              class="btn btn-primary text-primary"
+              class="btn btn-primary border border-primary text-primary"
             >
               <i class="far fa-trash-alt"></i>
             </button>
@@ -234,7 +233,6 @@
   </div>          
 </div>
 {% endif %}
-</section>
 {% endblock content %}
 {% block script %}
 

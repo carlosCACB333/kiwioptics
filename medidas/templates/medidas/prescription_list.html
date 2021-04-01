@@ -7,6 +7,7 @@
         border-collapse: collapse;
     }
     td {
+      white-space: nowrap;
     }
     section {
         line-height: 1.2;
@@ -15,7 +16,6 @@
 {% endblock styles %}
 {% block prescriptions %}active{% endblock prescriptions %}
  {% block content %}
-<section class="py-0 mb-5">
 <h1 class='display-4'>Lista de prescripciones</h1>
   {% if messages %} {% for message in messages %}
   <div class="alert alert-{{message.tags}}">{{message}}</div>
@@ -30,7 +30,7 @@
       id="search"
     />
     <div class="input-group-append">
-      <button class="btn btn-primary text-primary" type="submit" value="Buscar">
+      <button class="btn btn-primary border border-primary text-primary" type="submit" value="Buscar">
         <i class="fas fa-search"></i> Buscar
       </button>
     </div>
@@ -39,15 +39,15 @@
   
   <div class="row no-gutters">
     <div class="col-12">
-      <table class="table table-sm table-striped table-bordered table-responsive-lg mx-2">
+      <table class="table table-sm table-striped table-bordered table-responsive-md mx-2">
         <thead class='table-primary'>
             <tr class="">
           <th class="text-center align-middle" scope="col">N°</th>
           <th class="align-middle p-0" scope="col">Fecha</th>
           <th class="align-middle" scope="col">Paciente</th>
           <th class="align-middle" scope="col">Dni</th>
-          <th class="align-middle" scope="col">Precio</th>
-          <th colspan="3" class="align-middle text-center" scope="col">Opciones</th>
+          <th class="align-middle" scope="col">Total</th>
+          <th colspan="4" class="align-middle text-center" scope="col">Opciones</th>
         </tr>
         </thead>
         {% for prescription in prescriptions %}
@@ -56,22 +56,33 @@
           <td class="align-middle" >
             {{prescription.date|date:'d/m/Y'}}
           </td>
-          <td class="align-middle" >{{prescription.patient|title|truncatechars:25}}</td>
+          <td class="align-middle" >{{prescription.patient|title|truncatechars:30}}</td>
           <td class="align-middle" >
             {{prescription.patient.dni|default_if_none:"-----"|truncatechars:12}}
           </td>
           <td class="align-middle" >
-            S/.{{prescription.price|default_if_none:"-----"}}
+            {% if prescription.get_total is None %}
+              -----
+            {% else %}
+              S/.{{prescription.get_total}}
+            {% endif %}
           </td>
           <td class="align-middle text-center px-0" >
             <a
-              class="btn btn-primary text-primary"
+              class="btn btn-primary border border-primary text-primary"
+              href=""
+              ><i class="far fa-file-pdf"></i>
+            </a>
+          </td>
+          <td class="align-middle text-center px-0" >
+            <a
+              class="btn btn-primary border border-primary text-primary"
               href="{% url 'medidas:prescription-detail' prescription.id %}"
               ><i class="far fa-eye"></i
             ></a>
           </td>
           <td class="align-middle text-center px-0"><a
-              class="btn btn-primary text-primary"
+              class="btn btn-primary border border-primary text-primary"
               href="{% url 'medidas:prescription-update' prescription.id %}"
               ><i class="far fa-edit"></i
             ></a></td>
@@ -80,7 +91,7 @@
               data-id="{{prescription.id}}"
               data-prescription-optic-id="{{prescription.prescription_optic_id}}"
               data-target="#prescription_delete"
-              class="btn btn-primary text-primary"
+              class="btn btn-primary border border-primary text-primary"
             >
               <i class="far fa-trash-alt"></i>
             </button></td>
@@ -163,7 +174,6 @@
   </div>          
 </div>
 {% endif %}
-</section>
 {% endblock content %} {% block script %}
 <script>
   $("#prescription_delete").on("show.bs.modal", function (event) {

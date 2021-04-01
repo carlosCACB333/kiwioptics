@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block crystals %}active{% endblock crystals %}
+{% block content %}
+<div class='row justify-content-between mb-2'>
+  <div class='col-5'>
+    <h1 class='display-4'>Lista de lunas</h1>
+  </div>
+  <div class='col-2 align-self-end'>
+    <a href='{% url 'medidas:crystal-add' %}' class='btn btn-primary border border-primary text-primary px-4'>Añadir Luna</a>
+  </div>
+</div>
+<div class="row no-gutters">
+    <div class="col-12">
+      <table class="table table-sm table-striped table-bordered table-responsive-md mx-2">
+        <thead class='table-primary'>
+            <tr class="">
+          <th class="text-center align-middle" scope="col">N°</th>
+          <th class="align-middle p-0" scope="col">Descripción</th>
+          <th class="align-middle" scope="col">Material</th>
+          <th class="align-middle" scope="col">Tratamientos</th>
+          <th class="align-middle" scope="col">Precio</th>
+          <th colspan="4" class="align-middle text-center" scope="col">Opciones</th>
+        </tr>
+        </thead>
+        {% for crystal in crystals %}
+        <tr class="">
+          <th class="text-center align-middle p-auto" >{{forloop.counter}}</th>
+          <td class="align-middle">{{crystal.name|title|truncatechars:70}}</td>
+          <td class="align-middle">{{crystal.material|title|truncatechars:40}}</td>
+          <td class="align-middle">
+            {{crystal.get_treatments|default_if_none:"-----"|truncatechars:150}}
+          </td>
+          <td class='align-middle'>
+          {% if crystal.default_price %}
+            S/.{{crystal.default_price}}
+          {% else %}
+            -----
+          {% endif %}
+          </td>
+          <td class="align-middle text-center px-0"><a
+              class="btn btn-primary text-primary border border-primary"
+              href=""
+              ><i class="far fa-edit"></i
+            ></a></td>
+          <td class="align-middle text-center px-0"><button
+              class="btn btn-primary text-primary border border-primary"
+            ><i class="far fa-trash-alt"></i>
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+</div>
+{% endblock content %}

@@ -13,7 +13,7 @@ medica {% endblock title %}
 {% endblock styles %}
 {% block prescription-add %}active{% endblock prescription-add %}
  {% block content %}
-<section class="py-0 mb-5">
+
 {% if messages %}
         {% for message in messages %}
           <div class="alert alert-{{message.tags}}">
@@ -21,7 +21,27 @@ medica {% endblock title %}
           </div>
         {% endfor %}
 {% endif %}
-  <div class="row no-gutters">
+
+<div class="row no-gutters">
+{{prescription_form.subsidiary.label_tag}}
+{{prescription_form.subsidiary}}
+{{prescription_form.diagnosis.label_tag}}
+{{prescription_form.diagnosis|attr:"list:diagnosis"}}
+{{prescription_form.measure_price.label_tag}}
+{{prescription_form.measure_price}}
+{{prescription_form.crystals.label_tag}}
+{{prescription_form.crystals}}
+{{prescription_form.crystals_price.label_tag}}
+{{prescription_form.crystals_price}}
+{{prescription_form.frame.label_tag}}
+{{prescription_form.frame}}
+{{prescription_form.frame_price.label_tag}}
+{{prescription_form.frame_price}}
+<datalist id="diagnosis">
+{% for key, value in diagnosis_choices %}
+    <option value="{{value}}"></option>
+{% endfor %}
+</datalist>
     <div class="col-lg-3 px-0 pr-lg-2">
         <div class="card m-0">
             <div class="card-header">
@@ -70,15 +90,15 @@ medica {% endblock title %}
                     </div> {% endcomment %}
                     <div class='accordion'>
                         <ul class="list-group list-group-flush">
-                            <button class="list-group-item btn btn-primary text-primary text-left" data-toggle='collapse' data-target='#lejos' aria-expanded='true' aria-controls='lejos'>Mostrar / esconder Lejos</button>
+                            <button class="list-group-item btn btn-primary border border-primary text-primary text-left" data-toggle='collapse' data-target='#lejos' aria-expanded='true' aria-controls='lejos'>Mostrar / esconder Lejos</button>
                             <div id='lejos' class='collapse show'>
                             {% include 'medidas/far_table.html' %}
                             </div>
-                            <button class="list-group-item btn btn-primary text-primary text-left" data-toggle='collapse' data-target='#intermedio' aria-expanded='true' aria-controls='intermedio'>Mostrar / esconder Intermedio</button>
+                            <button class="list-group-item btn btn-primary border border-primary text-primary text-left" data-toggle='collapse' data-target='#intermedio' aria-expanded='true' aria-controls='intermedio'>Mostrar / esconder Intermedio</button>
                             <div id='intermedio' class='collapse'>
                             {% include 'medidas/intermediate_table.html' %}
                             </div>
-                            <button class="list-group-item btn btn-primary text-primary text-left" data-toggle='collapse' data-target='#cerca' aria-expanded='true' aria-controls='cerca'>Mostrar / esconder Cerca</button>
+                            <button class="list-group-item btn btn-primary border border-primary text-primary text-left" data-toggle='collapse' data-target='#cerca' aria-expanded='true' aria-controls='cerca'>Mostrar / esconder Cerca</button>
                             <div id='cerca' class='collapse'>
                             {% include 'medidas/near_table.html' %}
                             </div>
@@ -99,9 +119,14 @@ medica {% endblock title %}
                 </div>
                 <div class=''>
                     <div class="form-group">
-                        {{prescription_form.observation.errors}}
-                        {{prescription_form.observation.label_tag}}
-                        {{prescription_form.observation|attr:"rows:3"}}
+                        {{prescription_form.patient_notes.errors}}
+                        {{prescription_form.patient_notes.label_tag}}
+                        {{prescription_form.patient_notes|attr:"rows:3"}}
+                    </div>
+                    <div class="form-group">
+                        {{prescription_form.laboratory_notes.errors}}
+                        {{prescription_form.laboratory_notes.label_tag}}
+                        {{prescription_form.laboratory_notes|attr:"rows:3"}}
                     </div>
                     <div class="form-row">
                         <div class='col-2'>
@@ -124,15 +149,29 @@ medica {% endblock title %}
         {% if detail %}
         <a class='btn btn-success text-light' href="{% url 'medidas:prescription-update' prescription_form.instance.id %}">Editar Prescripcion</a>
         {% else %}
-        <input class="btn btn-primary text-primary" form='prescription_form' type="submit" value="Guardar Prescripcion">
+        <input class="btn btn-primary border border-primary text-primary" form='prescription_form' type="submit" value="Guardar Prescripcion">
         {% endif %}
     </div>
     <form action="" method='POST' id='prescription_form'>{% csrf_token %}
     </form>
-</section>
 {% endblock content %}
 {% block script %}
     <script>
+    {% comment %} function monofocal(){
+        $('.monofocal').collapse('toggle')
+        $('.bifocal').collapse('hide')
+        $('.progresivo').collapse('hide')
+    }
+    function bifocal(){
+        $('.monofocal').collapse('hide')
+        $('.bifocal').collapse('toggle')
+        $('.progresivo').collapse('hide')
+    }
+    function progresivo(){
+        $('.monofocal').collapse('hide')
+        $('.bifocal').collapse('hide')
+        $('.progresivo').collapse('toggle')
+    } {% endcomment %}
     {% if detail %}
             var inputs = document.querySelectorAll("[form='prescription_form']");
             inputs.forEach((input) => {
