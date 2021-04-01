@@ -7,8 +7,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, UpdateView, TemplateView, CreateView
 from django.db.models.functions import Concat
 from django.core.serializers import serialize
-from .forms import PatientForm, PrescriptionForm, CrystalPruebaForm
-from .models import Patient, Prescription, Crystal, CrystalTreatments
+from .forms import PatientForm, PrescriptionForm, CrystalForm
+from .models import Patient, Prescription, DiagnosisChoices, Crystal, CrystalTreatments, CrystalMaterial
 from termcolor import colored
 from django.contrib import messages
 from .custom_functions import django_admin_keyword_search
@@ -46,28 +46,29 @@ def add_prescription(request):
             new_patient.save()
             updated_request = request.POST.copy()
             updated_request.update({'patient': new_patient})
-            prescription_form = PrescriptionForm(updated_request)
-            # print(colored(patient_form.cleaned_data,'yellow'))
+            prescription_form = PrescriptionForm(updated_request, request=request)
+            print(colored(patient_form.cleaned_data,'yellow'))
             if prescription_form.is_valid():
                 new_prescription = prescription_form.save(commit=False)
                 new_prescription.optic = account.get_opticuser()
+                print(colored(prescription_form.cleaned_data,'blue'))
                 new_prescription.save()
-                print(colored(prescription_form.cleaned_data, 'blue'))
                 messages.success(request, f'Historia añadida exitosamente')
                 return redirect('medidas:prescriptions')
             else:
                 print(colored(prescription_form.errors, 'red'))
                 new_patient.delete()
         else:
-            prescription_form = PrescriptionForm(request.POST)
+            prescription_form = PrescriptionForm(request.POST, request=request)
             prescription_form.is_valid()
             print(colored(patient_form.errors, 'red'))
             print(colored(prescription_form.errors, 'red'))
     else:
         patient_form = PatientForm()
-        prescription_form = PrescriptionForm()
+        prescription_form = PrescriptionForm(request=request)
     context['patient_form'] = patient_form
     context['prescription_form'] = prescription_form
+    context['diagnosis_choices'] = DiagnosisChoices.choices
     return render(request, 'medidas/prescription.html', context)
 
 
@@ -78,7 +79,7 @@ def prescription_detail(request, pk):
         prescription = Prescription.objects.get(pk=pk)
         patient = prescription.patient
         patient_form = PatientForm(instance=patient)
-        prescription_form = PrescriptionForm(instance=prescription)
+        prescription_form = PrescriptionForm(instance=prescription, request=request)
         return render(request, 'medidas/prescription.html', context={
             'patient_form': patient_form,
             'prescription_form': prescription_form,
@@ -93,7 +94,7 @@ def prescription_update(request, pk):
         prescription = Prescription.objects.get(pk=pk)
         patient = prescription.patient
         patient_form = PatientForm(instance=patient)
-        prescription_form = PrescriptionForm(instance=prescription)
+        prescription_form = PrescriptionForm(instance=prescription, request=request)
         return render(request, 'medidas/prescription.html', context={
             'patient_form': patient_form,
             'prescription_form': prescription_form,
@@ -104,8 +105,7 @@ def prescription_update(request, pk):
         patient = prescription.patient
         updated_request = request.POST.copy()
         updated_request.update({'patient': patient})
-        prescription_form = PrescriptionForm(
-            updated_request, instance=prescription)
+        prescription_form = PrescriptionForm(updated_request,instance=prescription, request=request)
         if prescription_form.is_valid():
             prescription_form.save()
             messages.success(request, 'Prescripcion actualizada exitosamente!')
@@ -128,7 +128,7 @@ def patient_add_prescription(request, pk):
     if request.method == 'GET':
         patient = Patient.objects.get(pk=pk)
         patient_form = PatientForm(instance=patient)
-        prescription_form = PrescriptionForm()
+        prescription_form = PrescriptionForm(request=request)
         return render(request, 'medidas/prescription.html', context={
             'patient_form': patient_form,
             'prescription_form': prescription_form,
@@ -137,8 +137,8 @@ def patient_add_prescription(request, pk):
     if request.method == 'POST':
         patient = Patient.objects.get(pk=pk)
         updated_request = request.POST.copy()
-        updated_request.update({'patient': patient})
-        prescription_form = PrescriptionForm(updated_request)
+        updated_request.update({'patient':patient})
+        prescription_form = PrescriptionForm(updated_request, request=request)
         if prescription_form.is_valid():
             new_prescription = prescription_form.save(commit=False)
             new_prescription.optic = request.user.get_opticuser()
@@ -194,14 +194,54 @@ class TestView(TemplateView):
     template_name = "medidas/test.html"
 
 
-class PruebaCreateView(CreateView):
+class CrystalListView(ListView):
     model = Crystal
-    template_name = "prueba.html"
-    form_class = CrystalPruebaForm
+    context_object_name = 'crystals'
+    template_name = "medidas/crystals.html"
+    def get_queryset(self):
+        opticUser = self.request.user.get_opticuser().id
+        return Crystal.objects.filter(optic=opticUser)
+
+class CrystalTreatmentsListView(ListView):
+    model = CrystalTreatments
+    context_object_name = 'crystals_treatments'
+    template_name = "medidas/crystal_treatments.html"
+    def get_queryset(self):
+        opticUser = self.request.user.get_opticuser().id
+        return CrystalTreatments.objects.filter(optic=opticUser)
+
+class CrystalMaterialListView(ListView):
+    model = CrystalMaterial
+    context_object_name = 'crystals_materials'
+    template_name = "medidas/crystal_materials.html"
+    def get_queryset(self):
+        opticUser = self.request.user.get_opticuser().id
+        return CrystalMaterial.objects.filter(optic=opticUser)
+
+class CrystalCreateView(CreateView):
+    model = Crystal
+    template_name = "medidas/crystal_add.html"
+    form_class = CrystalForm
+    success_url = '/crystals'
+
+    def form_valid(self, form):
+        print(colored(form.cleaned_data,'green'))
+        form.instance.optic = self.request.user.get_opticuser()
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print(colored(form.cleaned_data,'red'))
+        print(colored(form.errors,'red'))
+        return super().form_invalid(form)
 
     def get_form_kwargs(self):
-        kwargs = super(PruebaCreateView, self).get_form_kwargs()
-        kwargs.update({
-            'id': "aqui va el id del usario"
-        })
+        kwargs = super(CrystalCreateView, self).get_form_kwargs()
+        kwargs['request'] = self.request
         return kwargs
+
+
+
+
+
+    
+

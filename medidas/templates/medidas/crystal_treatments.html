@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block crystals %}active{% endblock crystals %}
+{% block content %}
+<div class='row justify-content-between mb-2'>
+  <div class='col-7'>
+    <h1 class='display-4'>Lista de tratamientos</h1>
+  </div>
+  <div class='col-5 align-self-end text-right pl-0'>
+    <a href='{% url 'medidas:crystal-add' %}' class='btn btn-primary border border-primary text-primary'>Nuevo Tratamiento</a>
+  </div>
+</div>
+<div class="row no-gutters">
+    <div class="col-12">
+      <table class="table table-sm table-striped table-bordered table-responsive-md">
+        <thead class='table-primary'>
+        <tr class="">
+          <th class="text-center align-middle" scope="col">N°</th>
+          <th class="align-middle p-0" scope="col">Tratamiento</th>
+          <th class="align-middle" scope="col">Descripción</th>
+          <th colspan="2" class="align-middle text-center" scope="col">Opciones</th>
+        </tr>
+        </thead>
+        {% for treatment in crystals_treatments %}
+        <tr class="">
+          <th class="text-center align-middle p-auto" >{{forloop.counter}}</th>
+          <td class="align-middle">{{treatment.name|title}}</td>
+          <td class="align-middle">{{treatment.description}}</td>
+          <td class="align-middle text-center px-0"><a
+              class="btn btn-primary text-primary border border-primary"
+              href=""
+              ><i class="far fa-edit"></i
+            ></a></td>
+          <td class="align-middle text-center px-0"><button
+              class="btn btn-primary text-primary border border-primary"
+            ><i class="far fa-trash-alt"></i>
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+</div>
+{% endblock content %}

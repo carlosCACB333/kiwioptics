@@ -1,57 +1,47 @@
-from django.forms import ModelForm
-from django import forms
-from .models import Patient, Prescription, Crystal, CrystalTreatments
+from django.forms import ModelForm, ModelChoiceField, ModelMultipleChoiceField
+from .models import Patient, Prescription, Crystal, CrystalTreatments, CrystalMaterial
 from termcolor import colored
 
-
 class PatientForm(ModelForm):
-    class Meta:
-        model = Patient
-        exclude = ('optic', 'patient_optic_id')
+	
+	class Meta:
+		model = Patient
+		exclude = ('optic','patient_optic_id')
 
-    def __init__(self, *args, **kwargs):
-        super(PatientForm, self).__init__(*args, **kwargs)
-
-        # self.fields['integerPolje1'].widget.attrs['class'] = 'SOMECLASS'
-
-        # you can iterate all fields here
-        for fname, f in self.fields.items():
-            f.widget.attrs['class'] = 'form-control form-control-sm'
-            f.widget.attrs['form'] = 'prescription_form'
-
+	def __init__(self, *args, **kwargs):
+		super(PatientForm, self).__init__(*args, **kwargs)
+		for fname, f in self.fields.items():
+			f.widget.attrs['class'] = 'form-control form-control-sm'
+			f.widget.attrs['form'] = 'prescription_form'
 
 class PrescriptionForm(ModelForm):
 
-    class Meta:
-        model = Prescription
-        exclude = ('optic', 'prescription_optic_id')
+	class Meta:
+		model = Prescription
+		exclude = ('optic','prescription_optic_id','doctor','prescription_type')
 
-    def __init__(self, *args, **kwargs):
-        super(PrescriptionForm, self).__init__(*args, **kwargs)
+	def __init__(self, *args, **kwargs):
+		self.request = kwargs.pop('request')
+		super(PrescriptionForm, self).__init__(*args, **kwargs)
 
-        # self.fields['integerPolje1'].widget.attrs['class'] = 'SOMECLASS'
+		# self.fields['integerPolje1'].widget.attrs['class'] = 'SOMECLASS'
+		self.fields['crystals'].queryset = Crystal.objects.filter(optic=self.request.user.get_opticuser())
+		# you can iterate all fields here
+		for fname, f in self.fields.items():    
+			f.widget.attrs['class'] = 'form-control form-control-sm'
+			f.widget.attrs['form'] = 'prescription_form'
 
-        # you can iterate all fields here
-        for fname, f in self.fields.items():
-            f.widget.attrs['class'] = 'form-control form-control-sm'
-            f.widget.attrs['form'] = 'prescription_form'
+class CrystalForm(ModelForm):
+	
+	class Meta:
+		model = Crystal
+		fields = ['name','material','treatments','default_price']
 
-
-class CrystalPruebaForm(ModelForm):
-    """Form definition for CrystalPrueba."""
-    id_user = None
-
-    def __init__(self, id, *args, **kwargs):
-        self.id_user = id
-        print(self.id_user)
-        super(CrystalPruebaForm, self).__init__(*args, **kwargs)
-
-    class Meta:
-        """Meta definition for CrystalPruebaform."""
-
-        model = Crystal
-        fields = "__all__"
-
-    treatments = forms.ModelMultipleChoiceField(
-        queryset=CrystalTreatments.objects.filter(id=1)
-    )
+	def __init__(self, *args, **kwargs):
+		self.request = kwargs.pop('request')
+		super(CrystalForm, self).__init__(*args, **kwargs)
+		self.fields['treatments'].queryset = CrystalTreatments.objects.filter(optic=self.request.user.get_opticuser())
+		self.fields['material'].queryset = CrystalMaterial.objects.filter(optic=self.request.user.get_opticuser())
+		for fname, f in self.fields.items():
+			f.widget.attrs['class'] = 'form-control form-control-sm'
+	

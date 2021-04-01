@@ -40,28 +40,23 @@ class Patient(models.Model):
             self.patient_optic_id = patient_optic_id
         return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
-# class Diagnosis(models.Model):
-#     class DiagnosisChoices(models.TextChoices):
-#         GLAUCOMA = 'GLAUCOMA','Glaucoma'
-#         CATARACT = 'CATARACT','Catarata'
-#         MYOPIA = 'MYOPIA','Miopía'
-#         FARSIGHTEDNESS = 'FARSIGHTEDNESS','Hipermetropía'
-#         ASTIGMATISM = 'ASTIGMATISM','Astigmatismo'
-#         PRESBYOPIA = 'PRESBYOPIA','Presbicia'
-#         AMBLYOPIA = 'AMBLYOPIA', 'Ambliopía'
-#         SQUINT = 'SQUINT', 'Estrabismo'
-#         SQUINT = 'SQUINT', 'Daltonismo'
+class DiagnosisChoices(models.TextChoices):
+    MYOPIA = 'MYOPIA','Miopía'
+    ASTIGMATISM = 'ASTIGMATISM','Astigmatismo'
+    FARSIGHTEDNESS = 'FARSIGHTEDNESS','Hipermetropía'
+    PRESBYOPIA = 'PRESBYOPIA','Presbicia'
+    SQUINT = 'SQUINT', 'Estrabismo'
+    AMBLYOPIA = 'AMBLYOPIA', 'Ambliopía'
+    DIOPIA = 'DIOPIA', 'Diopía'
+    GLAUCOMA = 'GLAUCOMA','Glaucoma'
+    DETACHED_RETINA = 'DETACHED_RETINA','Desprendimiento de la retina'
+    CATARACT = 'CATARACT','Catarata'
+    DALTONISM = 'DALTONISM', 'Daltonismo'
+    CONJUNCTIVITIS = 'CONJUNCTIVITIS', 'Conjuntivitis'
+    DIABETIC_RETINOPATHY = 'DIABETIC_RETINOPATHY','Retinopatía diabética'
+    DRY_EYE = 'DRY_EYE', 'Ojo seco'
+    MACULAR_DEGENERATION = 'MACULAR_DEGENERATION', 'Degeneración macular'
     
-#     name = models.CharField("Diagnostico", max_length=50, blank=False, null=False, choices=DiagnosisChoices.choices)
-
-#     class Meta:
-#         verbose_name = "Diagnostico"
-#         verbose_name_plural = "Diagnostico"
-
-#     def __str__(self):
-#         return self.name
-
-
 class Subsidiary(models.Model):
     name = models.CharField("Nombre",max_length=50, blank=True)
     direction = models.CharField("Dirección",max_length=80, blank=True)
@@ -104,18 +99,25 @@ class CrystalMaterial(models.Model):
 
 class Crystal(models.Model):
 
-    name = models.CharField("Material", max_length=120)
+    name = models.CharField("Nombre", max_length=120)
     material = models.ForeignKey(CrystalMaterial, verbose_name="Material", on_delete=models.CASCADE)
     treatments = models.ManyToManyField(CrystalTreatments, verbose_name="Tratamientos", blank=True)
-    default_price = models.DecimalField('Precio de los lentes',max_digits=10, decimal_places=2, default=0,validators=[MinValueValidator(0,'No se permite el valor ingresado')])
+    default_price = models.DecimalField('Precio de los lentes',max_digits=10, decimal_places=2,validators=[MinValueValidator(0,'No se permite el valor ingresado')], blank=True, null=True)
     optic = models.ForeignKey(OpticUser, verbose_name="Optica", on_delete=models.CASCADE, null=False)
 
     class Meta:
-        verbose_name = "Crystal"
-        verbose_name_plural = "Crystals"
+        verbose_name = "Luna"
+        verbose_name_plural = "Lunas"
 
     def __str__(self):
         return self.name
+
+    def get_treatments(self):
+        treatments = list(self.treatments.all())
+        treatments = [treatment.name for treatment in treatments]
+        if len(treatments) == 0:
+            return "-----"
+        return ", ".join(treatments)
 
 
 class Prescription(models.Model):
@@ -139,7 +141,7 @@ class Prescription(models.Model):
     axis_choices.append(('','---------'))
     dip_choices = [(i,f'{i}mm') for i in range(81,40,-1)]
     dip_choices.append(('','---------'))
-    dnp_choices = [(decimal.Decimal(i/2),f'{i/2}mm') for i in range(81,40,-1)]
+    dnp_choices = [(decimal.Decimal(i/2),f'{i/2}mm' if i%2==1 else f'{int(i/2)}mm') for i in range(81,40,-1)]
     dnp_choices.append(('','---------'))
     add_choices = generateChoices.__func__(1, 25)
     add_choices.append(('','---------'))
@@ -151,10 +153,10 @@ class Prescription(models.Model):
 
     optic = models.ForeignKey(OpticUser, verbose_name="Optica", on_delete=models.CASCADE, null=False)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, verbose_name="Paciente")
-    subsidiary = models.ForeignKey(Subsidiary, on_delete=models.CASCADE, verbose_name="Sucursal", blank=True, null=True)
-    doctor = models.ForeignKey(Account, verbose_name="Doctor", on_delete=models.CASCADE, null=False)
+    subsidiary = models.ForeignKey(Subsidiary, on_delete=models.SET_NULL, verbose_name="Sucursal", blank=True, null=True)
+    doctor = models.ForeignKey(Account, verbose_name="Doctor", on_delete=models.SET_NULL, blank=True, null=True)
     prescription_optic_id = models.PositiveIntegerField(blank=True)
-    prescription_type = models.CharField("Tipo", max_length=50, choices=PrescriptionType.choices, null=False, blank=False)
+    prescription_type = models.CharField("Tipo", max_length=50, choices=PrescriptionType.choices, null=True, blank=True)
     # laboratory = models.ForeignKey(Laboratory, on_delete=models.SET_NULL,verbose_name="Laboratorio", blank=True, null=True)
     date = models.DateTimeField(verbose_name='Fecha', default=now)
     far_spherical_right = models.DecimalField("Esf. derecho Lejos", max_digits=4, decimal_places=2, blank=True, null=True,choices=spherical_choices)
@@ -187,14 +189,16 @@ class Prescription(models.Model):
     near_axis_left = models.PositiveSmallIntegerField("Eje izquierdo Cerca", validators=[MaxValueValidator(180,'El eje solo permite valores entre 0 y 180')], blank=True, null=True, choices=axis_choices)
     near_av_left = models.CharField("Av. izquierdo Cerca",max_length=50, blank=True, null=True)
     near_dnp_left = models.DecimalField("Dnp. izquierdo Cerca", max_digits=3, decimal_places=1, blank=True, null=True,choices=dnp_choices)
-    observation = models.TextField("Observacion", blank=True)
+    patient_notes = models.TextField("Notas para el paciente", blank=True)
+    laboratory_notes = models.TextField("Notas para el laboratorio", blank=True)
     intermediate_add = models.DecimalField("Add. intermedio", max_digits=4, decimal_places=2, blank=True, null=True, choices=add_choices)
     near_add = models.DecimalField("Add. cerca", max_digits=4, decimal_places=2, blank=True, null=True, choices=add_choices)
-    diagnosis = models.CharField("Diagnostico", max_length=100)
-    measure_price = models.DecimalField('Precio de la medida',max_digits=10, decimal_places=2, default=0,validators=[MinValueValidator(0,'No se permite el valor ingresado')])
-    crystals_price = models.DecimalField('Precio de las lunas',max_digits=10, decimal_places=2, default=0,validators=[MinValueValidator(0,'No se permite el valor ingresado')])
-    frame = models.CharField("Descripcion de la montura", max_length=120)
-    frame_price = models.DecimalField('Precio de la montura',max_digits=10, decimal_places=2, default=0,validators=[MinValueValidator(0,'No se permite el valor ingresado')])
+    diagnosis = models.CharField("Diagnostico", max_length=150, blank=True)
+    measure_price = models.DecimalField('Precio de la medida',max_digits=10, decimal_places=2, default=0,validators=[MinValueValidator(0,'No se permite el valor ingresado')], blank=True, null=True)
+    crystals = models.ForeignKey(Crystal, on_delete=models.SET_NULL, verbose_name="Lunas", blank=True, null=True)
+    crystals_price = models.DecimalField('Precio de las lunas',max_digits=10, decimal_places=2,validators=[MinValueValidator(0,'No se permite el valor ingresado')], blank=True, null=True)
+    frame = models.CharField("Descripcion de la montura", max_length=120, null=True, blank=True)
+    frame_price = models.DecimalField('Precio de la montura',max_digits=10, decimal_places=2,validators=[MinValueValidator(0,'No se permite el valor ingresado')], blank=True, null=True)
 
     class Meta:
         verbose_name = "Receta"
@@ -202,8 +206,7 @@ class Prescription(models.Model):
         unique_together = ('optic','prescription_optic_id')
 
     def __str__(self):
-        return f"""{self.patient} S/{self.price}
-        """
+        return f"""{self.patient}"""
         # ODL:{self.far_spherical_right if self.far_spherical_right is not None else '?'}({self.far_cylinder_right if self.far_cylinder_right is not None else '?'}){self.far_axis_right if self.far_axis_right is not None else '?'}° 
         # OIL:{self.far_spherical_left if self.far_spherical_left is not None else '?'}({self.far_cylinder_left if self.far_cylinder_left is not None else '?'}){self.far_axis_left if self.far_axis_left is not None else '?'}° 
         # ODC:{self.near_spherical_right if self.near_spherical_right is not None else '?'}({self.near_cylinder_right if self.near_cylinder_right is not None else '?'}){self.near_axis_right if self.near_axis_right is not None else '?'}° 
@@ -219,3 +222,24 @@ class Prescription(models.Model):
                 prescription_optic_id = 1
             self.prescription_optic_id = prescription_optic_id
         return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+    
+    def get_total(self):
+        if self.frame_price is None and self.crystals_price is None and self.measure_price is None:
+            return None
+
+        if self.frame_price is None:
+            frame_price = 0
+        else:
+            frame_price = self.frame_price
+
+        if self.crystals_price is None:
+            crystals_price = 0
+        else:
+            crystals_price = self.measure_price
+
+        if self.measure_price is None:
+            measure_price = 0
+        else:
+            measure_price = self.measure_price
+        total = frame_price + crystals_price + measure_price
+        return total

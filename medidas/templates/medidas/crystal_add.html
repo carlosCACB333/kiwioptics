@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block crystals %}active{% endblock crystals %}
+{% block content %}
+<h1 class='display-4'>Añadir Luna</h1>
+<form action="" method='POST'>{% csrf_token %}
+    {{form.as_p}}
+    <button class='btn btn-primary text-primary border border-primary' type='submit'>Guardar</button>
+</form>
+{% endblock content %}

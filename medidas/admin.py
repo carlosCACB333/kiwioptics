@@ -1,6 +1,27 @@
 from django.contrib import admin
-from .models import Prescription, Patient,CrystalTreatments,CrystalMaterial,Crystal
+from .models import Prescription, Patient, Crystal, CrystalMaterial, CrystalTreatments
+from users.models import Account
 # Register your models here.
+
+admin.site.register(CrystalMaterial)
+admin.site.register(CrystalTreatments)
+
+@admin.register(Crystal)
+class CrystalAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'name',
+        'material',
+        'get_treatments',
+        'default_price',
+        'optic',
+    )
+
+    def get_treatments(self, obj):
+        return ", ".join([p.name for p in obj.treatments.all()])
+    
+    get_treatments.short_description = 'Tratamientos'
+
 
 @admin.register(Patient)
 class PatientAdmin(admin.ModelAdmin):
@@ -22,6 +43,7 @@ class PatientAdmin(admin.ModelAdmin):
 
     def full_name(self, obj):
         return f"{obj.full_name}"
+
 
 
 # @admin.register(Laboratory)
@@ -89,7 +111,3 @@ class PrescriptionAdmin(admin.ModelAdmin):
     )
     # list_filter = ('job','habilidades')
     # filter_vertical = ('habilidades',)
-
-admin.site.register(CrystalTreatments)
-admin.site.register(CrystalMaterial)
-admin.site.register(Crystal)

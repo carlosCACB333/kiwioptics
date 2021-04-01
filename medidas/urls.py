@@ -5,7 +5,6 @@ from . import  rest
 app_name = 'medidas'
 urlpatterns = [
     path('', views.index, name='index'),
-    path('prueba/', views.PruebaCreateView.as_view(), name='prueba'),
     path('patients/', views.PatientListView.as_view(), name='patients'),
     path('patients/<int:pk>/add-prescription/', views.patient_add_prescription, name='patient-add'),
     # path('patients/<int:pk>/', views.patient_detail, name='patient-detail'),
@@ -14,6 +13,10 @@ urlpatterns = [
     path('prescriptions/<int:pk>/', views.prescription_detail, name='prescription-detail'),
     path('prescriptions/<int:pk>/change/', views.prescription_update, name='prescription-update'),
     path('prescriptions/delete/', views.prescription_delete, name='prescription-delete'),
+    path('crystals/', views.CrystalListView.as_view(), name='crystals'),
+    path('crystals/add', views.CrystalCreateView.as_view(), name='crystal-add'),
+    path('crystals/materials', views.CrystalMaterialListView.as_view(), name='materials'),
+    path('crystals/treatments', views.CrystalTreatmentsListView.as_view(), name='treatments'),
     path('test/', views.TestView.as_view()),
     # api rest-framework
     path('api/patientList/', rest.PatientListApiView.as_view(),name='rest-patient-list'),
