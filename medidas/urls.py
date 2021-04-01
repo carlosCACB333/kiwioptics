@@ -24,4 +24,5 @@ urlpatterns = [
     path('api/patientDetail/<pk>/', rest.PatientDetailApiView.as_view(),name='rest-patient-detail'),
     path('api/patientDelete/<pk>/', rest.PatientDeleteApiView.as_view(),name='rest-patient-delete'),
     path('api/patientUpdate/<pk>/', rest.PatientUpdateApiWiew.as_view(),name='rest-patient-update'),
+   
 ]

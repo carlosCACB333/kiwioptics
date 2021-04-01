@@ -1,0 +1,443 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block styles %}
+<style>
+    .botones .btn {
+        border-radius: 20px !important;
+        /* opacity: .5; */
+    }
+
+    .card-user {
+        padding: 4px !important;
+    }
+    #id_user_permissions li{
+        display: flex;
+    }
+
+    #id_user_permissions{
+        height: 200px;
+    }
+    #id_groups{
+        height: 200px;
+
+    }
+
+    img{
+        object-fit: cover;
+    }
+
+    #profile_picture a,#picture-clear_id{
+        position: absolute;
+        top: 40px;
+    }
+    #profile_picture a::before{
+        content: 'actual : ';
+    }
+
+    #profile_picture #picture-clear_id{
+        right: 0;
+    }
+    #profile_picture label[for="picture-clear_id"]{
+        position: absolute;
+        top: 40px; 
+        right: 20px;
+    }
+
+    .custom-file-input{
+    height: 1px !important;
+    }
+</style>
+
+{% endblock styles %}
+
+
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-{{message.tags}}">
+    {{message}}
+</div>
+
+{{context}}
+{% endfor %}
+{% endif %}
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab"
+            aria-controls="pills-home" aria-selected="true">usuarios</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="pills-create-tab" data-toggle="pill" href="#pills-profile" role="tab"
+            aria-controls="pills-profile" aria-selected="false">añadir</a>
+    </li>
+    <!-- <li class="nav-item" role="presentation">
+        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab"
+            aria-controls="pills-contact" aria-selected="false">Contact</a>
+    </li> -->
+</ul>
+<div class="tab-content" id="pills-tabContent">
+    <!-- **************LISTADO DE USUARIOS************************* -->
+   
+    
+    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+
+        {% if perms.users.view_employeeuser %}
+        
+
+            <div class="row">
+                
+                
+            
+                    
+                
+                {% if users %}
+                
+                    {% for u in users %}
+
+                    <div class="col  col-sm-12 col-md-4 col-lg-3 mb-1 card-user">
+                        <div class="card h-100">
+                            <div class="d-flex justify-content-center h-100 mt-4">
+
+
+                                    {% if u.account.picture %}
+                                    
+                                    {% if u.account.picture|truncatechars:7 == 'http...' %}
+                                    <img src="{{u.account.picture}}" alt="No tiene foto de perfil" id="profile_image" class="rounded-circle" width="100px" height="100px">
+                                    {% else %}
+                                    <img src="{{u.account.picture.url}}" alt="No tiene foto de perfil" id="profile_image" class="rounded-circle" width="100px" height="100px">
+                                    {% endif %}
+                                        
+                                
+                                    {% else %}
+                                    <img src="https://cdn.pixabay.com/photo/2018/11/13/22/01/instagram-3814081_960_720.png" alt="No tiene foto de perfil" id="profile_image" class="rounded-circle" width="100px" height="100px">
+                                    {% endif %}
+                                
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title text-center text-primary">{{u.account.full_name}}</h6>
+                                <p class="text-center"><span class="badge badge-primary text-primary"><strong>{{u.account.user_type}}</strong></span></p>
+
+                                
+                                {% if perms.users.change_employeeuser %}
+                                <div class="text-center botones">
+                                    <a href="?id={{u.id}}" class="btn btn-success ">editar</a> 
+                                </div>
+
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                {% else %}
+
+                    <div class="container m-5 text-center">
+                            <div class="alert alert-primary" role="alert">
+                            <h2 class="text-center"><span class="badge badge-primary text-primary"><strong>{{user.get_opticuser}}</strong></span> no cuenta con usuarios</h2>
+                            <button type="button" class="btn btn-info" onclick="$('#pills-tab #pills-create-tab').tab('show')">añadir nuevo empleado</button>
+                            </div>
+                    </div>
+                {% endif %}
+
+
+            
+        
+
+            </div>
+
+    <!-- *************pagination****************** -->
+
+        {% if is_paginated %}
+        
+        <div class="mb-5 ">
+            <nav aria-label="...">
+                <ul class="pagination justify-content-center">
+                    
+                    {% if page_obj.has_previous %}                    
+                <li class="page-item disabled">
+                    <a href="?page={{page_obj.previous_page_number}}"> <span class="page-link">Previous</span></a> 
+                </li>
+                {% endif %}
+                
+                {% for pagina in paginator.page_range %}
+
+                
+                {% if pagina == page_obj.number  %} 
+                <li class="page-item active" aria-current="page">
+                    
+                    <a href="?page={{pagina}}"><span class="page-link">{{pagina}}</span></a>
+                </li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{pagina}}">{{pagina}}</a></li>
+                {% endif %}
+                    
+                
+                {% endfor %}
+                    
+                
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{page_obj.next_page_number}}">Next</a>
+                </li>
+                {% endif %}
+                    
+                
+
+                </ul>
+            </nav>
+        </div>
+
+        {% endif %}
+
+        <!-- *****end pagination****** -->
+
+        {% else %}
+
+
+        <div class="container m-5 text-center">
+            <div class="alert alert-primary" role="alert">
+            <h2 class="text-center">no tienes permiso para visualizar empleados</h2>
+           
+            </div>
+        </div>
+    {% endif %}
+
+    </div>
+
+
+    <!--  **************FIN LISTADO DE USUARIOS****************** -->
+
+    <!--  **************FORMULARIO PARA AÑADIR NUEVO EMPLEADO*************** -->
+
+    <div class="row tab-pane fade bg-white m-2" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+      
+        <!-- formulario para la tabla account -->
+
+    
+        {% if perms.users.change_employeeuser and id or perms.users.add_employeeuser and not id %}
+            
+        <form class="p-5" method="post" enctype="multipart/form-data" id="account_form">
+            {% csrf_token %}
+
+            <input type="hidden" name="id" value="{{id}}" id="id">
+           
+            <h1>Datos de la cuenta</h1>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">Nombre de usuario</label>
+                    {{form.username}}
+                    <div class='col-12 invalid-feedback d-block'>
+                        {% for error in form.username.errors %} {{error}} {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputPassword4">Password</label>
+                    {{form.password}}
+                    <div class='col-12 invalid-feedback d-block'>
+                        {% for error in form.password.errors %} {{error}} {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">Nombres Y Apellidos</label>
+                    {{form.full_name}}
+                    <div class='col-12 invalid-feedback d-block'>
+                        {% for error in form.full_name.errors %} {{error}} {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label >selecciona la foto de perfil</label>
+                    <div class="custom-file" id="profile_picture">
+                        {{form.picture|attr:"class:custom-file-input"}}
+                        <label class="custom-file-label" for="id_picture">seleccione una foto</label>
+                    </div>
+
+                    <div class='col-12 invalid-feedback d-block'>
+                        {% for error in form.picture.errors %} {{error}} {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-row form-control">
+                
+                <div class="form-group col-md-6">
+                    <label for="">Acceso al Admin</label>
+                    {{form.is_staff|attr:"class:"}}
+                    <div class='col-12 invalid-feedback d-block'>
+                        {% for error in form.is_staff.errors %} {{error}} {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="">Activo</label>
+                    {{form.is_active|attr:"class:"}}
+                    <div class='col-12 invalid-feedback d-block'>
+                        {% for error in form.is_active.errors %} {{error}} {% endfor %}
+                    </div>
+                </div>
+                
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="">Permisos del empleado</label>
+                  {{form.user_permissions}}
+                  <div class='col-12 invalid-feedback d-block'>
+                    {% for error in form.user_permissions.errors %} {{error}} {% endfor %}
+                </div>
+                       
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="">Grupos de Permisos</label>
+                  {{form.groups}}
+                  <div class='col-12 invalid-feedback d-block'>
+                    {% for error in form.groups.errors %} {{error}} {% endfor %}
+                </div>
+                       
+                </div>
+            </div>
+
+            <h1>Datos del empleado</h1>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">Email</label>
+                    {{form_employee.email}}
+                    <div class='col-12 invalid-feedback d-block'>
+                        {% for error in form_employee.email.errors %} {{error}} {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputPassword4">Nombre en la prescripcion</label>
+                    {{form_employee.prescription_name}}
+                    <div class='col-12 invalid-feedback d-block'>
+                        {% for error in form_employee.prescription_name.errors %} {{error}} {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputEmail4">Celular</label>
+                    {{form_employee.phone}}
+                    <div class='col-12 invalid-feedback d-block'>
+                        {% for error in form_employee.phone.errors %} {{error}} {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputPassword4">Celular 2</label>
+                    {{form_employee.other_phone}}
+                    <div class='col-12 invalid-feedback d-block'>
+                        {% for error in form_employee.other_phone.errors %} {{error}} {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            {% if perms.users.add_account and perms.users.add_employeeuser %}
+            <button type="button" class="btn btn-primary text-primary" onclick="$('#id').remove();$('#submit_form_employee').click();">Guardar nuevo empleado</button>
+                
+            {% endif %}
+    
+           
+            
+            {% if id and perms.users.change_account and perms.users.change_employeeuser %}
+            <button type="submit" class="btn btn-success" id="submit_form_employee" >Actualizar empleado</button>
+            {% endif %}
+                
+            
+           <!-- ***modal eliminar empleado** -->
+
+           {% if id and perms.users.delete_account and perms.users.delete_employeeuser %}
+               
+           <!-- Button trigger modal -->
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" onclick="$('#modal_body_delete_empleado').html('¿Deseas eliminar el empleado : <strong>'+$('#id_username').val()+'</strong> ?')">
+                    eliminar empleado
+                </button>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Eliminar Empleado</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body" id="modal_body_delete_empleado">
+                        ¿confirmar eliminación?
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">cerrar</button>
+                        <a href="{% url 'users:userOfOpticDelete' id %}" class="btn btn-danger">eliminar</a>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+           <!-- **fin modal eliminar  empleado ***-->
+           {% endif %}
+        </form>
+        {% else %}
+
+        <div class="container m-5 text-center">
+            <div class="alert alert-primary" role="alert">
+            <h2 class="text-center">no tienes permiso para 
+            {% if id %}
+            modificar
+            {% else %}
+            Añadir
+                
+            {% endif %}
+                 empleados</h2>
+           
+            </div>
+        </div>
+
+       
+        {% endif %}
+
+
+
+
+
+
+    </div>
+    <!--  **************FIN FORMULARIO AÑADIR NUEVO EMPLEADO -->
+    <!-- <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">3</div> -->
+</div>
+
+
+{% endblock content %}
+
+
+{% block script %}
+
+<script>
+    
+
+    $(document).ready(function(){
+        document.getElementById('id_picture').addEventListener('change',function(e){
+            if(e.target.files.length>0){
+                ruta=e.target.files[0].name
+                console.log( $(e.target).next().html(ruta))
+            }
+           
+        });
+
+        {% if form.errors or form_employee.errors or id %}
+
+        $('#pills-tab #pills-create-tab').tab('show') // Select last tab
+
+        // borramos el texto dentro del input type file
+        $('#profile_picture').contents().filter(function(){
+            return this.nodeType === 3;
+        }).remove();
+
+        {% endif %}
+    
+    });
+
+
+    
+</script>
+{% endblock script %}

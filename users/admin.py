@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import OpticUser
+from .models import OpticUser,Account,EmployeeUser
+from django.contrib.auth.models import Permission
 
 # Register your models here.
 # @admin.register(OpticUser)
@@ -17,3 +18,8 @@ from .models import OpticUser
 #     )
 #     search_fields = ('email',)
 #     ordering = ('email',)
+
+admin.site.register(Account)
+admin.site.register(OpticUser)
+admin.site.register(EmployeeUser)
+admin.site.register(Permission)

@@ -130,17 +130,7 @@
                             {{form.password|attr:"placeholder:Contraseña"|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"}}
                         </div>
 
-                        <!--optic-->
-                        <div class="input-group col-lg-12 mb-4" id="container-optic" style="display:none">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text bg-white px-3 border-md border-right-0">
-                    <i class="fa fa-eye text-muted" aria-hidden="true"></i>
-                  </span>
-                            </div>
-
-                            <input form="otro" type="text" maxlength="50" placeholder="Nombre de tu optica" class="form-control form-control-sm bg-white border-left-0 border-md" required id="id_optic">
-
-                        </div>
+                      
 
                         <!-- Submit Button -->
                         <div class="form-group col-lg-12 mx-auto mb-0" id="container-account">
@@ -159,6 +149,7 @@
 
              <!-- Social Login -->
                     <div class="form-group col-lg-12 mx-auto" id="container-register-google">
+<<<<<<< HEAD
                         <a  class="btn btn-primary border border-primary" style="width:100%" href="#!" role="button"
                         onClick="get_id_token(1)"><i class="fab fa-google"></i
                         > Iniciar Sesion Con Google</a>
@@ -170,6 +161,12 @@
                         > Continuar</a>
                     </div>
 
+=======
+                        <a  class="btn btn-primary" style="width:100%" href="{% url 'users:google' %}" role="button"><i class="fab fa-google"></i
+                        > Iniciar Sesion Con Google</a>
+                    </div>
+
+>>>>>>> 4b7b54078dde8b0aa443b4cf2b9c45c948cdb993
               <!-- Already Registered -->
               <div class="text-center w-100">
                 <p class="text-muted font-weight-bold">
@@ -187,23 +184,6 @@
 
 
 
-<!--  CDN PARA FIREBASE-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.js"></script>
-    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
-
-  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-  <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-app.js"></script>
-
-  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
-  <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-analytics.js"></script>
-
-  <!-- Add Firebase products that you want to use -->
-  <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-firestore.js"></script>
-<script src="{% static 'js/getCookie.js' %}"></script>
-  <script src="{% static 'js/firebase-google-login.js' %}"></script>
-
-<!--  FIN CDN PARA FIREBASE-->
   </body>
 
 </html>

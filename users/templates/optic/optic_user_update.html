@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+
+
+{% if user.user_type == 'OPTIC' %}
+
+
+
+<div class="card mb-5 shadow-sm border-0 shadow-hover p-5" id="employee_update">
+
+
+    <form action="{% url 'users:opticUpdate' user.get_opticuser.id %}" method="POST" id="form_optic_user_update">
+        {% csrf_token %}
+
+        <h1>Datos de tu cuenta</h1>
+    
+       
+
+        <div class="form-row">
+            <div class="col-md-12 mb-3">
+                <label for="validationDefault02">Nombre de usuario</label>
+                {{ form_change_account.username }}
+                <div class='col-12 invalid-feedback d-block'>
+                    {% for error in form_change_account.username.errors %} {{error}} {% endfor %}
+                </div>
+            </div>
+
+        </div><div class="form-row">
+            <div class="col-md-12 mb-3">
+                <label for="validationDefault02">Nombre y Apellidos del dueño
+                </label>
+                {{ form_change_account.full_name }}
+                <div class='col-12 invalid-feedback d-block'>
+                    {% for error in form_change_account.full_name.errors %} {{error}} {% endfor %}
+                </div>
+            </div>
+
+        </div>
+
+        <h2>Datos de tu optica</h2>
+
+        <div class="form-row">
+            <div class="col-md-12 mb-3">
+                <label for="validationDefault02">Nombre en la prescripcion</label>
+                {{ form.prescription_name }}
+                <div class='col-12 invalid-feedback d-block'>
+                    {% for error in form.prescription_name.errors %} {{error}} {% endfor %}
+                </div>
+            </div>
+
+        </div>
+        <div class="form-row">
+            <div class="col-md-6 mb-3">
+                <label for="validationDefault01">Nombre de la optica</label>
+                {{form.optic_name}}
+                <div class='col-12 invalid-feedback d-block'>
+                    {% for error in form.optic_name.errors %} {{error}} {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="validationDefault02">celular</label>
+                {{form.phone}}
+                <div class='col-12 invalid-feedback d-block'>
+                    {% for error in form.phone.errors %} {{error}} {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-12 mb-3">
+                <button class="btn btn-success btn-block" type="submit">actualizar
+                    datos</button>
+            </div>
+        </div>
+
+
+
+
+    </form>
+</div>
+{% else %}
+
+<h1 class="text-danger">no tienes permiso</h1>
+
+{% endif %}
+
+
+{% endblock content %}

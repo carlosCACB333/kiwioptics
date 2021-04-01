@@ -1,15 +1,17 @@
 from rest_framework.views import APIView
+from rest_framework.generics import UpdateAPIView
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from firebase_admin import auth
+from rest_framework.permissions import IsAuthenticated
 
 from django.views.generic import View
 from django.http import HttpResponseRedirect
 from django.contrib.auth import login, logout
 from django.urls import reverse_lazy
 
-from .serializer import LoginSocialSerializer
-from .models import OpticUser
+from .serializer import LoginSocialSerializer,PictureSerializer
+from .models import OpticUser,Account
 
 
 class GoogleLRegisterView(APIView):
@@ -72,13 +74,14 @@ class GoogleLoginValidateView(APIView):
 
         # descincriptamos
         decode_token = auth.verify_id_token(id_token)
+        print("=============",decode_token)
 
         email = decode_token['email']
         name = decode_token['name']
         email_verified = decode_token['email_verified']
 
         try:
-            usuario = OpticUser.objects.get(email=email)
+            usuario = Account.objects.get(username=email)
             login(self.request, usuario)
             user_get = {
                 'id': usuario.id,
@@ -86,7 +89,7 @@ class GoogleLoginValidateView(APIView):
                 'full_name': usuario.full_name,
 
             }
-        except OpticUser.DoesNotExist:
+        except Account.DoesNotExist:
             user_get = None
 
         return Response(
@@ -100,3 +103,10 @@ class LogoutUser(View):
     def get(self, request, *args, **kwargs):
         logout(self.request)
         return HttpResponseRedirect(reverse_lazy('users:login'))
+
+
+
+class PictureUpdateAPIView(UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class=PictureSerializer
+    queryset=Account.objects.all()

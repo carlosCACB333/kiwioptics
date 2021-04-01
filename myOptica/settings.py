@@ -130,6 +130,8 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'users.Account'
 LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'medidas:index'
+MEDIA_URL = '/media/'
+MEDIA_ROOT=BASE_DIR.joinpath('media')
 
 #configuracion para firebase
 cred = credentials.Certificate("firebase-key.json")

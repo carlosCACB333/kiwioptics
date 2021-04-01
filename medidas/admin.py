@@ -5,7 +5,6 @@ from users.models import Account
 
 admin.site.register(CrystalMaterial)
 admin.site.register(CrystalTreatments)
-admin.site.register(Account)
 
 @admin.register(Crystal)
 class CrystalAdmin(admin.ModelAdmin):
