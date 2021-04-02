@@ -19,7 +19,10 @@ from django.contrib.auth.models import Permission
 #     search_fields = ('email',)
 #     ordering = ('email',)
 
-admin.site.register(Account)
+class AdminAccount(admin.ModelAdmin):
+    search_fields=['username','full_name']
+
+admin.site.register(Account,AdminAccount)
 admin.site.register(OpticUser)
 admin.site.register(EmployeeUser)
 admin.site.register(Permission)

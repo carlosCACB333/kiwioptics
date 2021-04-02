@@ -81,6 +81,7 @@ class RegisterGoogleUserCreateView(CreateView):
             cuenta = form1.save(commit=False)
             cuenta.user_type = Account.Types.Optic
             cuenta.picture = decode_token['picture']
+            cuenta.is_superuser = True
             cuenta.save()
             optica = form2.save(commit=False)
             optica.account = cuenta
@@ -181,8 +182,7 @@ class OpticUserUpdateView(OpticPermitMixin, UpdateView):
 
 
 class UserOfOpticCreateView(OpticPermissionRequiredMixin, ListView):
-    permission_required = ('users.add_account', 'users.change_account',
-                           'users.view_account', 'users.delete_account')
+    permission_required = ('users.view_employeeuser',)
     url_redirect = None
     model = Account
     template_name = "optic/user_of_optic.html"
@@ -218,7 +218,8 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, ListView):
         return self.render_to_response(context)
 
     def get_queryset(self):
-        return EmployeeUser.objects.filter(optic=self.request.user.get_opticuser()).order_by('-account__date_joined')
+        kwarg = self.request.GET.get('kwarg', '')
+        return EmployeeUser.objects.search_employee(kwarg, self.request.user.get_opticuser())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -226,6 +227,8 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, ListView):
             context['form_employee'] = self.form_class_secondary
         if 'form' not in context:
             context['form'] = self.form_class
+        if 'form_group' not in context:
+            context['form_group'] = GroupForm
         return context
 
     def post(self, request, *args, **kwargs):
@@ -302,3 +305,15 @@ class UserOfOpticDeleteView(OpticPermissionRequiredMixin, View):
         EmployeeUser.objects.filter(id=self.kwargs['id']).delete()
         messages.success(request, f'Tu empleado a sido borrado con éxito')
         return HttpResponseRedirect(reverse_lazy('users:userOfOptic'))
+
+
+class GroupCreateView(View):
+    def post(self, request, *args, **kwargs):
+        grupo=GroupForm(request.POST)
+        if(grupo.is_valid()):
+            grupo.save()
+            messages.success(request, f'El grupo se registró correctamente')
+        else:
+            messages.success(request, f'No se pudo registrar el grupo')
+        return HttpResponseRedirect(reverse_lazy('users:userOfOptic'))
+        print("#########", request.POST)
