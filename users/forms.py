@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, UserChangeForm, UserChangeForm
 from django.contrib.auth.models import User, Group, Permission
 from .models import OpticUser, Account, EmployeeUser
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 
 from validate_email import validate_email
 
@@ -111,3 +111,23 @@ class UserOfOpticForm(forms.ModelForm):
         if email_v==True:
             raise forms.ValidationError('Este campo no puede ser un email')
         return self.cleaned_data['username']
+
+
+class GroupForm(forms.ModelForm):
+
+    class Meta:
+        model=Group
+        fields='__all__'
+        widgets={
+            'permissions':forms.CheckboxSelectMultiple(
+                attrs={
+                    'class':'form-control',
+                },
+            ),
+            'name':forms.TextInput(
+                attrs={
+                    'class':'form-control',
+                },
+            )
+            
+        }

@@ -20,6 +20,8 @@ urlpatterns = [
     path('userOfOptic/', views.UserOfOpticCreateView.as_view(), name='userOfOptic'),
     path('userOfOpticDelete/<id>/', views.UserOfOpticDeleteView.as_view(), name='userOfOpticDelete'),
 
+    path('createGroup/',views.GroupCreateView.as_view(),name='createGroup'),
+
 
 
     #api rest framework
