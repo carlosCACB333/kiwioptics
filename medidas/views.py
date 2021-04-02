@@ -239,6 +239,12 @@ class CrystalCreateView(CreateView):
         kwargs['request'] = self.request
         return kwargs
 
+class CrystalMaterialCreateView(CreateView):
+    model = CrystalMaterial
+    fields = ['name','description','retracting_index','abbe']
+    template_name = "medidas/crystal_material_add.html"
+
+
 
 
 

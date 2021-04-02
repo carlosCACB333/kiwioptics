@@ -3,7 +3,6 @@ from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, User
 from django.contrib.auth.models import User, Group, Permission
 from .models import OpticUser, Account, EmployeeUser
 from django.contrib.auth.models import User
-
 from validate_email import validate_email
 
 
