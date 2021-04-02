@@ -15,12 +15,12 @@ class Account(AbstractUser, PermissionsMixin):
         ('super usuario'),
         default=False,
         help_text=(
-            'Tiene todo los permisos sin asiganárselo '
+            'Tiene todo los permisos sin asignárselo '
         ),
     )
     full_name = models.CharField("Nombre completo", max_length=100)
     picture = models.ImageField(
-        "perfil", upload_to="account", blank=True, null=True)
+        "perfil", upload_to="account", blank=True, null=True, max_length=255)
     user_type = models.CharField(
         choices=Types.choices, max_length=10, blank=False, null=False)
     USERNAME_FIELD = 'username'

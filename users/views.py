@@ -16,6 +16,7 @@ from django.contrib.auth.models import Permission, Group
 from django.core.paginator import Paginator
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.http import Http404
+from termcolor import colored
 
 from .forms import *
 from .models import Account, OpticUser, EmployeeUser
@@ -80,7 +81,10 @@ class RegisterGoogleUserCreateView(CreateView):
         if(form1.is_valid() and form2.is_valid()):
             cuenta = form1.save(commit=False)
             cuenta.user_type = Account.Types.Optic
-            cuenta.picture = decode_token['picture']
+            if len(decode_token['picture']) <= Account._meta.get_field('picture').max_length and 'picture' in decode_token:
+                print(colored(decode_token['picture'],'yellow'))
+                print(colored(len(decode_token['picture']),'yellow'))
+                cuenta.picture = decode_token['picture']
             cuenta.is_superuser = True
             cuenta.save()
             optica = form2.save(commit=False)
@@ -91,7 +95,7 @@ class RegisterGoogleUserCreateView(CreateView):
             Token.objects.create(user=cuenta)
 
             messages.success(
-                request, f'Tu optica a sido creado con exito')
+                request, f'Tu optica ha sido creado con exito!')
             return HttpResponseRedirect(reverse_lazy("medidas:index"))
 
         else:

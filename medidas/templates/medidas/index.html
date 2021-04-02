@@ -91,12 +91,12 @@
 
          <div class="row mb-3">
             <!-- Tabla usuarios -->
-            <div class="col-xl-7 col-lg-12">
+            <div class="col-lg-12">
               <div class="table-responsive">
                 <table class="table">
                   <thead>
                     <tr>
-                      <th colspan="2"><small class="font-weight-bold">Usuarios<small></th>
+                      <th colspan="2"><small class="font-weight-bold">Usuarios<small><div class='' style='position:absolute ;display: inline-block; top: 11px'><a href="{% url 'users:userOfOptic' %}" class='circle-sm rounded-circle bg-primary align-self-center d-flex p-0 mx-2'><i style='font-size:1rem' class='fas fa-user-plus text-primary align-self-center mx-auto lead'></i></a></div></th>
                       <th scope="col"><small class="font-weight-bold">Estatus<small></th>
                       <th scope="col"><small class="font-weight-bold">Configuración<small></th>
                     </tr>
@@ -105,7 +105,7 @@
                     <tr class="shadow-sm">
                       <td><img src="{% static 'img/user-1.png' %}" class="img-fluid rounded-circle avatar"
                           alt="https://generated.photos/" /></td>
-                      <td><span class="d-block">Cristian</span><small class="text-muted">cristian@templune.com</small>
+                      <td><span class="d-block">Cristian</span><small class="text-muted"></small>
                       </td>
                       <td class="align-middle"><span class="badge badge-primary text-primary">Activo</span></td>
                       <td class="align-middle"><span class="badge badge-secondary">Editar <i
@@ -134,7 +134,7 @@
             <!-- Fin tabla usarios -->
 
             <!-- Mensajes -->
-            <div class="col-xl-5 col-lg-12">
+            {% comment %} <div class="col-xl-5 col-lg-12">
               <div class="card mb-5 shadow-sm border-0 shadow-hover">
                 <div class="card-header bg-light border-0 pt-3 pb-0">
                   <h6 class="mb-0">Mensajes</h6>
@@ -173,7 +173,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> {% endcomment %}
             <!-- Fin mensajes -->
           </div>
 
