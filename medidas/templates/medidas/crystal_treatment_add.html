@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block crystals %}active{% endblock crystals %}
+{% block content %}
+<h1 class='display-4'>Añadir Tratamiento</h1>
+<form action="" method='POST'>{% csrf_token %}
+    {% for field in form %}
+        {{field.label}}
+        {{field|attr:"rows:2"}}
+    {% endfor %}
+    <br>
+    <button class='btn btn-primary text-primary border border-primary' type='submit'>Guardar Tratamiento</button>
+</form>
+{% lorem 9 b random %}
+{% endblock content %}

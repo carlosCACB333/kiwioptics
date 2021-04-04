@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, UpdateView, TemplateView, CreateView
 from django.db.models.functions import Concat
 from django.core.serializers import serialize
-from .forms import PatientForm, PrescriptionForm, CrystalForm
+from .forms import PatientForm, PrescriptionForm, CrystalForm, CrystalMaterialForm, CrystalTreatmentsForm
 from .models import Patient, Prescription, DiagnosisChoices, Crystal, CrystalTreatments, CrystalMaterial
 from termcolor import colored
 from django.contrib import messages
@@ -194,7 +194,7 @@ class TestView(TemplateView):
     template_name = "medidas/test.html"
 
 
-class CrystalListView(ListView):
+class CrystalListView(LoginRequiredMixin,ListView):
     model = Crystal
     context_object_name = 'crystals'
     template_name = "medidas/crystals.html"
@@ -202,7 +202,7 @@ class CrystalListView(ListView):
         opticUser = self.request.user.get_opticuser().id
         return Crystal.objects.filter(optic=opticUser)
 
-class CrystalTreatmentsListView(ListView):
+class CrystalTreatmentsListView(LoginRequiredMixin,ListView):
     model = CrystalTreatments
     context_object_name = 'crystals_treatments'
     template_name = "medidas/crystal_treatments.html"
@@ -210,7 +210,7 @@ class CrystalTreatmentsListView(ListView):
         opticUser = self.request.user.get_opticuser().id
         return CrystalTreatments.objects.filter(optic=opticUser)
 
-class CrystalMaterialListView(ListView):
+class CrystalMaterialListView(LoginRequiredMixin,ListView):
     model = CrystalMaterial
     context_object_name = 'crystals_materials'
     template_name = "medidas/crystal_materials.html"
@@ -218,11 +218,11 @@ class CrystalMaterialListView(ListView):
         opticUser = self.request.user.get_opticuser().id
         return CrystalMaterial.objects.filter(optic=opticUser)
 
-class CrystalCreateView(CreateView):
+class CrystalCreateView(LoginRequiredMixin,CreateView):
     model = Crystal
     template_name = "medidas/crystal_add.html"
     form_class = CrystalForm
-    success_url = '/crystals'
+    success_url = reverse_lazy('medidas:crystals')
 
     def form_valid(self, form):
         print(colored(form.cleaned_data,'green'))
@@ -239,10 +239,36 @@ class CrystalCreateView(CreateView):
         kwargs['request'] = self.request
         return kwargs
 
-class CrystalMaterialCreateView(CreateView):
+class CrystalMaterialCreateView(LoginRequiredMixin,CreateView):
     model = CrystalMaterial
-    fields = ['name','description','retracting_index','abbe']
+    form_class = CrystalMaterialForm
     template_name = "medidas/crystal_material_add.html"
+    success_url = reverse_lazy('medidas:materials')
+
+    def form_valid(self, form):
+        form.instance.optic = self.request.user.get_opticuser()
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print(colored(form.cleaned_data,'red'))
+        print(colored(form.errors,'red'))
+        return super().form_invalid(form)
+
+class CrystalTreatmentsCreateView(CreateView):
+    model = CrystalTreatments
+    form_class = CrystalTreatmentsForm
+    template_name = "medidas/crystal_treatment_add.html"
+    success_url = reverse_lazy('medidas:treatments')
+
+    def form_valid(self, form):
+        form.instance.optic = self.request.user.get_opticuser()
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print(colored(form.cleaned_data,'red'))
+        print(colored(form.errors,'red'))
+        return super().form_invalid(form)
+
 
 
 

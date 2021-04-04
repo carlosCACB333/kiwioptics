@@ -58,7 +58,7 @@ class DiagnosisChoices(models.TextChoices):
     MACULAR_DEGENERATION = 'MACULAR_DEGENERATION', 'Degeneración macular'
     
 class Subsidiary(models.Model):
-    name = models.CharField("Nombre",max_length=50, blank=True)
+    subsidiary_name = models.CharField("Nombre Sucursal",max_length=50, blank=True)
     direction = models.CharField("Dirección",max_length=80, blank=True)
     optic = models.ForeignKey(OpticUser, verbose_name="Optica", on_delete=models.CASCADE, null=False)
 
@@ -67,11 +67,10 @@ class Subsidiary(models.Model):
         verbose_name_plural = "Sucursales"
 
     def __str__(self):
-        return self.name
+        return self.subsidiary_name
 
 class CrystalTreatments(models.Model):
-
-    name = models.CharField("Tratamiento", max_length=80)
+    treatment_name = models.CharField("Nombre del tratamiento", max_length=50)
     description = models.TextField("Descripcion", blank=True)
     optic = models.ForeignKey(OpticUser, verbose_name="Optica", on_delete=models.CASCADE, null=False)
 
@@ -80,11 +79,11 @@ class CrystalTreatments(models.Model):
         verbose_name_plural = "Tratamientos"
 
     def __str__(self):
-        return self.name
+        return self.treatment_name
 
 class CrystalMaterial(models.Model):
 
-    name = models.CharField("Material", max_length=80)
+    material_name = models.CharField("Nombre del Material", max_length=50)
     retracting_index = models.DecimalField("Indice retractivo", max_digits=4, decimal_places=3, blank=True, null=True)
     abbe = models.DecimalField("Valor abbe", max_digits=3, decimal_places=1, blank=True, null=True)
     description = models.TextField("Descripcion", blank=True)
@@ -95,11 +94,11 @@ class CrystalMaterial(models.Model):
         verbose_name_plural = "Materiales de las lunas"
 
     def __str__(self):
-        return self.name
+        return self.material_name
 
 class Crystal(models.Model):
 
-    name = models.CharField("Nombre", max_length=120)
+    crystal_name = models.CharField("Nombre Luna", max_length=70)
     material = models.ForeignKey(CrystalMaterial, verbose_name="Material", on_delete=models.CASCADE)
     treatments = models.ManyToManyField(CrystalTreatments, verbose_name="Tratamientos", blank=True)
     default_price = models.DecimalField('Precio de los lentes',max_digits=10, decimal_places=2,validators=[MinValueValidator(0,'No se permite el valor ingresado')], blank=True, null=True)
@@ -110,11 +109,11 @@ class Crystal(models.Model):
         verbose_name_plural = "Lunas"
 
     def __str__(self):
-        return self.name
+        return self.crystal_name
 
     def get_treatments(self):
         treatments = list(self.treatments.all())
-        treatments = [treatment.name for treatment in treatments]
+        treatments = [treatment.treatment_name for treatment in treatments]
         if len(treatments) == 0:
             return "-----"
         return ", ".join(treatments)

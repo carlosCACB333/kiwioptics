@@ -6,7 +6,7 @@
     <h1 class='display-4'>Lista de Tratamientos</h1>
   </div>
   <div class='col-4 align-self-end text-right pl-0'>
-    <a href='{% url 'medidas:crystal-add' %}' class='btn btn-primary border border-primary text-primary'>Nuevo Tratamiento</a>
+    <a href='{% url 'medidas:treatment-add' %}' class='btn btn-primary border border-primary text-primary'>Nuevo Tratamiento</a>
   </div>
 </div>
 <div class="row no-gutters">
@@ -23,8 +23,8 @@
         {% for treatment in crystals_treatments %}
         <tr class="">
           <th class="text-center align-middle p-auto" >{{forloop.counter}}</th>
-          <td class="align-middle">{{treatment.name|title}}</td>
-          <td class="align-middle">{{treatment.description}}</td>
+          <td class="align-middle">{{treatment.treatment_name|title}}</td>
+          <td class="align-middle"><div style='overflow:auto; max-height: 100px; word-wrap: break-word; max-width:57vw'>{{treatment.description}}</div></td>
           <td class="align-middle text-center px-0"><a
               class="btn btn-primary text-primary border border-primary"
               href=""

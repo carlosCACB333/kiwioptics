@@ -10,7 +10,7 @@ admin.site.register(CrystalTreatments)
 class CrystalAdmin(admin.ModelAdmin):
     list_display = (
         'id',
-        'name',
+        'crystal_name',
         'material',
         'get_treatments',
         'default_price',
