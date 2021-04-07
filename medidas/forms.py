@@ -1,4 +1,5 @@
 from django.forms import ModelForm, ModelChoiceField, ModelMultipleChoiceField
+from django.core.exceptions import ValidationError
 from .models import Patient, Prescription, Crystal, CrystalTreatments, CrystalMaterial
 from termcolor import colored
 
@@ -9,10 +10,18 @@ class PatientForm(ModelForm):
 		exclude = ('optic','patient_optic_id')
 
 	def __init__(self, *args, **kwargs):
+		self.request = kwargs.pop('request')
 		super(PatientForm, self).__init__(*args, **kwargs)
 		for fname, f in self.fields.items():
 			f.widget.attrs['class'] = 'form-control form-control-sm'
 			f.widget.attrs['form'] = 'prescription_form'
+
+	def clean(self):
+		cleaned_data = self.cleaned_data
+		if Patient.objects.filter(dni=cleaned_data['dni'], optic=self.request.user.get_opticuser()).exists():
+			msg = 'Ya existe un paciente con este dni.'
+			self.add_error('dni', ValidationError(msg))
+		return cleaned_data
 
 class PrescriptionForm(ModelForm):
 
@@ -53,6 +62,7 @@ class CrystalMaterialForm(ModelForm):
 
 	def __init__(self, *args, **kwargs):
 		super(CrystalMaterialForm, self).__init__(*args, **kwargs)
+		self.fields['description'].widget.attrs['rows'] = '3'
 		for fname, f in self.fields.items():
 			f.widget.attrs['class'] = 'form-control form-control-sm'
 
@@ -64,6 +74,7 @@ class CrystalTreatmentsForm(ModelForm):
 
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
+		self.fields['description'].widget.attrs['rows'] = '3'
 		for fname, f in self.fields.items():
 			f.widget.attrs['class'] = 'form-control form-control-sm'
 

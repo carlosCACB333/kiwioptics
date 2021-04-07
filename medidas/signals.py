@@ -57,7 +57,7 @@ como exterior.""",
 MATERIALS = (
     {
         "name":"Vidrio crown",
-        "retracting_index":"1.523",
+        "refractive_index":"1.523",
         "abbe":"59",
         "description":"""Excelente óptica.
         Bajo costo.
@@ -65,7 +65,7 @@ MATERIALS = (
     },
     {
         "name":"Resina CR-39",
-        "retracting_index":"1.498",
+        "refractive_index":"1.498",
         "abbe":"58",
         "description":"""Excelente óptica.
         Bajo costo.
@@ -73,27 +73,27 @@ MATERIALS = (
     },
     {
         "name":"Trivex",
-        "retracting_index":"1.54",
+        "refractive_index":"1.54",
         "abbe":"45",
         "description":"""Resistencia superior a impactos.
         El material más liviano que se ofrece.""",
     },
     {
         "name":"NK-55",
-        "retracting_index":"1.56",
+        "refractive_index":"1.56",
         "abbe":"38",
         "description":"""Son resistentes a los impactos, más delgados y altamente reflectantes..""",
     },
     {
         "name":"Policarbonato",
-        "retracting_index":"1.586",
+        "refractive_index":"1.586",
         "abbe":"30",
         "description":"""Resistencia superior a impactos.
         Más liviano que los cristales de plástico de alto índice.""",
     },
     {
         "name":"Tríbido",
-        "retracting_index":"1.60",
+        "refractive_index":"1.60",
         "abbe":"41",
         "description":"""Delgado y liviano.
         Considerablemente más resistente a impactos que los cristales de plástico CR-39 y de alto índice (excepto el policarbonato y Trivex).
@@ -101,27 +101,27 @@ MATERIALS = (
     },
     {
         "name":"Alto indice 1.60",
-        "retracting_index":"1.60",
+        "refractive_index":"1.60",
         "abbe":"36",
         "description":"""Delgado y liviano.
         Menos costoso que los lentes de 1.70-1.74 de índice alto.""",
     },
     {
         "name":"Alto indice 1.67",
-        "retracting_index":"1.67",
+        "refractive_index":"1.67",
         "abbe":"32",
         "description":"""Delgado y liviano.
         Menos costoso que los lentes de 1.70-1.74 de índice alto.""",
     },
     {
         "name":"Alto indice 1.70",
-        "retracting_index":"1.70",
+        "refractive_index":"1.70",
         "abbe":"36",
         "description":"""Los cristales más delgados que se ofrecen.""",
     },
     {
         "name":"Alto indice 1.74",
-        "retracting_index":"1.74",
+        "refractive_index":"1.74",
         "abbe":"33",
         "description":"""Los cristales más delgados que se ofrecen.""",
     },
@@ -203,7 +203,7 @@ def add_crystals(sender, instance, created,**kwargs):
         for material in MATERIALS:
             instance.crystalmaterial_set.create(
                 material_name=material["name"], 
-                retracting_index=material["retracting_index"],
+                refractive_index=material["refractive_index"],
                 abbe=material["abbe"],
                 description=material["description"],
             )

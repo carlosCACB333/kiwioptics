@@ -58,11 +58,11 @@
           </td>
           <td class="align-middle" >{{prescription.patient|title|truncatechars:30}}</td>
           <td class="align-middle" >
-            {{prescription.patient.dni|default_if_none:"-----"|truncatechars:12}}
+            {{prescription.patient.dni|default_if_none:"—"|truncatechars:12}}
           </td>
           <td class="align-middle" >
             {% if prescription.get_total is None %}
-              -----
+              —
             {% else %}
               S/.{{prescription.get_total}}
             {% endif %}

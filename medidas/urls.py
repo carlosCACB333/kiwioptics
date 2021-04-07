@@ -15,6 +15,7 @@ urlpatterns = [
     path('prescriptions/delete/', views.prescription_delete, name='prescription-delete'),
     path('crystals/', views.CrystalListView.as_view(), name='crystals'),
     path('crystals/add', views.CrystalCreateView.as_view(), name='crystal-add'),
+    path('crystals/<int:pk>/change', views.CrystalUpdateView.as_view(), name='crystal-update'),
     path('crystals/materials', views.CrystalMaterialListView.as_view(), name='materials'),
     path('crystals/materials/add', views.CrystalMaterialCreateView.as_view(), name='material-add'),
     path('crystals/treatments', views.CrystalTreatmentsListView.as_view(), name='treatments'),

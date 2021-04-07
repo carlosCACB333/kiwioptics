@@ -16,7 +16,7 @@ class Patient(models.Model):
     patient_optic_id = models.PositiveIntegerField(blank=True)
     optic = models.ForeignKey(OpticUser, verbose_name="Optica", on_delete=models.CASCADE, null=False)
     full_name = models.CharField("Nombre completo", max_length=100)  
-    dni = models.CharField("Dni",max_length=20, unique=True, blank=True, null=True)    
+    dni = models.CharField("Dni",max_length=20, blank=True, null=True)    
     gender = models.CharField("Genero", max_length=20, blank=True, choices=Gender.choices)
     phone = models.CharField("Celular",max_length=30, blank=True)
     job = models.CharField('Ocupacion', max_length=70, blank=True)
@@ -84,7 +84,7 @@ class CrystalTreatments(models.Model):
 class CrystalMaterial(models.Model):
 
     material_name = models.CharField("Nombre del Material", max_length=50)
-    retracting_index = models.DecimalField("Indice retractivo", max_digits=4, decimal_places=3, blank=True, null=True)
+    refractive_index = models.DecimalField("Indice de refracción", max_digits=4, decimal_places=3, blank=True, null=True)
     abbe = models.DecimalField("Valor abbe", max_digits=3, decimal_places=1, blank=True, null=True)
     description = models.TextField("Descripcion", blank=True)
     optic = models.ForeignKey(OpticUser, verbose_name="Optica", on_delete=models.CASCADE, null=False)
@@ -115,7 +115,7 @@ class Crystal(models.Model):
         treatments = list(self.treatments.all())
         treatments = [treatment.treatment_name for treatment in treatments]
         if len(treatments) == 0:
-            return "-----"
+            return "—"
         return ", ".join(treatments)
 
 
@@ -130,20 +130,20 @@ class Prescription(models.Model):
         choices = [( decimal.Decimal(f'{i*0.25}0') if i%2==0 else decimal.Decimal(f'{i*0.25}'), (f'{i*0.25}0' if i <= 0 else f'+{i*0.25}0') if i%2==0 else (f'{i*0.25}' if i <= 0 else f'+{i*0.25}')) for i in range(end-1,start-1,-1)]
         for i, (value, name) in enumerate(choices):
             if value == decimal.Decimal(0):
-                choices.insert(i, ('','---------'))
+                choices.insert(i, ('','—'))
                 break
         return choices
     
     spherical_choices = generateChoices.__func__(-100,101)
     cylinder_choices = generateChoices.__func__(-29, 1)
     axis_choices = [(i,f'{i}°') for i in range(180,-1,-1)]
-    axis_choices.append(('','---------'))
+    axis_choices.append(('','—'))
     dip_choices = [(i,f'{i}mm') for i in range(81,40,-1)]
-    dip_choices.append(('','---------'))
+    dip_choices.append(('','—'))
     dnp_choices = [(decimal.Decimal(i/2),f'{i/2}mm' if i%2==1 else f'{int(i/2)}mm') for i in range(81,40,-1)]
-    dnp_choices.append(('','---------'))
+    dnp_choices.append(('','—'))
     add_choices = generateChoices.__func__(1, 25)
-    add_choices.append(('','---------'))
+    add_choices.append(('','—'))
     # print(colored(spherical_choices,'green'))
     # print(colored(cylinder_choices,'red'))
     # print(colored(axis_choices,'green'))

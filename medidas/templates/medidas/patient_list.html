@@ -49,7 +49,7 @@
           >
             <th class='text-center px-0'>{{patient.patient_optic_id}}</th>
             <td class="text-center px-0">{{patient|truncatechars:25}}</td>
-            <td class="text-center px-0">{{patient.dni|default_if_none:'--------'|truncatechars:12}}</td>
+            <td class="text-center px-0">{{patient.dni|default_if_none:'—'|truncatechars:12}}</td>
             <td class="text-center px-0">{{patient.phone|truncatechars:12}}</td>
             <td class="text-center px-0">{{patient.job|truncatechars:12}}</td>
             <td class="text-center px-0">{{patient.prescription_set.count}}</td>
@@ -85,7 +85,7 @@
                     <tr class="table table-primary border">
                       <th class='text-center px-0'>N°</th>
                       <th class='text-center px-0'>Fecha</th>
-                      <th class='text-center px-0'>Precio</th>
+                      <th class='text-center px-0'>Total</th>
                       <th class='text-center px-0' colspan='1'>Opciones</th>
                     </tr>
                   </thead>
@@ -96,7 +96,7 @@
                     >
                       <td class='text-center px-0'>{{prescription.prescription_optic_id}}</td>
                       <td class='text-center px-0'>{{prescription.date|date:'d/m/Y'}}</td>
-                      <td class='text-center px-0'>S/.{{prescription.price}}</td>
+                      <td class='text-center px-0'>S/.{{prescription.get_total}}</td>
                       <td class='text-center px-0'>
                         <a class='btn btn-primary border border-primary text-primary' href="{% url 'medidas:prescription-detail' prescription.id %}" class="btn btn-default btn-sm">
                           <i class="far fa-eye"></i>

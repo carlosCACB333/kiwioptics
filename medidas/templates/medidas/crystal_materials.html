@@ -17,6 +17,8 @@
           <th class="text-center align-middle" scope="col">N°</th>
           <th class="align-middle p-0" scope="col">Material</th>
           <th class="align-middle" scope="col">Descripción</th>
+          <th class="align-middle" scope="col">Indice de refracción</th>
+          <th class="align-middle" scope="col">Abbe</th>
           <th colspan="2" class="align-middle text-center" scope="col">Opciones</th>
         </tr>
         </thead>
@@ -25,6 +27,8 @@
           <th class="text-center align-middle p-auto" >{{forloop.counter}}</th>
           <td class="align-middle">{{material.material_name|title}}</td>
           <td class="align-middle"><div style='overflow:auto; max-height: 100px; word-wrap: break-word; max-width:57vw'>{{material.description}}</div></td>
+          <td class="align-middle">{{material.refractive_index|default_if_none:"—"}}</td>
+          <td class="align-middle">{{material.abbe|default_if_none:"—"}}</td>
           <td class="align-middle text-center px-0"><a
               class="btn btn-primary text-primary border border-primary"
               href=""

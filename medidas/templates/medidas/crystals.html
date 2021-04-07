@@ -28,18 +28,18 @@
           <td class="align-middle"><div style='word-wrap: break-word; max-width:20vw'>{{crystal.crystal_name|title}}</div></td>
           <td class="align-middle">{{crystal.material|title}}</td>
           <td class="align-middle">
-            {{crystal.get_treatments|default_if_none:"-----"}}
+            {{crystal.get_treatments|default_if_none:"—"}}
           </td>
           <td class='align-middle'>
           {% if crystal.default_price %}
             S/.{{crystal.default_price}}
           {% else %}
-            -----
+            —
           {% endif %}
           </td>
           <td class="align-middle text-center px-0"><a
               class="btn btn-primary text-primary border border-primary"
-              href=""
+              href="{% url 'medidas:crystal-update' crystal.id %}"
               ><i class="far fa-edit"></i
             ></a></td>
           <td class="align-middle text-center px-0"><button

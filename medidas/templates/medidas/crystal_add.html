@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 {% block crystals %}active{% endblock crystals %}
 {% block styles %}
 <style>
@@ -15,7 +16,18 @@
 {% block content %}
 <h1 class='display-4'>Añadir Luna</h1>
 <form action="" method='POST'>{% csrf_token %}
-    {{form.as_p}}
+    {% for field in form %}
+    {{field.label}}
+      {% if field.errors %}
+          {{field|attr:"class:form-control form-control-sm is-invalid"}}
+          <div id="{{ field.id_for_label }}" class="invalid-feedback">
+          {{field.errors}}
+          </div>
+      {% else %}
+          {{field}}
+      {% endif %}    
+    {% endfor %}
+    <br>
     <button class='btn btn-primary text-primary border border-primary' type='submit'>Guardar</button>
 </form>
 {% endblock content %}
@@ -35,7 +47,7 @@ $("select[multiple]").bsMultiSelect({
       marginBottom: '0'
     },
     choice: 'px-md-2 px-1',
-    choice_hover: 'text-primary bg-light',
+    choice_hover: 'text-primary bg-primary',
     filterInput: {
       border: '0px',
       height: 'auto',

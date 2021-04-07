@@ -12,6 +12,7 @@ from .models import Patient, Prescription, DiagnosisChoices, Crystal, CrystalTre
 from termcolor import colored
 from django.contrib import messages
 from .custom_functions import django_admin_keyword_search
+from .decorators import model_owned_required
 
 # Create your views here.
 
@@ -38,7 +39,7 @@ def index(request):
 def add_prescription(request):
     context = {}
     if request.method == 'POST':
-        patient_form = PatientForm(request.POST)
+        patient_form = PatientForm(request.POST, request=request)
         if patient_form.is_valid():
             new_patient = patient_form.save(commit=False)
             account = request.user
@@ -64,7 +65,7 @@ def add_prescription(request):
             print(colored(patient_form.errors, 'red'))
             print(colored(prescription_form.errors, 'red'))
     else:
-        patient_form = PatientForm()
+        patient_form = PatientForm(request = request)
         prescription_form = PrescriptionForm(request=request)
     context['patient_form'] = patient_form
     context['prescription_form'] = prescription_form
@@ -73,12 +74,14 @@ def add_prescription(request):
 
 
 @login_required
+@model_owned_required(Prescription)
 def prescription_detail(request, pk):
+    print(colored(f"{request} + {pk}",'red'))
     context = {}
     if request.method == 'GET':
         prescription = Prescription.objects.get(pk=pk)
         patient = prescription.patient
-        patient_form = PatientForm(instance=patient)
+        patient_form = PatientForm(instance=patient, request=request)
         prescription_form = PrescriptionForm(instance=prescription, request=request)
         return render(request, 'medidas/prescription.html', context={
             'patient_form': patient_form,
@@ -93,7 +96,7 @@ def prescription_update(request, pk):
     if request.method == 'GET':
         prescription = Prescription.objects.get(pk=pk)
         patient = prescription.patient
-        patient_form = PatientForm(instance=patient)
+        patient_form = PatientForm(instance=patient, request=request)
         prescription_form = PrescriptionForm(instance=prescription, request=request)
         return render(request, 'medidas/prescription.html', context={
             'patient_form': patient_form,
@@ -127,7 +130,7 @@ def prescription_delete(request):
 def patient_add_prescription(request, pk):
     if request.method == 'GET':
         patient = Patient.objects.get(pk=pk)
-        patient_form = PatientForm(instance=patient)
+        patient_form = PatientForm(instance=patient, request=request)
         prescription_form = PrescriptionForm(request=request)
         return render(request, 'medidas/prescription.html', context={
             'patient_form': patient_form,
@@ -181,7 +184,7 @@ class PatientListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["patient_form"] = PatientForm()
+        context["patient_form"] = PatientForm(request = self.request)
         return context
 
 
@@ -201,22 +204,6 @@ class CrystalListView(LoginRequiredMixin,ListView):
     def get_queryset(self):
         opticUser = self.request.user.get_opticuser().id
         return Crystal.objects.filter(optic=opticUser)
-
-class CrystalTreatmentsListView(LoginRequiredMixin,ListView):
-    model = CrystalTreatments
-    context_object_name = 'crystals_treatments'
-    template_name = "medidas/crystal_treatments.html"
-    def get_queryset(self):
-        opticUser = self.request.user.get_opticuser().id
-        return CrystalTreatments.objects.filter(optic=opticUser)
-
-class CrystalMaterialListView(LoginRequiredMixin,ListView):
-    model = CrystalMaterial
-    context_object_name = 'crystals_materials'
-    template_name = "medidas/crystal_materials.html"
-    def get_queryset(self):
-        opticUser = self.request.user.get_opticuser().id
-        return CrystalMaterial.objects.filter(optic=opticUser)
 
 class CrystalCreateView(LoginRequiredMixin,CreateView):
     model = Crystal
@@ -238,6 +225,43 @@ class CrystalCreateView(LoginRequiredMixin,CreateView):
         kwargs = super(CrystalCreateView, self).get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
+
+class CrystalUpdateView(LoginRequiredMixin,UpdateView):
+    model = Crystal
+    success_url = reverse_lazy('medidas:crystals')
+    form_class = CrystalForm
+    template_name = "medidas/crystal_add.html"
+
+    def form_valid(self, form):
+        print(colored(form.cleaned_data,'green'))
+        form.instance.optic = self.request.user.get_opticuser()
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print(colored(form.cleaned_data,'red'))
+        print(colored(form.errors,'red'))
+        return super().form_invalid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+    
+class CrystalTreatmentsListView(LoginRequiredMixin,ListView):
+    model = CrystalTreatments
+    context_object_name = 'crystals_treatments'
+    template_name = "medidas/crystal_treatments.html"
+    def get_queryset(self):
+        opticUser = self.request.user.get_opticuser().id
+        return CrystalTreatments.objects.filter(optic=opticUser)
+
+class CrystalMaterialListView(LoginRequiredMixin,ListView):
+    model = CrystalMaterial
+    context_object_name = 'crystals_materials'
+    template_name = "medidas/crystal_materials.html"
+    def get_queryset(self):
+        opticUser = self.request.user.get_opticuser().id
+        return CrystalMaterial.objects.filter(optic=opticUser)
 
 class CrystalMaterialCreateView(LoginRequiredMixin,CreateView):
     model = CrystalMaterial
