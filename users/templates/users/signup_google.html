@@ -56,7 +56,9 @@
             box-shadow: none;
         }
     </style>
-    <script src="https://kit.fontawesome.com/049f05bf2b.js" crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    
 </head>
 
 <body>
@@ -84,47 +86,17 @@
             </div>
 
             <!-- Registeration Form -->
-            <div class="col-md-7 col-lg-6 ml-auto">
-                <form action="" method='POST'>{% csrf_token %}
-                    <input type="hidden" name="token_id" id="token_id">
-                    <h4 class="text-success" style="display:none" id="message-form">Completa tus datos para continuar</h4>
+            <div class="col-md-7 col-lg-6 ml-auto" >
+                <form action="{% url 'users:google' %}" method='POST' id="registration-google">{% csrf_token %}
+                    <input type="hidden" name="token_id" id="token_id" value="{{token_id}}">
+                    <!-- <h4 class="text-primary"  id="message-form">Completa tus datos para continuar</h4> -->
+                    <div class="alert alert-primary" role="alert">
+                        <h4 class="alert-heading">Completa tus datos</h4>
+                        <p>Ingresa los datos de tu optica y presiona en <strong>crear cuenta</strong></p>
+                      </div>
                     <div class="row">
                         {{form.non_field_errors}}
-                        <!-- full Name -->
-                        <div class="input-group col-lg-12 mb-4">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text bg-white px-3 border-md border-right-0">
-                    <i class="fa fa-user text-muted"></i>
-                  </span>
-                            </div>
-                            {{form.full_name|attr:"class:form-control form-control-sm bg-white border-left-0 border-md full_name"|attr:"hidden"}} 
-                            {% if form.full_name.errors %} {{form.full_name|attr:"class:form-control form-control-sm bg-white border-left-0 border-md is-invalid full_name"|attr:"disabled"}}
-                            <div id="{{ form.full_name.id_for_label }}" class="invalid-feedback">
-                                {% for error in form.full_name.errors %} {{error}} {% endfor %}
-                            </div>
-                            {% else %}
-                             {{form.full_name|attr:"class:form-control form-control-sm bg-white border-left-0 border-md full_name"|attr:"disabled"}} 
-
-                             {% endif %}
-                        </div>
-
-
-                        <!-- Email Address -->
-                        <div class="input-group col-lg-12 mb-4">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text bg-white px-3 border-md border-right-0">
-                    <i class="fa fa-envelope text-muted"></i>
-                  </span>
-                            </div>
-                            {{form.username|attr:"class:form-control form-control-sm bg-white border-left-0 border-md username"|attr:"hidden"}}
-                            {% if form.username.errors %} {{form.username|attr:"class:form-control form-control-sm bg-white border-left-0 border-md is-invalid username"|attr:"disabled"}}
-                            <div id="{{ form.username.id_for_label }}" class="invalid-feedback">
-                                {% for error in form.username.errors %} {{error}} {% endfor %}
-                            </div>
-                            {% else %}
-                             {{form.username|attr:"class:form-control form-control-sm bg-white border-left-0 border-md username"|attr:"disabled"}}
-                              {% endif %}
-                        </div>
+                        
                         <!-- Empresa -->
                         <div class="input-group col-lg-12 mb-4">
                             <div class="input-group-prepend">
@@ -132,11 +104,11 @@
                     <i class="fa fa-eye text-muted"></i>
                   </span>
                             </div>
-                            {% if form_optic.optic_name.errors %} {{form_optic.optic_name|attr:"class:form-control form-control-sm bg-white border-left-0 border-md is-invalid"}}
+                            {% if form.optic_name.errors %} {{form.optic_name|attr:"class:form-control form-control-sm bg-white border-left-0 border-md is-invalid"}}
                             <div id="{{ form.optic_name.id_for_label }}" class="invalid-feedback">
-                                {% for error in form_optic.optic_name.errors %} {{error}} {% endfor %}
+                                {% for error in form.optic_name.errors %} {{error}} {% endfor %}
                             </div>
-                            {% else %} {{form_optic.optic_name|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"}} {% endif %}
+                            {% else %} {{form.optic_name|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"}} {% endif %}
                         </div>
 
                         <!-- Phone Number -->
@@ -163,10 +135,10 @@
                                     <i class="fas fa-file-signature"></i>
                   </span>
                             </div>
-                            {% if form_optic.prescription_name.errors %} {{form_optic.prescription_name|attr:"class:form-control form-control-sm bg-white border-left-0 border-md is-invalid"}} {% else %} {{form_optic.prescription_name|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"}} {% endif %}
+                            {% if form.prescription_name.errors %} {{form.prescription_name|attr:"class:form-control form-control-sm bg-white border-left-0 border-md is-invalid"}} {% else %} {{form.prescription_name|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"}} {% endif %}
 
                             <div class='col-12 invalid-feedback d-block'>
-                                {% for error in form_optic.prescription_name.errors %} {{error}} {% endfor %}
+                                {% for error in form.prescription_name.errors %} {{error}} {% endfor %}
                             </div>
                         </div>
                         
@@ -178,10 +150,10 @@
                                     <i class="fas fa-phone-alt"></i>
                   </span>
                             </div>
-                            {% if form_optic.phone.errors %} {{form_optic.phone|attr:"class:form-control form-control-sm bg-white border-left-0 border-md is-invalid"}} {% else %} {{form_optic.phone|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"}} {% endif %}
+                            {% if form.phone.errors %} {{form.phone|attr:"class:form-control form-control-sm bg-white border-left-0 border-md is-invalid"}} {% else %} {{form.phone|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"}} {% endif %}
                         </div>
                         <div class='col-12 invalid-feedback d-block'>
-                            {% for error in form_optic.phone.errors %} {{error}} {% endfor %}
+                            {% for error in form.phone.errors %} {{error}} {% endfor %}
                         </div>
 
                          <!-- Divider Text -->
@@ -195,19 +167,11 @@
                         <!-- Submit Button -->
                         
                     <div class="form-group col-lg-12 mx-auto " id="container-register">
-                        <button type="submit" class="btn btn-primary" style="width:100%">
-                       <i class="fab fa-google"></i> Crear Cuenta con Google
+                        <button type="submit" class="btn btn-primary" style="width:100%" id="registration-google-button">
+                       <i class="fab fa-google"></i> Crear Cuenta
                          </button>
                     </div>
 
-                       
-
-                    <!-- Social Login -->
-
-                    <div class="form-group col-lg-12 mx-auto" id="container-register-google">
-                        <a  class="btn btn-primary" style="width:100%" href="#" role="button" onclick="get_id_token('{% url 'users:login-google'%}')" id="get_token"><i class="fab fa-google"></i
-                        > Iniciar Sesion Con Google</a>
-                    </div>
                     
 
                     <!-- Already Registered -->
@@ -244,17 +208,16 @@
 
 <script>
     $(document).ready(function(){
-            $("#container-register").hide();
-            $("#get_token").click();
-
-
-
-    
+        $('#registration-google-button').html("<i class='fab fa-google'>  Iniciar Sesion Con Google");
+        $('#registration-google').submit(function(){
+            if($('#token_id').val().trim().length<=0){
+                $('#registration-google-button').html("<i class='fab fa-google'>  Crear Cuenta");
+                get_id_token("{% url 'users:login-google' %}","{% url 'users:google' %}");
+                return false;
+            }
+        });
     });
-
-    
 </script>
-
 
 </body>
 

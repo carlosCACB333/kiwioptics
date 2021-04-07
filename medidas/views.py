@@ -4,11 +4,13 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, UpdateView, TemplateView, CreateView
+from django.views.generic import ListView, UpdateView, TemplateView, CreateView,TemplateView
 from django.db.models.functions import Concat
 from django.core.serializers import serialize
 from .forms import PatientForm, PrescriptionForm, CrystalForm, CrystalMaterialForm, CrystalTreatmentsForm
 from .models import Patient, Prescription, DiagnosisChoices, Crystal, CrystalTreatments, CrystalMaterial
+from users.models import EmployeeUser
+from users.mixins import OpticPermissionRequiredMixin
 from termcolor import colored
 from django.contrib import messages
 from .custom_functions import django_admin_keyword_search
@@ -33,6 +35,17 @@ def index(request):
 #             'job':patient.job,
 #         }
 #         return JsonResponse(data, safe=False)
+
+
+
+
+
+class IndexView(LoginRequiredMixin,ListView):
+    model = EmployeeUser
+    template_name = "medidas/index.html"
+
+   
+
 
 
 @login_required

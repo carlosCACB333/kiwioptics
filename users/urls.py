@@ -20,10 +20,6 @@ urlpatterns = [
     path('userOfOptic/', views.UserOfOpticCreateView.as_view(), name='userOfOptic'),
     path('userOfOpticDelete/<id>/', views.UserOfOpticDeleteView.as_view(), name='userOfOpticDelete'),
 
-    path('createGroup/',views.GroupCreateView.as_view(),name='createGroup'),
-
-
-
     #api rest framework
     path('api/loginGoogle', rest.GoogleLoginValidateView.as_view(), name='login-google'),
     path('api/registerGoogle', rest.GoogleLRegisterView.as_view(), name='register-google'),

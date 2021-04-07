@@ -74,8 +74,6 @@ class GoogleLoginValidateView(APIView):
 
         # descincriptamos
         decode_token = auth.verify_id_token(id_token)
-        print("=============",decode_token)
-
         email = decode_token['email']
         name = decode_token['name']
         email_verified = decode_token['email_verified']

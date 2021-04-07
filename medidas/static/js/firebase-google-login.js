@@ -18,9 +18,8 @@ $(document).ready(function() {
 })
 
 
-function login(url,idToken) {
+function login(url_validate,url_create,idToken) {
 
-    console.log(url)
     datos = {
         'token_id': idToken,
     }
@@ -28,7 +27,7 @@ function login(url,idToken) {
     $.ajax({
         method: 'POST',
         // url: "/app/api/patients/"+id+"/?format=json",
-        url: url,
+        url: url_validate,
         data: datos,
         dataType: "json",
         headers: { 'X-CSRFToken': getCookie('csrftoken') },
@@ -37,7 +36,10 @@ function login(url,idToken) {
             if (data.user != null) {
                 window.location = "/"
             } else {
-                show_registry_controls();
+                $("#registration-form").load(url_create+" #registration-google",function(){
+                    show_registry_controls();
+                });
+                show_registry_controls();                               
             }
         }, //End of AJAX Success function
     }).fail(function(e) {
@@ -48,20 +50,12 @@ function login(url,idToken) {
 
 
 function show_registry_controls() {
-
-    $("#id_full_name.full_name").val(user.displayName)
-    $("#id_username.username").val(user.email)
+    // $("#id_full_name.full_name").val(user.displayName)
+    // $("#id_username.username").val(user.email)
     $("#token_id").val(mi_token)
-    $(".close").click();
-    $("#message-form").show();
-
-    $("#container-register").show();
-    $("#container-register-google").hide();
-   
-
 }
 
-function get_id_token(url) {
+function get_id_token(url_validate,url_create) {
 
 
     //  Crea una instancia del objeto del proveedor de Google
@@ -83,7 +77,7 @@ function get_id_token(url) {
                 // Send token to your backend via HTTPS
                 // obtenemos el toquen id para hacer la validacion
                 mi_token = idToken
-                login(url,idToken);
+                login(url_validate,url_create,idToken);
             }).catch(function(error) {
                 // Handle error
                 console.log(error)
@@ -100,31 +94,4 @@ function get_id_token(url) {
             var credential = error.credential;
             // ...
         });
-}
-
-
-function register() {
-    var optica = $("#id_optic").val().trim();
-    if (optica.length > 0) {
-
-        datos = {
-            'token_id': mi_token,
-            'optic': optica
-        }
-
-
-        $.ajax({
-            method: 'POST',
-            // url: "/app/api/patients/"+id+"/?format=json",
-            url: '/accounts/api/registerGoogle',
-            data: datos,
-            dataType: "json",
-            headers: { 'X-CSRFToken': getCookie('csrftoken') },
-            success: function(data) {
-                window.location = "/"
-            }, //End of AJAX Success function
-        }).fail(function() {
-
-        });
-    }
 }

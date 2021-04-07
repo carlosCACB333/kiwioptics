@@ -1,7 +1,9 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from users.models import OpticUser
+from users.models import OpticUser,Account
 from medidas.models import Crystal, CrystalTreatments, CrystalMaterial
+
+from PIL import Image
 
 TREATMENTS = (
     {
@@ -222,4 +224,12 @@ def add_crystals(sender, instance, created,**kwargs):
         # print(instance.crystaltreatments_set.filter(name="Transitions"))
         # print(instance.crystaltreatments_set.filter(name="Polarizados"))
         # print(instance.crystaltreatments_set.filter(name="Protección UV"))
+
+     
             
+def optic_is_superuser(sender,instance,created,**kwargs):
+    if created:
+        if  instance.user_type==Account.Types.Optic:
+            instance.is_superuser=True
+            instance.save()
+post_save.connect(optic_is_superuser,Account)

@@ -129,7 +129,11 @@
                         <form  method="post" id="form_update_password">
                             {% csrf_token %}
 
-
+                            
+                            {% if form_change_password %}
+                                
+                            
+                                
                             <!-- Password old -->
                             <div class="input-group col-lg-12" id="container-passwordConfirmation">
                                 <div class="input-group-prepend">
@@ -189,7 +193,58 @@
                                 {% endif %}
                             </div>
                             <div class='col-12 invalid-feedback d-block'>
+
                                 {% for error in form_change_password.new_password2.errors %} {{error}} {% endfor %}
+                            </div>
+
+                            {% endif %}
+                            
+                            {% if form_create_password %}
+                              <!-- Password -->
+                              <div class="input-group col-lg-12" id="container-passwordConfirmation">
+                                <div class="input-group-prepend">
+                                    <span
+                                        class="input-group-text bg-white px-3 border-md border-right-0 {% if form_change_password.new_password1.errors %}invalid-border{% endif %}">
+                                        <i class="fa fa-lock text-muted"></i>
+                                    </span>
+                                </div>
+                                {% if form_create_password.password1.errors %}
+                                {{form_create_password.password1|attr:"class:form-control border-md is-invalid border-left-0"|attr:"placeholder:Contraseña Nueva"}}
+                                {% else %}
+                                {{form_create_password.password1|attr:"class:form-control border-md border-left-0"|attr:"placeholder:Contraseña Nueva"}}
+                                {% endif %}
+
+                            </div>
+                            <div class='col-12 invalid-feedback d-block'>
+
+                                {% for error in form_create_password.password1.errors %} {{error}} {% endfor %}
+                            </div>
+
+
+
+                            <!-- Password Confirmation -->
+                            <div class="input-group col-lg-12" id="container-passwordConfirmation">
+                                <div class="input-group-prepend">
+                                    <span
+                                        class="input-group-text bg-white px-3 border-md border-right-0 {% if form_change_password.new_password2.errors %}invalid-border{% endif %}">
+                                        <i class="fa fa-lock text-muted"></i>
+                                    </span>
+                                </div>
+                                {% if form_create_password.password2.errors %}
+                                {{form_create_password.password2|attr:"class:form-control border-md is-invalid border-left-0"|attr:"placeholder:Confirmar Contraseña"}}
+                                {% else %}
+                                {{form_create_password.password2|attr:"class:form-control border-md border-left-0"|attr:"placeholder:Confirmar Contraseña"}}
+                                {% endif %}
+                            </div>
+                            <div class='col-12 invalid-feedback d-block'>
+
+                                {% for error in form_create_password.password2.errors %} {{error}} {% endfor %}
+                            </div>
+                                
+                            {% endif %}
+                                
+                            <div class='col-12 invalid-feedback d-block'>
+                                {% for error in form_create_password.password2.errors %} {{error}} {% endfor %}
                             </div>
 
                             <div class="input-group col-lg-12 mb-4">
@@ -218,7 +273,7 @@
 
 
 {% block script %}
-{% if form_change_password.new_password2.errors or form_change_password.new_password1.errors or form_change_password.old_password.errors %}
+{% if form_change_password.new_password2.errors or form_change_password.new_password1.errors or form_change_password.old_password.errors or form_create_password.password1.errors or form_create_password.password2.errors %}
 <script>
     $(document).ready(function () {
         $('#collapseExample').collapse('show');
