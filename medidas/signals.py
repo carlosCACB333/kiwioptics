@@ -15,20 +15,14 @@ TREATMENTS = (
     "description":"reduce considerablemente el brillo que afecta tus ojos y reduce la fatiga ocular.",
     },
     {
-    "name":"Hidrofóbicos",
-    "description":"""Tratamiento Antireflex Superior resistente al polvo, agua y grasa haciendo que la luna
-    no se ensucie ni raye con facilidad y que también sea más facil de limpiar.""",
-    },
-    {
     "name":"Blue Defense",
     "description":"""Protege de la luz emitida por los dispositivos digitales, protege contra los rayos UV hasta 400 nm, el nuevo estándar en salud visual.
      Incluye una protección completa contra los rayos UV mas nocivos de 380 nm hasta 400 nm.""",
     },
     {
-    "name":"Superclean",
-    "description":"""Es un tratamiento antireflejo superior, además de disminuir el brillo y
-    brindar mayor comodidad. Repele el polvo, agua y grasa; haciendo que la
-    luna sea muy fácil de limpiar.""",
+    "name":"Protección UV",
+    "description":"""Las gafas de sol con protección UV son un bloqueador solar para sus ojos.
+    La exposición acumulativa a la dañina radiación ultravioleta (UV) a lo largo de la vida de una persona ha sido asociada con problemas relacionados con la edad, como las cataratas y la degeneración macular.""",
     },
     {
     "name":"FotoCromatico",
@@ -38,21 +32,27 @@ en todo tipo de condiciones y son ideales para situaciones tanto en interior
 como exterior.""",
     },
     {
-    "name":"Transitions",
-    "description":"""Lunas que están también en la familia de los fotocromáticas, pero que
-    tienen una tecnología superior en cuanto a la velocidad de opacidad de
-    las lunas al estar en contacto con los rayos UV.""",
-    },
-    {
     "name":"Polarizados",
     "description":"""Permite minimizar los efectos de los rayos de luz,
      son ideales para uso sobre pavimento, arena, agua y nieve.
      Elimina el deslumbramiento.""",
     },
     {
-    "name":"Protección UV",
-    "description":"""Las gafas de sol con protección UV son un bloqueador solar para sus ojos.
-    La exposición acumulativa a la dañina radiación ultravioleta (UV) a lo largo de la vida de una persona ha sido asociada con problemas relacionados con la edad, como las cataratas y la degeneración macular.""",
+    "name":"Hidrofóbicos",
+    "description":"""Tratamiento Antireflex Superior resistente al polvo, agua y grasa haciendo que la luna
+    no se ensucie ni raye con facilidad y que también sea más facil de limpiar.""",
+    },
+    {
+    "name":"Superclean",
+    "description":"""Es un tratamiento antireflejo superior, además de disminuir el brillo y
+    brindar mayor comodidad. Repele el polvo, agua y grasa; haciendo que la
+    luna sea muy fácil de limpiar.""",
+    },
+    {
+    "name":"Transitions",
+    "description":"""Lunas que están también en la familia de los fotocromáticas, pero que
+    tienen una tecnología superior en cuanto a la velocidad de opacidad de
+    las lunas al estar en contacto con los rayos UV.""",
     },
 )
 
@@ -201,19 +201,19 @@ CRYSTALS = (
 def add_crystals(sender, instance, created,**kwargs):
     if created:
         for treatment in TREATMENTS:
-            instance.crystaltreatments_set.create(name=treatment["name"], description=treatment["description"])
+            instance.crystaltreatments_set.create(treatment_name=treatment["name"], description=treatment["description"])
         for material in MATERIALS:
             instance.crystalmaterial_set.create(
-                name=material["name"], 
+                material_name=material["name"], 
                 retracting_index=material["retracting_index"],
                 abbe=material["abbe"],
                 description=material["description"],
             )
         for crystal in CRYSTALS:
-            crystal_material = instance.crystalmaterial_set.get(name=crystal["material"])
-            new_crystal = instance.crystal_set.create(name=crystal["name"],material=crystal_material)
+            crystal_material = instance.crystalmaterial_set.get(material_name=crystal["material"])
+            new_crystal = instance.crystal_set.create(crystal_name=crystal["name"],material=crystal_material)
             for treatment in crystal["treatments"]:
-                crystal_treatment = instance.crystaltreatments_set.get(name=treatment)
+                crystal_treatment = instance.crystaltreatments_set.get(treatment_name=treatment)
                 new_crystal.treatments.add(crystal_treatment)
         # print(instance.crystaltreatments_set.filter(name="Antirayas"))
         # print(instance.crystaltreatments_set.filter(name="Antireflex"))

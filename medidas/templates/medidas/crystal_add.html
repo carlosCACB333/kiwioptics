@@ -1,5 +1,17 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block crystals %}active{% endblock crystals %}
+{% block styles %}
+<style>
+.dashboardcode-bsmultiselect ul.dropdown-menu {
+    max-height: 8em;
+    overflow: auto;
+}
+.badge {
+    font-weight: 400;
+}
+</style>
+{% endblock styles %}
 {% block content %}
 <h1 class='display-4'>Añadir Luna</h1>
 <form action="" method='POST'>{% csrf_token %}
@@ -7,3 +19,92 @@
     <button class='btn btn-primary text-primary border border-primary' type='submit'>Guardar</button>
 </form>
 {% endblock content %}
+{% block script %}
+<script src="{% static 'js/BsMultiSelect.js' %}"></script>
+<script>
+$("select[multiple]").bsMultiSelect({
+  cssPatch: {
+    choices: {
+      listStyleType: 'none'
+    },
+    picks: {
+      listStyleType: 'none',
+      display: 'flex',
+      flexWrap: 'wrap',
+      height: 'auto',
+      marginBottom: '0'
+    },
+    choice: 'px-md-2 px-1',
+    choice_hover: 'text-primary bg-light',
+    filterInput: {
+      border: '0px',
+      height: 'auto',
+      boxShadow: 'none',
+      padding: '0',
+      margin: '0',
+      outline: 'none',
+      backgroundColor: 'transparent',
+      backgroundImage: 'none' // otherwise BS .was-vali<a href="https://www.jqueryscript.net/time-clock/">date</a>d set its image
+
+    },
+    filterInput_empty: 'form-control-sm',
+    // need for placeholder, TODO test form-control-plaintext
+    // used in staticContentGenerator
+    picks_disabled: {
+      backgroundColor: '#e9ecef'
+    },
+    picks_focus: {
+      borderColor: '#80bdff',
+      boxShadow: '0 0 0 0.2rem rgba(0, 123, 255, 0.25)'
+    },
+    picks_focus_valid: {
+      borderColor: '',
+      boxShadow: '0 0 0 0.2rem rgba(40, 167, 69, 0.25)'
+    },
+    picks_focus_invalid: {
+      borderColor: '',
+      boxShadow: '0 0 0 0.2rem rgba(220, 53, 69, 0.25)'
+    },
+    // used in BsAppearance
+    picks_def: {
+      minHeight: 'calc(2.25rem + 2px)'
+    },
+    picks_lg: {
+      minHeight: 'calc(2.875rem + 2px)'
+    },
+    picks_sm: {
+      minHeight: 'calc(1.8125rem + 2px)'
+    },
+    // used in pickContentGenerator
+    pick: {
+      paddingLeft: '0px',
+      lineHeight: '1.5em',
+      fontSize: '0.875rem',
+    },
+    pickButton: {
+      fontSize: '1.5em',
+      lineHeight: '.9em',
+      float: "none",
+    },
+    pickContent_disabled: {
+      opacity: '.65'
+    },
+    // used in choiceContentGenerator
+    choiceContent: {
+      justifyContent: 'initial'
+    },
+    // BS problem: without this on inline form menu items justified center
+    choiceLabel: {
+      color: 'inherit'
+    },
+    // otherwise BS .was-validated set its color
+    choiceCheckBox: {
+      color: 'inherit'
+    },
+    choiceLabel_disabled: {
+      opacity: '.65'
+    }
+  }
+});
+</script>
+{% endblock script %}

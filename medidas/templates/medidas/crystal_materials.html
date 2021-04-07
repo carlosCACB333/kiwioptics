@@ -2,33 +2,29 @@
 {% block crystals %}active{% endblock crystals %}
 {% block content %}
 <div class='row justify-content-between mb-2'>
-  <div class='col-10'>
+  <div class='col-8'>
     <h1 class='display-4'>Lista de Materiales</h1>
   </div>
-  <div class='col-2 align-self-end'>
+  <div class='col-4 align-self-end text-right pl-0'>
     <a href='{% url 'medidas:material-add' %}' class='btn btn-primary border border-primary text-primary'>Nuevo Material</a>
   </div>
 </div>
 <div class="row no-gutters">
     <div class="col-12">
-      <table class="table table-sm table-striped table-bordered table-responsive-md mx-2">
+      <table class="table table-sm table-striped table-bordered table-responsive-md">
         <thead class='table-primary'>
-            <tr class="">
-                <th class="text-center align-middle" scope="col">N°</th>
-                <th class="align-middle p-0" scope="col">Material</th>
-                <th class="align-middle" scope="col">Descripción</th>
-                <th class="align-middle text-center" scope="col">Indice refractivo</th>
-                <th class="align-middle text-center" scope="col">Abbe</th>
-                <th colspan="2" class="align-middle text-center" scope="col">Opciones</th>
-           </tr>
+        <tr class="">
+          <th class="text-center align-middle" scope="col">N°</th>
+          <th class="align-middle p-0" scope="col">Material</th>
+          <th class="align-middle" scope="col">Descripción</th>
+          <th colspan="2" class="align-middle text-center" scope="col">Opciones</th>
+        </tr>
         </thead>
         {% for material in crystals_materials %}
         <tr class="">
           <th class="text-center align-middle p-auto" >{{forloop.counter}}</th>
-          <td class="align-middle">{{material.name|title}}</td>
-          <td class="align-middle">{{material.description}}</td>
-          <td class="align-middle">{{material.retracting_index|title}}</td>
-          <td class="align-middle">{{material.abbe|title}}</td>
+          <td class="align-middle">{{material.material_name|title}}</td>
+          <td class="align-middle"><div style='overflow:auto; max-height: 100px; word-wrap: break-word; max-width:57vw'>{{material.description}}</div></td>
           <td class="align-middle text-center px-0"><a
               class="btn btn-primary text-primary border border-primary"
               href=""

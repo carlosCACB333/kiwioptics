@@ -35,7 +35,7 @@ class CrystalForm(ModelForm):
 	
 	class Meta:
 		model = Crystal
-		fields = ['name','material','treatments','default_price']
+		fields = ['crystal_name','material','treatments','default_price']
 
 	def __init__(self, *args, **kwargs):
 		self.request = kwargs.pop('request')
@@ -44,4 +44,28 @@ class CrystalForm(ModelForm):
 		self.fields['material'].queryset = CrystalMaterial.objects.filter(optic=self.request.user.get_opticuser())
 		for fname, f in self.fields.items():
 			f.widget.attrs['class'] = 'form-control form-control-sm'
+
+class CrystalMaterialForm(ModelForm):
+	
+	class Meta:
+		model = CrystalMaterial
+		exclude = ('optic',)
+
+	def __init__(self, *args, **kwargs):
+		super(CrystalMaterialForm, self).__init__(*args, **kwargs)
+		for fname, f in self.fields.items():
+			f.widget.attrs['class'] = 'form-control form-control-sm'
+
+class CrystalTreatmentsForm(ModelForm):
+	
+	class Meta:
+		model = CrystalTreatments
+		exclude = ('optic',)
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		for fname, f in self.fields.items():
+			f.widget.attrs['class'] = 'form-control form-control-sm'
+
+
 	

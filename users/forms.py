@@ -86,7 +86,7 @@ class UserOfOpticForm(forms.ModelForm):
     class Meta:
         model = Account
         # fields='__all__'
-        exclude = ('last_login', 'date_joined', 'user_type', 'is_superuser')
+        exclude = ('last_login', 'date_joined', 'user_type', 'is_superuser','is_staff')
         widgets = {
             'password':forms.PasswordInput(
                 attrs={

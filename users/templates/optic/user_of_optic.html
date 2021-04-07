@@ -139,14 +139,7 @@
             </div>
             <div class="form-row form-control">
 
-                <div class="form-group col-md-6">
-                    <label for="">Acceso al Admin</label>
-                    {{form.is_staff|attr:"class:"}}
-                    <div class='col-12 invalid-feedback d-block'>
-                        {% for error in form.is_staff.errors %} {{error}} {% endfor %}
-                    </div>
-                </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-12">
                     <label for="">Activo</label>
                     {{form.is_active|attr:"class:"}}
                     <div class='col-12 invalid-feedback d-block'>
