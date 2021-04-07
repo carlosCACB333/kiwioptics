@@ -50,20 +50,14 @@ def signup(request):
 
 
 class RegisterGoogleUserCreateView(CreateView):
-    model = Account
-    model_secondary = OpticUser
+    """ vista para registrar un usuario mediante autenticacion por google"""
+    model = OpticUser
     template_name = "users/signup_google.html"
-    form_class = AccountChangeForm
-    form_class_secondary = OpticUserForm
-
-    def get_context_data(self, **kwargs):
-        contexto = super().get_context_data(**kwargs)
-        if 'form_optic' not in contexto:
-            contexto['form_optic'] = self.form_class_secondary
-        return contexto
+    form_class = OpticUserForm
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object
+        token = request.POST['token_id']
         serializer = LoginSocialSerializer(data=request.POST)
         # si no es correcto mandamos un error
         serializer.is_valid(raise_exception=True)
@@ -73,21 +67,19 @@ class RegisterGoogleUserCreateView(CreateView):
 
         # descincriptamos
         decode_token = auth.verify_id_token(id_token)
-        # request.POST['username'] = decode_token['email']
-        # request.POST['full_name'] = decode_token['name']
 
         form1 = self.form_class(request.POST)
-        form2 = self.form_class_secondary(request.POST)
-        if(form1.is_valid() and form2.is_valid()):
-            cuenta = form1.save(commit=False)
-            cuenta.user_type = Account.Types.Optic
+        if(form1.is_valid()):
+            cuenta = Account(
+                username=decode_token['email'],
+                full_name=decode_token['name'],
+                # is_superuser=True,
+                user_type=Account.Types.Optic
+            )
             if len(decode_token['picture']) <= Account._meta.get_field('picture').max_length and 'picture' in decode_token:
-                print(colored(decode_token['picture'],'yellow'))
-                print(colored(len(decode_token['picture']),'yellow'))
                 cuenta.picture = decode_token['picture']
-            cuenta.is_superuser = True
             cuenta.save()
-            optica = form2.save(commit=False)
+            optica = form1.save(commit=False)
             optica.account = cuenta
             optica.save()
 
@@ -99,7 +91,7 @@ class RegisterGoogleUserCreateView(CreateView):
             return HttpResponseRedirect(reverse_lazy("medidas:index"))
 
         else:
-            return self.render_to_response(self.get_context_data(form=form1, form_optic=form2))
+            return self.render_to_response(self.get_context_data(form=form1, token_id=token))
 
 
 class ProfileView(PasswordChangeView):
@@ -109,16 +101,37 @@ class ProfileView(PasswordChangeView):
     success_url = '.'
 
     def get_context_data(self, **kwargs):
+        password = self.request.user.password
         contexto = super().get_context_data(**kwargs)
-        contexto['form_change_password'] = contexto["form"]
+        if len(password) == 0:
+            if 'form_create_password' not in contexto:
+                contexto['form_create_password'] = AccountCreatePasswordForm
+        else:
+            contexto['form_change_password'] = contexto["form"]
         del contexto["form"]
         return contexto
+    def post(self, request, *args, **kwargs):
 
-    def form_valid(self, form):
-        form.save()
-        messages.success(
-            self.request, f'se actualizó exitosamente la contraseña')
-        return super().form_valid(form)
+        if 'old_password' in request.POST:
+            form1 = self.get_form()
+            if form1.is_valid():
+                form1.save()
+                messages.success(
+                    self.request, f'se actualizó exitosamente la contraseña')
+                return self.form_valid(form1)
+                
+            else:
+                return self.render_to_response(self.get_context_data(form_change_password=form1))
+        else:
+            form2 = AccountCreatePasswordForm(request.POST, instance=self.request.user)
+            form2.user=self.request.user
+            if form2.is_valid():
+                form2.save()
+                messages.success(
+                    self.request, f'se creó exitosamente la contraseña')
+                return self.form_valid(form2)
+            else:
+                return self.render_to_response(self.get_context_data(form_create_password=form2))
 
 
 class EmployeeUserUpdateView(OpticPermitMixin, UpdateView):
@@ -185,34 +198,19 @@ class OpticUserUpdateView(OpticPermitMixin, UpdateView):
             return self.render_to_response(self.get_context_data(form=form1, form_change_account=form2))
 
 
-class UserOfOpticCreateView(OpticPermissionRequiredMixin, ListView):
+class UserOfOpticCreateView(OpticPermissionRequiredMixin, CreateView):
+    """ vista para crear y actualizar los datos de los empleados """
+
     permission_required = ('users.view_employeeuser',)
-    url_redirect = None
+    # url_redirect = None
     model = Account
     template_name = "optic/user_of_optic.html"
     form_class = UserOfOpticForm
     form_class_secondary = EmployeeUserForm2
-    context_object_name = 'users'
-    paginate_by = 8
 
     def get(self, request, *args, **kwargs):
-
-        self.object_list = self.get_queryset()
-        allow_empty = self.get_allow_empty()
-        if not allow_empty:
-            # When pagination is enabled and object_list is a queryset,
-            # it's better to do a cheap query than to load the unpaginated
-            # queryset in memory.
-            if self.get_paginate_by(self.object_list) is not None and hasattr(self.object_list, 'exists'):
-                is_empty = not self.object_list.exists()
-            else:
-                is_empty = not self.object_list
-            if is_empty:
-                raise Http404(_('Empty list and “%(class_name)s.allow_empty” is False.') % {
-                    'class_name': self.__class__.__name__,
-                })
+        self.object = None
         context = self.get_context_data()
-
         if 'id' in request.GET:
             context['form'] = self.form_class(
                 instance=Account.objects.get(employeeuser__id=request.GET['id']))
@@ -221,29 +219,18 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, ListView):
             context['id'] = request.GET['id']
         return self.render_to_response(context)
 
-    def get_queryset(self):
-        kwarg = self.request.GET.get('kwarg', '')
-        return EmployeeUser.objects.search_employee(kwarg, self.request.user.get_opticuser())
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if 'form_employee' not in context:
             context['form_employee'] = self.form_class_secondary
-        if 'form' not in context:
-            context['form'] = self.form_class
-        if 'form_group' not in context:
-            context['form_group'] = GroupForm
         return context
 
     def post(self, request, *args, **kwargs):
-        self.object_list = self.get_queryset()
-
+        self.object = self.get_object
         if 'id' in request.POST:
             id = request.POST['id']
         else:
             id = None
-
-        print("----------------------", id)
 
         if id:
             # actualizamos
@@ -269,7 +256,7 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, ListView):
                 empleado.save()
                 messages.success(
                     request, f'Los datos han sido actualizados correctamente')
-                return HttpResponseRedirect(reverse_lazy("users:userOfOptic"))
+                return HttpResponseRedirect(reverse_lazy("medidas:index"))
             else:
                 return self.render_to_response(self.get_context_data(form=form_user, form_employee=form_employees, id=id))
 
@@ -297,12 +284,13 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, ListView):
                 empleado.save()
                 messages.success(
                     request, f'Tu empleado a sido registrado con éxito')
-                return HttpResponseRedirect(reverse_lazy("users:userOfOptic"))
+                return HttpResponseRedirect(reverse_lazy("medidas:index"))
             else:
                 return self.render_to_response(self.get_context_data(form=form_user, form_employee=form_employees))
 
 
 class UserOfOpticDeleteView(OpticPermissionRequiredMixin, View):
+    """ vista para eliminar un empleado """
     permission_required = ('users.delete_account', 'users.delete_employeeuser')
 
     def get(self, request, *args, **kwargs):
@@ -311,13 +299,3 @@ class UserOfOpticDeleteView(OpticPermissionRequiredMixin, View):
         return HttpResponseRedirect(reverse_lazy('users:userOfOptic'))
 
 
-class GroupCreateView(View):
-    def post(self, request, *args, **kwargs):
-        grupo=GroupForm(request.POST)
-        if(grupo.is_valid()):
-            grupo.save()
-            messages.success(request, f'El grupo se registró correctamente')
-        else:
-            messages.success(request, f'No se pudo registrar el grupo')
-        return HttpResponseRedirect(reverse_lazy('users:userOfOptic'))
-        print("#########", request.POST)

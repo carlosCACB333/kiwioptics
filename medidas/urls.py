@@ -4,7 +4,7 @@ from . import  rest
 
 app_name = 'medidas'
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.IndexView.as_view(), name='index'),
     path('patients/', views.PatientListView.as_view(), name='patients'),
     path('patients/<int:pk>/add-prescription/', views.patient_add_prescription, name='patient-add'),
     # path('patients/<int:pk>/', views.patient_detail, name='patient-detail'),

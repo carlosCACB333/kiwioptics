@@ -22,7 +22,8 @@
 
   <!-- Ionic icons -->
   <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/049f05bf2b.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+  <!-- <script src="https://kit.fontawesome.com/049f05bf2b.js" crossorigin="anonymous"></script> -->
 </head>
 
 <body>
@@ -54,7 +55,7 @@
                 <a href="{% url 'medidas:treatments' %}" class='list-group-item list-group-item-action pl-4 p-3 border-0'>Tratamientos</a>
             </li>
         </ul>
-        <a href="{% url 'users:userOfOptic' %}" class="list-group-item list-group-item-action p-3 border-0 {% block user_of_optic %}{% endblock user_of_optic %}"><i class="fas fa-users"></i> usuarios</a>
+        <a href="{% url 'users:userOfOptic' %}" class="list-group-item list-group-item-action p-3 border-0 {% block user_of_optic %}{% endblock user_of_optic %}"><i class="fas fa-users"></i>Añadir usuario</a>
       </div>  
     </div>
     <!-- Fin sidebar -->
@@ -76,6 +77,22 @@
                 <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarDropdown" role="button"
                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   {{user}}
+                  <img src="
+                
+                {% if user.picture %}
+                  
+            
+                  
+                  {% if user.picture|truncatechars:7 == 'http...' %}
+                    {{user.picture}}
+                  {% else %}
+                  {{user.picture.url}}
+                  {% endif %}
+                  
+                  {% else %}
+                  https://cdn.pixabay.com/photo/2018/11/13/22/01/instagram-3814081_960_720.png
+                  {% endif %}
+                  " class="img-fluid rounded-circle avatar" alt="https://generated.photos/" />
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                   <a class="dropdown-item" href="{% url 'users:profile' %}">Mi perfil</a>

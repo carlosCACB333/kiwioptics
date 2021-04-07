@@ -1,9 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}
-    Optica
+Optica
 {% endblock title %}
 {% block dashboard %}active{% endblock dashboard %}
+
+
+{% block styles %}
+<style>
+  #body-table-employe {
+    max-height: 300px;
+  }
+</style>
+{% endblock styles %}
+
+
 {% block content %}
 {% if messages %}
 {% for message in messages %}
@@ -17,241 +28,257 @@
   {{message}}
 </div>
 {% endif %}
-  
 
 
 {{context}}
 {% endfor %}
 {% endif %}
-    <section class="py-3">
-          <!-- Highlights -->
-          <div class="row">
-            <div class="col-xl-3 col-lg-6">
-              <div class="card mb-5 shadow-sm border-0 shadow-hover">
-                <div class="card-body d-flex">
-                  <div>
-                    <div class="circle rounded-circle bg-primary align-self-center d-flex mr-3">
-                      <i class="fas fa-book-medical text-primary align-self-center mx-auto lead"></i>
-                    </div>
-                  </div>
-                  <div class="align-self-center">
-                    <h5 class="mb-0">{{user.get_opticuser.prescription_set.count}}</h5>
-                    <small class="text-muted">Prescripciones</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-xl-3 col-lg-6">
-              <div class="card mb-5 shadow-sm border-0 shadow-hover">
-                <div class="card-body d-flex">
-                  <div>
-                    <div class="circle rounded-circle bg-primary align-self-center d-flex mr-3">
-                      <i class="fas fa-store-alt text-primary align-self-center mx-auto lead"></i>
-                    </div>
-                  </div>
-                  <div class="align-self-center">
-                    <h5 class="mb-0">4</h5>
-                    <small class="text-muted">Sucursales</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-xl-3 col-lg-6">
-              <div class="card mb-5 shadow-sm border-0 shadow-hover">
-                <div class="card-body d-flex">
-                  <div>
-                    <div class="circle rounded-circle bg-primary align-self-center d-flex mr-3">
-                      <i class="fas fa-user-md text-primary align-self-center mx-auto lead"></i>
-                    </div>
-                  </div>
-                  <div class="align-self-center">
-                    <h5 class="mb-0">{{user.get_opticuser.employeeuser_set.count}}</h5>
-                    <small class="text-muted">Usuarios</small>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-xl-3 col-lg-6">
-              <div class="card mb-5 shadow-sm border-0 shadow-hover">
-                <div class="card-body d-flex">
-                  <div>
-                    <div class="circle rounded-circle bg-primary align-self-center d-flex mr-3">
-                    <i class="fas fa-blind text-primary align-self-center mx-auto lead"></i>
-                    </div>
-                  </div>
-                  <div class="align-self-center">
-                    <h5 class="mb-0">{{user.get_opticuser.patient_set.count}}</h5>
-                    <small class="text-muted">Pacientes</small>
-                  </div>
-                </div>
-              </div>
+<section class="py-3">
+  <!-- Highlights -->
+  <div class="row">
+    <div class="col-xl-3 col-lg-6">
+      <div class="card mb-5 shadow-sm border-0 shadow-hover">
+        <div class="card-body d-flex">
+          <div>
+            <div class="circle rounded-circle bg-primary align-self-center d-flex mr-3">
+              <i class="fas fa-book-medical text-primary align-self-center mx-auto lead"></i>
             </div>
           </div>
-          <!-- Fin highlights -->
-
-         <div class="row mb-3">
-            <!-- Tabla usuarios -->
-            <div class="col-lg-12">
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th colspan="2"><small class="font-weight-bold">Usuarios<small><div class='' style='position:absolute ;display: inline-block; top: 11px'><a href="{% url 'users:userOfOptic' %}" class='circle-sm rounded-circle bg-primary align-self-center d-flex p-0 mx-2'><i style='font-size:1rem' class='fas fa-user-plus text-primary align-self-center mx-auto lead'></i></a></div></th>
-                      <th scope="col"><small class="font-weight-bold">Estatus<small></th>
-                      <th scope="col"><small class="font-weight-bold">Configuración<small></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr class="shadow-sm">
-                      <td><img src="{% static 'img/user-1.png' %}" class="img-fluid rounded-circle avatar"
-                          alt="https://generated.photos/" /></td>
-                      <td><span class="d-block">Cristian</span><small class="text-muted"></small>
-                      </td>
-                      <td class="align-middle"><span class="badge badge-primary text-primary">Activo</span></td>
-                      <td class="align-middle"><span class="badge badge-secondary">Editar <i
-                            class="icon ion-md-settings ml-2"></i></span></td>
-                    </tr>
-                    <tr class="shadow-sm">
-                      <td><img src="{% static 'img/user-1.png' %}" class="img-fluid rounded-circle avatar"
-                          alt="https://generated.photos/" /></td>
-                      <td><span class="d-block">Diego</span><small class="text-muted">diego@templune.com</small></td>
-                      <td class="align-middle"><span class="badge badge-primary text-primary">Activo</span></td>
-                      <td class="align-middle"><span class="badge badge-secondary">Editar <i
-                            class="icon ion-md-settings ml-2"></i></span></td>
-                    </tr>
-                    <tr class="shadow-sm">
-                      <td><img src="{% static 'img/user-2.png' %}" class="img-fluid rounded-circle avatar"
-                          alt="https://generated.photos/" /></td>
-                      <td><span class="d-block">Irina</span><small class="text-muted">irina@templune.com</small></td>
-                      <td class="align-middle"><span class="badge badge-primary text-primary">Activo</span></td>
-                      <td class="align-middle"><span class="badge badge-secondary">Editar <i
-                            class="icon ion-md-settings ml-2"></i></span></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <!-- Fin tabla usarios -->
-
-            <!-- Mensajes -->
-            {% comment %} <div class="col-xl-5 col-lg-12">
-              <div class="card mb-5 shadow-sm border-0 shadow-hover">
-                <div class="card-header bg-light border-0 pt-3 pb-0">
-                  <h6 class="mb-0">Mensajes</h6>
-                </div>
-                <div class="card-body">
-                  <div class="d-flex border-bottom py-3">
-                    <div class="mr-3">
-                      <img src="{% static 'img/user-1.png' %}" class="img-fluid rounded-circle avatar"
-                        alt="https://generated.photos/" />
-                    </div>
-                    <div>
-                      <div class="d-flex">
-                        <p class="mb-0">Cristian Palacios</p>
-                        <small class="text-muted ml-auto">Hace 2 horas</small>
-                      </div>
-                      <small class="text-muted">Me podrías enviar la cotización de la aplicación.</small>
-                    </div>
-                  </div>
-
-                  <div class="d-flex border-bottom py-3">
-                    <div class="mr-3">
-                      <img src="{% static 'img/user-2.png' %}" class="img-fluid rounded-circle avatar"
-                        alt="https://generated.photos/" />
-                    </div>
-                    <div>
-                      <div class="d-flex">
-                        <p class="mb-0">Adriana Arenas</p>
-                        <small class="text-muted ml-auto">Hace 2 horas</small>
-                      </div>
-                      <small class="text-muted">Hola, la junto de hoy es a las 10 en la oficina 2.</small>
-                    </div>
-                  </div>
-
-                  <div class="text-center pt-3">
-                    <a href=""><small>Ver todos los mensajes</small></a>
-                  </div>
-                </div>
-              </div>
-            </div> {% endcomment %}
-            <!-- Fin mensajes -->
+          <div class="align-self-center">
+            <h5 class="mb-0">{{user.get_opticuser.prescription_set.count}}</h5>
+            <small class="text-muted">Prescripciones</small>
           </div>
-
-          <!-- Eventos -->
-          <div class="row">
-            <div class="col-lg-4">
-              <div class="card d-inline-block border-0 shadow-sm shadow-hover w-100 mr-3 mb-5">
-                <div class="card-body">
-                  <h5 class="mb-0">Presentación de producto</h5>
-                  <small class="d-inline-block text-muted mb-2">12:30 - 15:45</small>
-                  <div class="mb-4">
-                    <span class="badge badge-primary text-primary mr-1">Mercadotecnia</span> <span
-                      class="badge badge-primary text-primary">Directivos</span>
-                  </div>
-                  <div class="d-flex">
-                    <div>
-                      <img src="{% static 'img/user-1.png' %}" class="img-fluid rounded-circle avatar"
-                        alt="https://generated.photos/" />
-                      <img src="{% static 'img/user-2.png' %}" class="img-fluid rounded-circle avatar"
-                        alt="https://generated.photos/" />
-                    </div>
-                    <div class="d-flex ml-auto">
-                      <span class="badge badge-secondary align-self-center">Asistir <i
-                          class="icon ion-md-checkmark-circle ml-2"></i></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4">
-              <div class="card d-inline-block border-0 shadow-sm shadow-hover w-100 mr-3 mb-5">
-                <div class="card-body">
-                  <h5 class="mb-0">Junta de resultados</h5>
-                  <small class="d-inline-block text-muted mb-2">12:30 - 15:45</small>
-                  <div class="mb-4">
-                    <span class="badge badge-primary text-primary mr-1">Ventas</span> <span
-                      class="badge badge-primary text-primary">Mercadotecnia</span>
-                  </div>
-                  <div class="d-flex">
-                    <div>
-                      <img src="{% static 'img/user-1.png' %}" class="img-fluid rounded-circle avatar"
-                        alt="https://generated.photos/" />
-                      <img src="{% static 'img/user-2.png' %}" class="img-fluid rounded-circle avatar"
-                        alt="https://generated.photos/" />
-                    </div>
-                    <div class="d-flex ml-auto">
-                      <span class="badge badge-secondary align-self-center">Asistir <i
-                          class="icon ion-md-checkmark-circle ml-2"></i></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4">
-              <div class="card d-inline-block border-0 shadow-sm shadow-hover w-100 mr-3 mb-5">
-                <div class="card-body">
-                  <h5 class="mb-0">Reunión con mercadotecnia</h5>
-                  <small class="d-inline-block text-muted mb-2">12:30 - 15:45</small>
-                  <div class="mb-4">
-                    <span class="badge badge-primary text-primary mr-1">Mercadotecnia</span> <span
-                      class="badge badge-primary text-primary">Creativo</span>
-                  </div>
-                  <div class="d-flex">
-                    <div>
-                      <img src="{% static 'img/user-1.png' %}" class="img-fluid rounded-circle avatar"
-                        alt="https://generated.photos/" />
-                      <img src="{% static 'img/user-2.png' %}" class="img-fluid rounded-circle avatar"
-                        alt="https://generated.photos/" />
-                    </div>
-                    <div class="d-flex ml-auto">
-                      <span class="badge badge-secondary align-self-center">Asistir <i
-                          class="icon ion-md-checkmark-circle ml-2"></i></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-lg-6">
+      <div class="card mb-5 shadow-sm border-0 shadow-hover">
+        <div class="card-body d-flex">
+          <div>
+            <div class="circle rounded-circle bg-primary align-self-center d-flex mr-3">
+              <i class="fas fa-store-alt text-primary align-self-center mx-auto lead"></i>
             </div>
           </div>
-          <!-- Fin Eventos -->
+          <div class="align-self-center">
+            <h5 class="mb-0">4</h5>
+            <small class="text-muted">Sucursales</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-lg-6">
+      <div class="card mb-5 shadow-sm border-0 shadow-hover">
+        <div class="card-body d-flex">
+          <div>
+            <div class="circle rounded-circle bg-primary align-self-center d-flex mr-3">
+              <i class="fas fa-user-md text-primary align-self-center mx-auto lead"></i>
+            </div>
+          </div>
+          <div class="align-self-center">
+            <h5 class="mb-0">{{user.get_opticuser.employeeuser_set.count}}</h5>
+            <small class="text-muted">Usuarios</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-3 col-lg-6">
+      <div class="card mb-5 shadow-sm border-0 shadow-hover">
+        <div class="card-body d-flex">
+          <div>
+            <div class="circle rounded-circle bg-primary align-self-center d-flex mr-3">
+              <i class="fas fa-blind text-primary align-self-center mx-auto lead"></i>
+            </div>
+          </div>
+          <div class="align-self-center">
+            <h5 class="mb-0">{{user.get_opticuser.patient_set.count}}</h5>
+            <small class="text-muted">Pacientes</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Fin highlights -->
 
-{% endblock content %}
+  <div class="row mb-3">
+
+    <!-- Tabla usuarios -->
+    <div class="col-lg-12">
+      <div class="table-responsive" id="body-table-employe">
+        <table class="table">
+          <thead>
+            <tr>
+              <th colspan="2" class="position-relative"><small class="font-weight-bold">Usuarios<small>
+                    <div class='' style='position:absolute ;display: inline-block ;top: 5px;'><a
+                        href="{% url 'users:userOfOptic' %}"
+                        class='circle-sm rounded-circle bg-primary align-self-center d-flex p-0 mx-2'><i
+                          style='font-size:1rem'
+                          class='fas fa-user-plus text-primary align-self-center mx-auto lead'></i></a></div>
+              </th>
+              <th scope="col"><small class="font-weight-bold">Estatus<small></th>
+              <th scope="col"><small class="font-weight-bold">Configuración<small></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for empleado in user.get_opticuser.employeeuser_set.all %}
+
+            <tr class="shadow-sm">
+              <td><img src="
+                
+                {% if empleado.account.picture %}
+                  
+            
+                  
+                  {% if empleado.account.picture|truncatechars:7 == 'http...' %}
+                    {{empleado.account.picture}}
+                  {% else %}
+                  {{empleado.account.picture.url}}
+                  {% endif %}
+                  
+                  {% else %}
+                  https://cdn.pixabay.com/photo/2018/11/13/22/01/instagram-3814081_960_720.png
+                  {% endif %}
+                  " class="img-fluid rounded-circle avatar" alt="https://generated.photos/" /></td>
+              <td><span class="d-block">{{empleado.account.full_name}}</span><small
+                  class="text-muted">{{empleado.email}}</small></td>
+              <td class="align-middle"><span class="badge badge-primary text-primary">
+                  {% if empleado.account.is_active %}
+                  Activo
+                  {% else %}
+                  Inactivo
+                  {% endif %}
+                </span></td>
+              <td class="align-middle">
+                <a href="{% url 'users:userOfOptic' %}?id={{empleado.id}}" class="shadow-hover "><span
+                    class="badge badge-secondary">Editar <i class="icon ion-md-settings ml-2"></i></span></a>
+              </td>
+            </tr>
+
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Fin tabla usarios -->
+
+    <!-- Mensajes -->
+    {% comment %} <div class="col-xl-5 col-lg-12">
+      <div class="card mb-5 shadow-sm border-0 shadow-hover">
+        <div class="card-header bg-light border-0 pt-3 pb-0">
+          <h6 class="mb-0">Mensajes</h6>
+        </div>
+        <div class="card-body">
+          <div class="d-flex border-bottom py-3">
+            <div class="mr-3">
+              <img src="{% static 'img/user-1.png' %}" class="img-fluid rounded-circle avatar"
+                alt="https://generated.photos/" />
+            </div>
+            <div>
+              <div class="d-flex">
+                <p class="mb-0">Cristian Palacios</p>
+                <small class="text-muted ml-auto">Hace 2 horas</small>
+              </div>
+              <small class="text-muted">Me podrías enviar la cotización de la aplicación.</small>
+            </div>
+          </div>
+
+          <div class="d-flex border-bottom py-3">
+            <div class="mr-3">
+              <img src="{% static 'img/user-2.png' %}" class="img-fluid rounded-circle avatar"
+                alt="https://generated.photos/" />
+            </div>
+            <div>
+              <div class="d-flex">
+                <p class="mb-0">Adriana Arenas</p>
+                <small class="text-muted ml-auto">Hace 2 horas</small>
+              </div>
+              <small class="text-muted">Hola, la junto de hoy es a las 10 en la oficina 2.</small>
+            </div>
+          </div>
+
+          <div class="text-center pt-3">
+            <a href=""><small>Ver todos los mensajes</small></a>
+          </div>
+        </div>
+      </div>
+    </div> {% endcomment %}
+    <!-- Fin mensajes -->
+  </div>
+
+  <!-- Eventos -->
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="card d-inline-block border-0 shadow-sm shadow-hover w-100 mr-3 mb-5">
+        <div class="card-body">
+          <h5 class="mb-0">Presentación de producto</h5>
+          <small class="d-inline-block text-muted mb-2">12:30 - 15:45</small>
+          <div class="mb-4">
+            <span class="badge badge-primary text-primary mr-1">Mercadotecnia</span> <span
+              class="badge badge-primary text-primary">Directivos</span>
+          </div>
+          <div class="d-flex">
+            <div>
+              <img src="{% static 'img/user-1.png' %}" class="img-fluid rounded-circle avatar"
+                alt="https://generated.photos/" />
+              <img src="{% static 'img/user-2.png' %}" class="img-fluid rounded-circle avatar"
+                alt="https://generated.photos/" />
+            </div>
+            <div class="d-flex ml-auto">
+              <span class="badge badge-secondary align-self-center">Asistir <i
+                  class="icon ion-md-checkmark-circle ml-2"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card d-inline-block border-0 shadow-sm shadow-hover w-100 mr-3 mb-5">
+        <div class="card-body">
+          <h5 class="mb-0">Junta de resultados</h5>
+          <small class="d-inline-block text-muted mb-2">12:30 - 15:45</small>
+          <div class="mb-4">
+            <span class="badge badge-primary text-primary mr-1">Ventas</span> <span
+              class="badge badge-primary text-primary">Mercadotecnia</span>
+          </div>
+          <div class="d-flex">
+            <div>
+              <img src="{% static 'img/user-1.png' %}" class="img-fluid rounded-circle avatar"
+                alt="https://generated.photos/" />
+              <img src="{% static 'img/user-2.png' %}" class="img-fluid rounded-circle avatar"
+                alt="https://generated.photos/" />
+            </div>
+            <div class="d-flex ml-auto">
+              <span class="badge badge-secondary align-self-center">Asistir <i
+                  class="icon ion-md-checkmark-circle ml-2"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card d-inline-block border-0 shadow-sm shadow-hover w-100 mr-3 mb-5">
+        <div class="card-body">
+          <h5 class="mb-0">Reunión con mercadotecnia</h5>
+          <small class="d-inline-block text-muted mb-2">12:30 - 15:45</small>
+          <div class="mb-4">
+            <span class="badge badge-primary text-primary mr-1">Mercadotecnia</span> <span
+              class="badge badge-primary text-primary">Creativo</span>
+          </div>
+          <div class="d-flex">
+            <div>
+              <img src="{% static 'img/user-1.png' %}" class="img-fluid rounded-circle avatar"
+                alt="https://generated.photos/" />
+              <img src="{% static 'img/user-2.png' %}" class="img-fluid rounded-circle avatar"
+                alt="https://generated.photos/" />
+            </div>
+            <div class="d-flex ml-auto">
+              <span class="badge badge-secondary align-self-center">Asistir <i
+                  class="icon ion-md-checkmark-circle ml-2"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Fin Eventos -->
+
+  {% endblock content %}
