@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, UserChangeForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, UserChangeForm, UserChangeForm, AuthenticationForm
 from django.contrib.auth.models import User, Group, Permission
 from .models import OpticUser, Account, EmployeeUser
 
@@ -86,16 +86,17 @@ class UserOfOpticForm(forms.ModelForm):
     class Meta:
         model = Account
         # fields='__all__'
-        exclude = ('last_login', 'date_joined', 'user_type', 'is_superuser','is_staff')
+        exclude = ('last_login', 'date_joined',
+                   'user_type', 'is_superuser', 'is_staff')
         widgets = {
-            'password':forms.PasswordInput(
+            'password': forms.PasswordInput(
                 attrs={
-                    'value':''
+                    'value': ''
                 },
             ),
 
-            'user_permissions':forms.CheckboxSelectMultiple(),
-            'groups':forms.CheckboxSelectMultiple(),
+            'user_permissions': forms.CheckboxSelectMultiple(),
+            'groups': forms.CheckboxSelectMultiple(),
         }
 
     def __init__(self, *args, **kwargs):
@@ -107,12 +108,23 @@ class UserOfOpticForm(forms.ModelForm):
 
     def clean_username(self):
         email_v = validate_email(self.cleaned_data['username'])
-        if email_v==True:
+        if email_v == True:
             raise forms.ValidationError('Este campo no puede ser un email')
         return self.cleaned_data['username']
 
+
 class AccountCreatePasswordForm(UserCreationForm):
     class Meta:
-        model=Account
-        fields=('password1','password2')
+        model = Account
+        fields = ('password1', 'password2')
 
+
+class AccountAutenticateForm(AuthenticationForm):
+    """ autentication user"""
+
+    def clean(self):
+        cuenta = Account.objects.filter(username=self.cleaned_data.get('username'))
+        if cuenta:
+           if cuenta.first().verify_email==False and cuenta.first().user_type==Account.Types.Optic:
+               raise forms.ValidationError('Su email no ha sido verificado. Entre a su correo y valide su cuenta')
+        return super(AccountAutenticateForm, self).clean()

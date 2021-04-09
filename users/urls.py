@@ -3,6 +3,7 @@ from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 
+from .forms import AccountAutenticateForm
 from . import views
 from . import rest
 
@@ -15,7 +16,8 @@ urlpatterns = [
     path('profile/', views.ProfileView.as_view(), name='profile'),
     path('employeeUpdate/<pk>/', views.EmployeeUserUpdateView.as_view(), name='employeeUpdate'),
     path('opticUpdate/<pk>/', views.OpticUserUpdateView.as_view(), name='opticUpdate'),
-    path('login/', auth_views.LoginView.as_view(template_name='users/login.html',redirect_authenticated_user=True), name='login'),
+    path('login/', auth_views.LoginView.as_view(template_name='users/login.html',redirect_authenticated_user=True,form_class=AccountAutenticateForm), name='login'),
+    path('valivateEmail/<id>/<codigo>/',views.ValidateEmail.as_view(),name='validateEmail'),
     path('google/', views.RegisterGoogleUserCreateView.as_view(), name='google'),
     path('userOfOptic/', views.UserOfOpticCreateView.as_view(), name='userOfOptic'),
     path('userOfOpticDelete/<id>/', views.UserOfOpticDeleteView.as_view(), name='userOfOpticDelete'),

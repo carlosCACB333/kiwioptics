@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User, AbstractUser, PermissionsMixin, AbstractBaseUser
 from .managers import CustomUserManager, EmployeeUserManager
 
+from .signals import verify_email
+from django.db.models.signals import post_save
+
 
 class Account(AbstractUser, PermissionsMixin):
     class Types(models.TextChoices):
@@ -23,6 +26,8 @@ class Account(AbstractUser, PermissionsMixin):
         "perfil", upload_to="account", blank=True, null=True, max_length=255)
     user_type = models.CharField(
         choices=Types.choices, max_length=10, blank=False, null=False)
+    verification_code = models.CharField('codigo de verificacion', max_length=8,blank=True,null=True)
+    verify_email = models.BooleanField('email verificado',default=False)
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 
@@ -88,3 +93,6 @@ class EmployeeUser(models.Model):
 
     def __str__(self):
         return str(self.account)
+
+#coneect signals
+post_save.connect(verify_email,Account)

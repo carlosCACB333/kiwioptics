@@ -56,7 +56,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'users.middleware.RequestMiddleware',
 ]
+
+
 
 ROOT_URLCONF = 'myOptica.urls'
 
@@ -136,3 +139,14 @@ MEDIA_ROOT=BASE_DIR.joinpath('media')
 #configuracion para firebase
 cred = credentials.Certificate("firebase-key.json")
 firebase_admin.initialize_app(cred)
+
+
+#configuracion para enviar email
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = config('MY_EMAIL')
+EMAIL_HOST_PASSWORD = config('MY_EMAIL_PASSWORD')
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False

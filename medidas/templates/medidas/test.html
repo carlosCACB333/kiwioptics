@@ -1,5 +1,8 @@
 {% extends 'base.html' %} {% block content %}
-<form action="{% url 'medidas:patient' %}" method='POST'> {% csrf_token %}
-<input type="submit" value="patient">
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{form}}
 </form>
+
 {% endblock content %}

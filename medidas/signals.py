@@ -5,6 +5,7 @@ from medidas.models import Crystal, CrystalTreatments, CrystalMaterial
 
 from PIL import Image
 
+
 TREATMENTS = (
     {
     "name":"Antirayas",

@@ -29,9 +29,7 @@ from .serializer import LoginSocialSerializer
 def signup(request):
     if request.method == 'POST':
         optica_form = OpticaRegisterForm(request.POST)
-        print(colored(request.POST, 'red'))
         if optica_form.is_valid():
-            print(colored(optica_form.cleaned_data, 'green'))
             new_account = optica_form.save(commit=False)
             new_account.user_type = Account.Types.Optic
             new_account.save()
@@ -39,7 +37,6 @@ def signup(request):
                 account=new_account, optic_name=request.POST.get('optic_name'))
             return redirect('users:login')
         else:
-            print(optica_form.errors)
             return render(request, 'users/signup.html', {
                 'form': optica_form,
             })
@@ -47,6 +44,23 @@ def signup(request):
         return render(request, 'users/signup.html', {
             'form': OpticaRegisterForm(),
         })
+
+
+class ValidateEmail(View):
+    def get(self, request, *args, **kwargs):
+        id_cuenta = kwargs['id']
+        codigo = kwargs['codigo']
+
+        try:
+            cuenta = Account.objects.get(
+                id=id_cuenta, verification_code=codigo)
+            cuenta.verify_email = True
+            cuenta.save()
+            messages.success(
+                request, f'Tu email a sido verificado con éxito')
+        except Account.DoesNotExist:
+            messages.error(request, f'Error al verificar el email')
+        return HttpResponseRedirect(reverse_lazy("users:login"))
 
 
 class RegisterGoogleUserCreateView(CreateView):
@@ -110,6 +124,7 @@ class ProfileView(PasswordChangeView):
             contexto['form_change_password'] = contexto["form"]
         del contexto["form"]
         return contexto
+
     def post(self, request, *args, **kwargs):
 
         if 'old_password' in request.POST:
@@ -119,12 +134,13 @@ class ProfileView(PasswordChangeView):
                 messages.success(
                     self.request, f'se actualizó exitosamente la contraseña')
                 return self.form_valid(form1)
-                
+
             else:
                 return self.render_to_response(self.get_context_data(form_change_password=form1))
         else:
-            form2 = AccountCreatePasswordForm(request.POST, instance=self.request.user)
-            form2.user=self.request.user
+            form2 = AccountCreatePasswordForm(
+                request.POST, instance=self.request.user)
+            form2.user = self.request.user
             if form2.is_valid():
                 form2.save()
                 messages.success(
@@ -297,5 +313,3 @@ class UserOfOpticDeleteView(OpticPermissionRequiredMixin, View):
         EmployeeUser.objects.filter(id=self.kwargs['id']).delete()
         messages.success(request, f'Tu empleado a sido borrado con éxito')
         return HttpResponseRedirect(reverse_lazy('users:userOfOptic'))
-
-
