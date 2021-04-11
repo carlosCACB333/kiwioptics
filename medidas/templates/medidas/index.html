@@ -103,6 +103,10 @@ Optica
 
     <!-- Tabla usuarios -->
     <div class="col-lg-12">
+
+      {% if user.get_opticuser.employeeuser_set.all %}
+
+
       <div class="table-responsive" id="body-table-employe">
         <table class="table">
           <thead>
@@ -157,6 +161,13 @@ Optica
           </tbody>
         </table>
       </div>
+
+      {% else %}
+      <div class="alert alert-primary text-center" role="alert">
+        <div>La optica aún no tiene empleados. Preciona <strong>Nuevo empleado</strong> para crear un nuevo empleado</div>
+        <div><a href="{% url 'users:userOfOptic' %}" type="button" class="btn btn-outline-primary border-5"><strong>Nuevo empleado</strong></a></div>
+      </div>
+      {% endif %}
     </div>
     <!-- Fin tabla usarios -->
 

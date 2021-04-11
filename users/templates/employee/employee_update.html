@@ -9,8 +9,7 @@
         <div class="form-row">
             <div class="col-md-12 mb-3">
                 <label for="validationDefault01">optica</label>
-                {{ form.optic|attr:"disabled" }}
-                {{ form.optic|attr:"hidden" }}
+                <div class="border border-secondary rounded p-1 "> {{user.get_opticuser}}</div> 
                 <div class='col-12 invalid-feedback d-block'>
                     {% for error in form.optic.errors %} {{error}} {% endfor %}
                 </div>
@@ -18,8 +17,7 @@
             
             <div class="col-md-12 mb-3">
                 <label for="validationDefault02">cuenta</label>
-                {{ form.account|attr:"disabled"}}
-                {{ form.account|attr:"hidden"}}
+                <div class="border border-secondary rounded p-1 "> {{user}}</div> 
                 <div class='col-12 invalid-feedback d-block'>
                     {% for error in form.account.errors %} {{error}} {% endfor %}
                 </div>

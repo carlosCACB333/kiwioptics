@@ -97,7 +97,6 @@
 
         <form class="p-5" method="post" enctype="multipart/form-data" id="account_form">
             {% csrf_token %}
-
             <input type="hidden" name="id" value="{{id}}" id="id">
 
             <h1>Datos de la cuenta</h1>
@@ -137,6 +136,12 @@
                     </div>
                 </div>
             </div>
+
+            
+            {% if id %}
+                
+           
+                
             <div class="form-row form-control">
 
                 <div class="form-group col-md-12">
@@ -148,6 +153,8 @@
                 </div>
 
             </div>
+
+            {% endif %}
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="">Permisos del empleado</label>

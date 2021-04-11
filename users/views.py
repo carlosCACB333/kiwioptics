@@ -284,6 +284,7 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, CreateView):
                 cuenta = form_user.save(commit=False)
                 cuenta.set_password(request.POST['password'])
                 cuenta.user_type = Account.Types.Employee
+                cuenta.is_active=True
 
                 if 'picture' in request.FILES:
                     cuenta.picture = request.FILES['picture']

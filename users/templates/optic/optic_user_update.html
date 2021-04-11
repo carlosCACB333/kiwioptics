@@ -14,13 +14,10 @@
         {% csrf_token %}
 
         <h1>Datos de tu cuenta</h1>
-    
-       
-
         <div class="form-row">
             <div class="col-md-12 mb-3">
                 <label for="validationDefault02">Nombre de usuario</label>
-                {{ form_change_account.username }}
+                <div class="border border-secondary rounded p-1 "> {{user.get_opticuser.account.username}}</div> 
                 <div class='col-12 invalid-feedback d-block'>
                     {% for error in form_change_account.username.errors %} {{error}} {% endfor %}
                 </div>

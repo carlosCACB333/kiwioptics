@@ -29,7 +29,7 @@ class OpticaRegisterForm(UserCreationForm):
 class EmployeeUserForm(forms.ModelForm):
     class Meta:
         model = EmployeeUser
-        fields = '__all__'
+        exclude=('account','optic')
 
     def __init__(self, *args, **kwargs):
         super(EmployeeUserForm, self).__init__(*args, **kwargs)
@@ -70,7 +70,7 @@ class OpticUserForm(forms.ModelForm):
 class AccountChangeForm(UserChangeForm):
     class Meta:
         model = Account
-        fields = ('username', 'full_name')
+        fields = ( 'full_name',)
 
     def __init__(self, *args, **kwargs):
         super(AccountChangeForm, self).__init__(*args, **kwargs)
