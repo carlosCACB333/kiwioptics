@@ -37,7 +37,7 @@
   </div>
   </div>
   </form>
-      <table class="table table-hover table-responsive-sm">
+      <table class="table table-hover table-responsive-md">
           <thead class='table-primary'>
             <tr>
             <th class="text-center" scope="col">N°</th>
@@ -56,7 +56,7 @@
           >
             <th class='text-center px-0'>{{patient.patient_optic_id}}</th>
             <td class="text-center px-0">{{patient|truncatechars:25}}</td>
-            <td class="text-center px-0">{{patient.dni|default_if_none:'—'|truncatechars:12}}</td>
+            <td class="text-center px-0">{{patient.dni|default_if_none:'--'|truncatechars:12}}</td>
             <td class="text-center px-0">{{patient.phone|truncatechars:12}}</td>
             <td class="text-center px-0">{{patient.job|truncatechars:12}}</td>
             <td class="text-center px-0">{{patient.prescription_set.count}}</td>
@@ -160,7 +160,7 @@
                   class="btn btn-secondary"
                   data-dismiss="modal"
                 >
-                  Close
+                  Cerrar
                 </button>
 
 
@@ -188,7 +188,7 @@
                   class="btn btn-secondary"
                   data-dismiss="modal"
                 >
-                  Close
+                  Cerrar
                 </button>
                 <form
                   method="POST"

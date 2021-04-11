@@ -2,7 +2,11 @@
 {% load widget_tweaks %}
 {% block crystals %}active{% endblock crystals %}
 {% block content %}
+{% if update %}
+<h1 class='display-4'>Modificar Tratamiento</h1>
+{% else %}
 <h1 class='display-4'>Añadir Tratamiento</h1>
+{% endif %}
 <form action="" method='POST'>{% csrf_token %}
     {% for field in form %}
         {{field.label}}

@@ -119,7 +119,7 @@
                             {% else %} {{form.username|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"}} {% endif %}
                         </div>
                         <!-- Empresa -->
-                        <div class="input-group col-lg-12 mb-4">
+                        <div class="input-group col-lg-6 mb-4">
                             <div class="input-group-prepend">
                                 <span class="input-group-text bg-white px-3 border-md border-right-0">
                     <i class="fa fa-eye text-muted"></i>
@@ -133,22 +133,25 @@
                         </div>
 
                         <!-- Phone Number -->
-                        {% comment %}
-                        <div class="input-group col-lg-12 mb-4">
+                        
+                        <div class="input-group col-lg-6 mb-4">
                             <div class="input-group-prepend">
                                 <span class="input-group-text bg-white px-3 border-md border-right-0">
                     <i class="fa fa-phone-square text-muted"></i>
                   </span>
                             </div>
-                            <select id="countryCode" name="countryCode" style="max-width: 80px" class="custom-select form-control form-control-sm bg-white border-left-0 border-md h-100 font-weight-bold text-muted">
+                            {% comment %} <select id="countryCode" name="countryCode" style="max-width: 80px" class="custom-select form-control form-control-sm bg-white border-left-0 border-md h-100 font-weight-bold text-muted">
                             <option value="">+12</option>
                             <option value="">+10</option>
                             <option value="">+15</option>
                             <option value="">+18</option>
-                        </select>
-                            <input id="phoneNumber" type="tel" name="phone" placeholder="Número de contacto" class="form-control form-control-sm bg-white border-md border-left-0 pl-3" />
+                        </select> {% endcomment %}
+                            {% if form.phone.errors %} {{form.phone|attr:"class:form-control form-control-sm bg-white border-left-0 border-md is-invalid"}}
+                            <div id="{{ form.phone.id_for_label }}" class="invalid-feedback">
+                                {% for error in form.phone.errors %} {{error}} {% endfor %}
+                            </div>
+                            {% else %} {{form.phone|attr:"class:form-control form-control-sm bg-white border-left-0 border-md"}} {% endif %}
                         </div>
-                        {% endcomment %}
                         <!-- Password -->
                         <div class="input-group col-lg-6" id="container-password">
                             <div class="input-group-prepend">

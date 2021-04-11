@@ -1,9 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import View
 from django.views.generic import ListView, UpdateView, TemplateView, CreateView, TemplateView
 from django.db.models.functions import Concat
 from django.core.serializers import serialize
@@ -18,11 +19,6 @@ from .decorators import model_owned_required
 from django.contrib.auth.views import PasswordResetView
 
 # Create your views here.
-
-
-@login_required
-def index(request):
-    return render(request, 'medidas/index.html')
 
 # def patient_detail(request, pk):
 #     if request.method == 'GET':
@@ -209,8 +205,6 @@ class TestView(PasswordResetView):
 
     template_name = "medidas/test.html"
 
-        
-
 class CrystalListView(LoginRequiredMixin, ListView):
     model = Crystal
     context_object_name = 'crystals'
@@ -249,11 +243,6 @@ class CrystalUpdateView(LoginRequiredMixin, UpdateView):
     form_class = CrystalForm
     template_name = "medidas/crystal_add.html"
 
-    def form_valid(self, form):
-        print(colored(form.cleaned_data, 'green'))
-        form.instance.optic = self.request.user.get_opticuser()
-        return super().form_valid(form)
-
     def form_invalid(self, form):
         print(colored(form.cleaned_data, 'red'))
         print(colored(form.errors, 'red'))
@@ -264,16 +253,18 @@ class CrystalUpdateView(LoginRequiredMixin, UpdateView):
         kwargs['request'] = self.request
         return kwargs
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['update'] = True
+        return context
 
-class CrystalTreatmentsListView(LoginRequiredMixin, ListView):
-    model = CrystalTreatments
-    context_object_name = 'crystals_treatments'
-    template_name = "medidas/crystal_treatments.html"
-
-    def get_queryset(self):
-        opticUser = self.request.user.get_opticuser().id
-        return CrystalTreatments.objects.filter(optic=opticUser)
-
+class CrystalDeleteView(LoginRequiredMixin, View):
+    
+    def post(self, request, *args, **kwargs):
+        pk = request.POST['crystal_id']
+        crystal = get_object_or_404(Crystal, pk=pk)
+        crystal.delete()
+        return redirect('medidas:crystals')
 
 class CrystalMaterialListView(LoginRequiredMixin, ListView):
     model = CrystalMaterial
@@ -283,7 +274,6 @@ class CrystalMaterialListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         opticUser = self.request.user.get_opticuser().id
         return CrystalMaterial.objects.filter(optic=opticUser)
-
 
 class CrystalMaterialCreateView(LoginRequiredMixin, CreateView):
     model = CrystalMaterial
@@ -300,8 +290,35 @@ class CrystalMaterialCreateView(LoginRequiredMixin, CreateView):
         print(colored(form.errors, 'red'))
         return super().form_invalid(form)
 
+class CrystalMaterialUpdateView(LoginRequiredMixin, UpdateView):
+    model = CrystalMaterial
+    template_name = "medidas/crystal_material_add.html"
+    form_class = CrystalMaterialForm
+    success_url = reverse_lazy('medidas:materials')
 
-class CrystalTreatmentsCreateView(CreateView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['update'] = True
+        return context
+
+class CrystalMaterialDeleteView(LoginRequiredMixin, View):
+
+    def post(self, request, *args, **kwargs):
+        pk = request.POST['material_id']
+        material = get_object_or_404(CrystalMaterial, pk=pk)
+        material.delete()
+        return redirect('medidas:materials')
+
+class CrystalTreatmentsListView(LoginRequiredMixin, ListView):
+    model = CrystalTreatments
+    context_object_name = 'crystals_treatments'
+    template_name = "medidas/crystal_treatments.html"
+
+    def get_queryset(self):
+        opticUser = self.request.user.get_opticuser().id
+        return CrystalTreatments.objects.filter(optic=opticUser)
+
+class CrystalTreatmentsCreateView(LoginRequiredMixin, CreateView):
     model = CrystalTreatments
     form_class = CrystalTreatmentsForm
     template_name = "medidas/crystal_treatment_add.html"
@@ -315,3 +332,23 @@ class CrystalTreatmentsCreateView(CreateView):
         print(colored(form.cleaned_data, 'red'))
         print(colored(form.errors, 'red'))
         return super().form_invalid(form)
+
+class CrystalTreatmentsUpdateView(LoginRequiredMixin, UpdateView):
+    model = CrystalTreatments
+    template_name = "medidas/crystal_treatment_add.html"
+    form_class = CrystalTreatmentsForm
+    success_url = reverse_lazy('medidas:treatments')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["update"] = True
+        return context
+    
+class CrystalTreatmentsDeleteView(LoginRequiredMixin, View):
+    
+    def post(self, request, *args, **kwargs):
+        pk = request.POST.get('treatment_id')
+        treatment = get_object_or_404(CrystalTreatments, pk=pk)
+        treatment.delete()
+        return redirect('medidas:treatments')
+
