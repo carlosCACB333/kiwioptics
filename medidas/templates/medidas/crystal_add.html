@@ -14,7 +14,11 @@
 </style>
 {% endblock styles %}
 {% block content %}
+{% if update %}
+<h1 class='display-4'>Editar Luna</h1>
+{% else %}
 <h1 class='display-4'>Añadir Luna</h1>
+{% endif %}
 <form action="" method='POST'>{% csrf_token %}
     {% for field in form %}
     {{field.label}}

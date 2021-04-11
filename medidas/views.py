@@ -1,9 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views import View
 from django.views.generic import ListView, UpdateView, TemplateView, CreateView, TemplateView
 from django.db.models.functions import Concat
 from django.core.serializers import serialize
@@ -18,11 +19,6 @@ from .decorators import model_owned_required
 from django.contrib.auth.views import PasswordResetView
 
 # Create your views here.
-
-
-@login_required
-def index(request):
-    return render(request, 'medidas/index.html')
 
 # def patient_detail(request, pk):
 #     if request.method == 'GET':
@@ -264,6 +260,18 @@ class CrystalUpdateView(LoginRequiredMixin, UpdateView):
         kwargs['request'] = self.request
         return kwargs
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['update'] = True
+        return context
+
+class CrystalDeleteView(LoginRequiredMixin, View):
+    
+    def post(self, request, *args, **kwargs):
+        pk = request.POST['crystal_id']
+        crystal = get_object_or_404(Crystal, pk=pk)
+        crystal.delete()
+        return redirect('medidas:crystals')
 
 class CrystalTreatmentsListView(LoginRequiredMixin, ListView):
     model = CrystalTreatments
@@ -301,7 +309,7 @@ class CrystalMaterialCreateView(LoginRequiredMixin, CreateView):
         return super().form_invalid(form)
 
 
-class CrystalTreatmentsCreateView(CreateView):
+class CrystalTreatmentsCreateView(LoginRequiredMixin, CreateView):
     model = CrystalTreatments
     form_class = CrystalTreatmentsForm
     template_name = "medidas/crystal_treatment_add.html"

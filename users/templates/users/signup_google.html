@@ -129,7 +129,7 @@
                         </div>
                         {% endcomment %}
                         <!-- prescription name -->
-                        <div class="input-group col-lg-6" id="container-prescription">
+                        {% comment %} <div class="input-group col-lg-6" id="container-prescription">
                             <div class="input-group-prepend">
                                 <span class="input-group-text bg-white px-3 border-md border-right-0">
                                     <i class="fas fa-file-signature"></i>
@@ -140,11 +140,11 @@
                             <div class='col-12 invalid-feedback d-block'>
                                 {% for error in form.prescription_name.errors %} {{error}} {% endfor %}
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                         
 
                         <!-- phone -->
-                        <div class="input-group col-lg-6" id="container-passwordConfirmation">
+                        <div class="input-group col" id="container-passwordConfirmation">
                             <div class="input-group-prepend">
                                 <span class="input-group-text bg-white px-3 border-md border-right-0">
                                     <i class="fas fa-phone-alt"></i>

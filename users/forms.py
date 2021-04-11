@@ -12,10 +12,10 @@ class OpticaRegisterForm(UserCreationForm):
         label='Nombres y apellidos', max_length=100, required=True)
     optic_name = forms.CharField(
         label='Nombre de tu optica', max_length=50, required=True)
-
+    phone = forms.CharField(label="Celular", max_length=30, required=True)
     class Meta:
         model = Account
-        fields = ('full_name', 'username', 'optic_name',
+        fields = ('full_name', 'username', 'optic_name', 'phone',
                   'password1', 'password2')
 
     def __init__(self, *args, **kwargs):
@@ -58,7 +58,7 @@ class EmployeeUserForm2(forms.ModelForm):
 class OpticUserForm(forms.ModelForm):
     class Meta:
         model = OpticUser
-        exclude = ("account",)
+        exclude = ("account","prescription_name")
 
     def __init__(self, *args, **kwargs):
         super(OpticUserForm, self).__init__(*args, **kwargs)
@@ -66,6 +66,16 @@ class OpticUserForm(forms.ModelForm):
             field.widget.attrs['placeholder'] = field.label
             field.widget.attrs['class'] = "form-control border-md"
 
+class OpticUserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = OpticUser
+        exclude = ("account",)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['placeholder'] = field.label
+            field.widget.attrs['class'] = "form-control border-md"
 
 class AccountChangeForm(UserChangeForm):
     class Meta:

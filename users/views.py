@@ -29,12 +29,13 @@ from .serializer import LoginSocialSerializer
 def signup(request):
     if request.method == 'POST':
         optica_form = OpticaRegisterForm(request.POST)
+        print(colored(request.POST,'yellow'))
         if optica_form.is_valid():
             new_account = optica_form.save(commit=False)
             new_account.user_type = Account.Types.Optic
             new_account.save()
             OpticUser.objects.create(
-                account=new_account, optic_name=request.POST.get('optic_name'))
+                account=new_account, optic_name=request.POST.get('optic_name'), phone=request.POST.get('phone'))
             return redirect('users:login')
         else:
             return render(request, 'users/signup.html', {
@@ -170,7 +171,7 @@ class OpticUserUpdateView(OpticPermitMixin, UpdateView):
     model = OpticUser
     model_secondary = Account
     template_name = "optic/optic_user_update.html"
-    form_class = OpticUserForm
+    form_class = OpticUserUpdateForm
     form_class_secondary = AccountChangeForm
     success_url = reverse_lazy('users:profile')
     permit_type = Account.Types.Optic

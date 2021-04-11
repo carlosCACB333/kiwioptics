@@ -174,7 +174,8 @@
   </div>          
 </div>
 {% endif %}
-{% endblock content %} {% block script %}
+{% endblock content %} 
+{% block script %}
 <script>
   $("#prescription_delete").on("show.bs.modal", function (event) {
     var button = $(event.relatedTarget); // Button that triggered the modal
