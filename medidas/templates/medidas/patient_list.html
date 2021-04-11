@@ -13,30 +13,18 @@
 {% endblock styles %}
 {% block patients %}active{% endblock patients %}
  {% block content %}
-  <div class="col-md-12">
-    <form class="" action="">
+ <h1 class='display-4'>Lista de pacientes</h1>
+  <div class="col-md-12 p-0">
+<form id='search_form' action="">
   <div class="input-group mb-3">
-    <!-- <input
-      class="form-control"
-      placeholder="Apellidos, nombres o dni"
-      type="search"
-      name="q"
-      id="search"
-    />
-    <div class="input-group-append">
-      <button class="btn btn-primary border border-primary text-primary" type="submit" value="Buscar">
-        <i class="fas fa-search"></i> Buscar
-      </button>
-    </div> -->
-
-    <div class="box">
+    <div class="box" style='width: 600px'>
       <div class="container-buscador">
-          <span class="icon"><i class="fa fa-search"></i></span>
-          <input type="search" id="search" placeholder="Search..." name="q" />
+          <span id='btn-search' class="icon"><i class="fa fa-search"></i></span>
+          <input type="search" id="search" placeholder="Nombres o dni" name="q" />
       </div>
   </div>
   </div>
-  </form>
+</form>
       <table class="table table-hover table-responsive-md">
           <thead class='table-primary'>
             <tr>

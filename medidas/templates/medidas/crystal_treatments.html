@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block crystals %}active{% endblock crystals %}
+{% block treatments %}active{% endblock treatments %}
 {% block styles %}
 <style>
   table, th, td, tbody, thead {
@@ -16,7 +16,7 @@
     <h1 class='display-4'>Lista de Tratamientos</h1>
   </div>
   <div class='col-4 align-self-end text-right pl-0'>
-    <a href='{% url 'medidas:treatment-add' %}' class='btn btn-primary border border-primary text-primary'>Nuevo Tratamiento</a>
+    <a href='{% url 'medidas:treatment-add' %}' class='btn btn-primary border border-primary text-primary'>Añadir Tratamiento</a>
   </div>
 </div>
 <div class="row no-gutters">
@@ -34,7 +34,7 @@
         <tr class="">
           <th class="text-center align-middle p-auto" >{{forloop.counter}}</th>
           <td class="align-middle">{{treatment.treatment_name|title}}</td>
-          <td class="align-middle"><div style='overflow:auto; max-height: 100px; word-wrap: break-word; max-width:57vw'>{{treatment.description}}</div></td>
+          <td class="align-middle"><div style='overflow:auto; max-height: 100px; word-wrap: break-word; max-width:55vw'>{{treatment.description}}</div></td>
           <td class="align-middle text-center px-0"><a
               class="btn btn-primary text-primary border border-primary"
               href="{% url 'medidas:treatment-update' treatment.id%}"

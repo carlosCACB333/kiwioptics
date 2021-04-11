@@ -122,8 +122,15 @@ def prescription_update(request, pk):
             messages.success(request, 'Prescripcion actualizada exitosamente!')
             return redirect('medidas:prescription-detail', pk=pk)
         else:
+            prescription = Prescription.objects.get(pk=pk)
+            patient = prescription.patient
+            patient_form = PatientForm(instance=patient, request=request)
             print(colored(prescription_form.errors, 'red'))
-
+            return render(request, 'medidas/prescription.html', context={
+            'patient_form': patient_form,
+            'prescription_form': prescription_form,
+            'update': True,
+            })
 
 @login_required
 def prescription_delete(request):

@@ -9,6 +9,9 @@ medica {% endblock title %}
     section {
         line-height: 1.2;
     }
+    .date {
+        width: 100px;
+    }
 </style>
 {% endblock styles %}
 {% block prescription-add %}active{% endblock prescription-add %}
@@ -21,29 +24,31 @@ medica {% endblock title %}
           </div>
         {% endfor %}
 {% endif %}
-
-<div class="row no-gutters">
-{{prescription_form.subsidiary.label_tag}}
-{{prescription_form.subsidiary}}
-{{prescription_form.diagnosis.label_tag}}
-{{prescription_form.diagnosis|attr:"list:diagnosis"}}
-{{prescription_form.measure_price.label_tag}}
-{{prescription_form.measure_price}}
-{{prescription_form.crystals.label_tag}}
-{{prescription_form.crystals}}
-{{prescription_form.crystals_price.label_tag}}
-{{prescription_form.crystals_price}}
-{{prescription_form.frame.label_tag}}
-{{prescription_form.frame}}
-{{prescription_form.frame_price.label_tag}}
-{{prescription_form.frame_price}}
 <datalist id="diagnosis">
 {% for key, value in diagnosis_choices %}
     <option value="{{value}}"></option>
 {% endfor %}
 </datalist>
+<h1 class='display-4'>Añadir Prescripción</h1>
+<div class="row no-gutters">
     <div class="col-lg-3 px-0 pr-lg-2">
-        <div class="card m-0">
+        <div class="card mx-0 mb-3">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-store-alt"></i> Sucursal</h6>
+            </div>
+            <div class="card-body">
+                {{prescription_form.subsidiary.label_tag}}
+                {% if prescription_form.subsidiary.errors %}
+                    {{prescription_form.subsidiary|attr:"class:form-control form-control-sm is-invalid"}}
+                    <div id="{{ prescription_form.subsidiary.id_for_label }}" class="invalid-feedback">
+                        {{prescription_form.subsidiary.errors}}
+                    </div>
+                {% else %}
+                    {{prescription_form.subsidiary}}
+                {% endif %}
+            </div>
+        </div>
+        <div class="card mx-0 mb-3">
             <div class="card-header">
                 <h6 class="mb-0"><i class="fas fa-blind"></i> Paciente</h6>
             </div>
@@ -63,10 +68,53 @@ medica {% endblock title %}
                 </form>
             </div>
         </div>
+        <div class="card mx-0 my-3">
+            <div class="card-header">
+                <h6 class="mb-0"><i class="fas fa-glasses"></i> Lunas y Montura</h6>
+            </div>
+            <div class="card-body">
+                {{prescription_form.crystals.label_tag}}
+                {% if prescription_form.crystals.errors %}
+                    {{prescription_form.crystals|attr:"class:form-control form-control-sm is-invalid"}}
+                    <div id="{{ prescription_form.crystals.id_for_label }}" class="invalid-feedback">
+                    {{prescription_form.crystals.errors}}
+                    </div>
+                {% else %}
+                    {{prescription_form.crystals}}
+                {% endif %}
+                {{prescription_form.crystals_price.label_tag}}
+                {% if prescription_form.crystals_price.errors %}
+                    {{prescription_form.crystals_price|attr:"class:form-control form-control-sm is-invalid"}}
+                    <div id="{{ prescription_form.crystals_price.id_for_label }}" class="invalid-feedback">
+                    {{prescription_form.crystals_price.errors}}
+                    </div>
+                {% else %}
+                    {{prescription_form.crystals_price}}
+                {% endif %}
+                {{prescription_form.frame.label_tag}}
+                {% if prescription_form.frame.errors %}
+                    {{prescription_form.frame|attr:"class:form-control form-control-sm is-invalid"}}
+                    <div id="{{ prescription_form.frame.id_for_label }}" class="invalid-feedback">
+                    {{prescription_form.frame.errors}}
+                    </div>
+                {% else %}
+                    {{prescription_form.frame}}
+                {% endif %}
+                {{prescription_form.frame_price.label_tag}}
+                {% if prescription_form.frame_price.errors %}
+                    {{prescription_form.frame_price|attr:"class:form-control form-control-sm is-invalid"}}
+                    <div id="{{ prescription_form.frame_price.id_for_label }}" class="invalid-feedback">
+                    {{prescription_form.frame_price.errors}}
+                    </div>
+                {% else %}
+                    {{prescription_form.frame_price}}
+                {% endif %}
+            </div>
+        </div>
     </div>
     <div class="col-lg-9 px-0 pl-lg-2">
         <div class="card">
-            <div class="card-header pt-2">
+            <div class="card-header pt-2 pb-1">
                 {% comment %} <ul class="nav nav-tabs card-header-tabs">
                     <h6 class='my-2 ml-2 mr-3'><i class="fas fa-file-medical"></i> Medidas</h6>
                     <li class="nav-item">
@@ -76,7 +124,14 @@ medica {% endblock title %}
                         <a class="nav-link" data-toggle="tab" href="#cerca">Cerca</a>
                     </li>
                 </ul> {% endcomment %}
-                <h6 class='my-2 ml-2 mr-3'><i class="fas fa-file-medical"></i> Medidas</h6>
+                <h6 class='mt-2 mb-0 ml-2 mr-3 d-flex justify-content-between'>
+                    <div><i class="fas fa-file-medical"></i> Medidas</div>
+                    <div class='d-flex'>
+                        {{prescription_form.date.errors}}
+                        {{prescription_form.date.label_tag}}
+                        {{prescription_form.date|attr:"class:form-control form-control-sm py-0 ml-2 mb-1 date"}}
+                    </div>
+                </h6>
             </div>
             <div class='py-4 px-3'>
                 <div class="card-body table-responsive-md p-0 mb-4">
@@ -116,6 +171,18 @@ medica {% endblock title %}
                         {{prescription_form.near_add.label_tag}}
                         {{prescription_form.near_add}}
                     </div>
+                    <div class='col-3'>
+                        {{prescription_form.measure_price.errors}}
+                        {{prescription_form.measure_price.label_tag}}
+                        {{prescription_form.measure_price}}
+                    </div>
+                </div>
+                <div class='form-row mb-3'>
+                    <div class='col-12'>
+                        {{prescription_form.diagnosis.errors}}
+                        {{prescription_form.diagnosis.label_tag}}
+                        {{prescription_form.diagnosis|attr:"list:diagnosis"}}
+                    </div>
                 </div>
                 <div class=''>
                     <div class="form-group">
@@ -128,16 +195,14 @@ medica {% endblock title %}
                         {{prescription_form.laboratory_notes.label_tag}}
                         {{prescription_form.laboratory_notes|attr:"rows:3"}}
                     </div>
+                    <div class="form-group">
+                        {{prescription_form.optic_notes.errors}}
+                        {{prescription_form.optic_notes.label_tag}}
+                        {{prescription_form.optic_notes|attr:"rows:3"}}
+                    </div>
                     <div class="form-row">
                         <div class='col-2'>
-                            {{prescription_form.price.errors}}
-                            {{prescription_form.price.label_tag}}
-                            {{prescription_form.price}}
-                        </div>
-                        <div class='col-2'>
-                            {{prescription_form.date.errors}} 
-                            {{prescription_form.date.label_tag}}                        
-                            {{prescription_form.date}}                        
+                        
                         </div>
                     </div>
                 </div>
