@@ -1,5 +1,15 @@
 {% extends 'base.html' %}
 {% block crystals %}active{% endblock crystals %}
+{% block styles %}
+<style>
+  table, th, td, tbody, thead {
+        border-collapse: collapse;
+    }
+    section {
+        line-height: 1.2;
+    }
+</style>
+{% endblock styles %}
 {% block content %}
 <div class='row justify-content-between mb-2'>
   <div class='col-5'>
@@ -11,7 +21,7 @@
 </div>
 <div class="row no-gutters">
     <div class="col-12">
-      <table class="table table-sm table-striped table-bordered table-responsive-md mx-2">
+      <table class="table table-hover table-responsive-md">
         <thead class='table-primary'>
             <tr class="">
           <th class="text-center align-middle" scope="col">N°</th>
@@ -26,15 +36,15 @@
         <tr class="">
           <th class="text-center align-middle p-auto" >{{forloop.counter}}</th>
           <td class="align-middle"><div style='word-wrap: break-word; max-width:20vw'>{{crystal.crystal_name|title}}</div></td>
-          <td class="align-middle">{{crystal.material|title}}</td>
+          <td class="align-middle">{{crystal.material|default_if_none:"--"}}</td>
           <td class="align-middle">
-            {{crystal.get_treatments|default_if_none:"—"}}
+            {{crystal.get_treatments|default_if_none:"--"}}
           </td>
           <td class='align-middle'>
           {% if crystal.default_price %}
             S/.{{crystal.default_price}}
           {% else %}
-            —
+            --
           {% endif %}
           </td>
           <td class="align-middle text-center px-0"><a
@@ -76,7 +86,7 @@
                   class="btn btn-secondary"
                   data-dismiss="modal"
                 >
-                  Close
+                  Cerrar
                 </button>
                 <form
                   method="POST"

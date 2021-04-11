@@ -19,8 +19,12 @@ urlpatterns = [
     path('crystals/delete/', views.CrystalDeleteView.as_view(), name='crystal-delete'),
     path('crystals/materials', views.CrystalMaterialListView.as_view(), name='materials'),
     path('crystals/materials/add', views.CrystalMaterialCreateView.as_view(), name='material-add'),
+    path('crystals/materials/<int:pk>/change', views.CrystalMaterialUpdateView.as_view(), name='material-update'),
+    path('crystals/materials/delete', views.CrystalMaterialDeleteView.as_view(), name='material-delete'),
     path('crystals/treatments', views.CrystalTreatmentsListView.as_view(), name='treatments'),
     path('crystals/treatments/add', views.CrystalTreatmentsCreateView.as_view(), name='treatment-add'),
+    path('crystals/treatments/<int:pk>/change', views.CrystalTreatmentsUpdateView.as_view(), name='treatment-update'),
+    path('crystals/treatments/delete', views.CrystalTreatmentsDeleteView.as_view(), name='treatment-delete'),
     path('test/', views.TestView.as_view()),
     # api rest-framework
     path('api/patientList/', rest.PatientListApiView.as_view(),name='rest-patient-list'),

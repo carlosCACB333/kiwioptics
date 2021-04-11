@@ -1,5 +1,15 @@
 {% extends 'base.html' %}
 {% block crystals %}active{% endblock crystals %}
+{% block styles %}
+<style>
+  table, th, td, tbody, thead {
+        border-collapse: collapse;
+    }
+    section {
+        line-height: 1.2;
+    }
+</style>
+{% endblock styles %}
 {% block content %}
 <div class='row justify-content-between mb-2'>
   <div class='col-8'>
@@ -11,7 +21,7 @@
 </div>
 <div class="row no-gutters">
     <div class="col-12">
-      <table class="table table-sm table-striped table-bordered table-responsive-md">
+      <table class="table table-hover table-responsive-md">
         <thead class='table-primary'>
         <tr class="">
           <th class="text-center align-middle" scope="col">N°</th>
@@ -27,17 +37,78 @@
           <td class="align-middle"><div style='overflow:auto; max-height: 100px; word-wrap: break-word; max-width:57vw'>{{treatment.description}}</div></td>
           <td class="align-middle text-center px-0"><a
               class="btn btn-primary text-primary border border-primary"
-              href=""
+              href="{% url 'medidas:treatment-update' treatment.id%}"
               ><i class="far fa-edit"></i
             ></a></td>
           <td class="align-middle text-center px-0"><button
-              class="btn btn-primary text-primary border border-primary"
-            ><i class="far fa-trash-alt"></i>
-            </button>
-          </td>
+              data-toggle="modal"
+              data-id="{{treatment.id}}"
+              data-treatment-optic-id="{{forloop.counter}}"
+              data-target="#treatment_delete"
+              class="btn btn-primary border border-primary text-primary"
+            >
+              <i class="far fa-trash-alt"></i>
+            </button></td>
         </tr>
         {% endfor %}
       </table>
     </div>
 </div>
+        <div
+          class="modal fade"
+          id="treatment_delete"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="treatment_delete_title"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Confirmar eliminación</h5>
+              </div>
+              <div class="modal-body"></div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Cerrar
+                </button>
+                <form
+                  method="POST"
+                  action="{% url 'medidas:treatment-delete' %}"
+                >
+                  {% csrf_token %}
+                  <button
+                    val=""
+                    id="treatment_button_id"
+                    type="submit"
+                    name="treatment_id"
+                    class="btn btn-danger text-light"
+                  >
+                    Eliminar
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
 {% endblock content %}
+{% block script %}
+<script>
+  $("#treatment_delete").on("show.bs.modal", function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var recipient = button.data("id"); // Extract info from data-* attributes
+    var treatment_optic_id = button.data("treatment-optic-id")
+    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    var modal = $(this);
+    modal
+      .find(".modal-body")
+      .text("¿Seguro que desea eliminar el tratamiento N°" + treatment_optic_id + "?");
+    modal.find("#treatment_button_id").val(recipient);
+  });
+</script>
+{% endblock script %}

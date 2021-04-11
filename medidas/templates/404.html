@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block styles %}
+<style>
+#content {
+    display: flex;
+    align-items: center;
+}
+</style>
+{% endblock styles %}
+{% block content %}
+<div class="row mb-5">
+     <div class="col-md-2 text-center">
+          <p><i class="fa fa-exclamation-triangle fa-5x text-danger"></i></p>
+     </div>
+     <div class="col-md-10">
+          <h3>Error 404: No encontramos lo que buscabas</h3>
+          <p>Ha ocurrido un error u.u.</p>
+     </div>
+</div>
+{% endblock content %}

@@ -18,12 +18,12 @@ TREATMENTS = (
     {
     "name":"Blue Defense",
     "description":"""Protege de la luz emitida por los dispositivos digitales, protege contra los rayos UV hasta 400 nm, el nuevo estándar en salud visual.
-     Incluye una protección completa contra los rayos UV mas nocivos de 380 nm hasta 400 nm.""",
+Incluye una protección completa contra los rayos UV mas nocivos de 380 nm hasta 400 nm.""",
     },
     {
     "name":"Protección UV",
     "description":"""Las gafas de sol con protección UV son un bloqueador solar para sus ojos.
-    La exposición acumulativa a la dañina radiación ultravioleta (UV) a lo largo de la vida de una persona ha sido asociada con problemas relacionados con la edad, como las cataratas y la degeneración macular.""",
+La exposición acumulativa a la dañina radiación ultravioleta (UV) a lo largo de la vida de una persona ha sido asociada con problemas relacionados con la edad, como las cataratas y la degeneración macular.""",
     },
     {
     "name":"FotoCromatico",
@@ -35,25 +35,25 @@ como exterior.""",
     {
     "name":"Polarizados",
     "description":"""Permite minimizar los efectos de los rayos de luz,
-     son ideales para uso sobre pavimento, arena, agua y nieve.
-     Elimina el deslumbramiento.""",
+son ideales para uso sobre pavimento, arena, agua y nieve.
+Elimina el deslumbramiento.""",
     },
     {
     "name":"Hidrofóbicos",
     "description":"""Tratamiento Antireflex Superior resistente al polvo, agua y grasa haciendo que la luna
-    no se ensucie ni raye con facilidad y que también sea más facil de limpiar.""",
+no se ensucie ni raye con facilidad y que también sea más facil de limpiar.""",
     },
     {
     "name":"Superclean",
     "description":"""Es un tratamiento antireflejo superior, además de disminuir el brillo y
-    brindar mayor comodidad. Repele el polvo, agua y grasa; haciendo que la
-    luna sea muy fácil de limpiar.""",
+brindar mayor comodidad. Repele el polvo, agua y grasa; haciendo que la
+luna sea muy fácil de limpiar.""",
     },
     {
     "name":"Transitions",
     "description":"""Lunas que están también en la familia de los fotocromáticas, pero que
-    tienen una tecnología superior en cuanto a la velocidad de opacidad de
-    las lunas al estar en contacto con los rayos UV.""",
+tienen una tecnología superior en cuanto a la velocidad de opacidad de
+las lunas al estar en contacto con los rayos UV.""",
     },
 )
 
@@ -63,23 +63,23 @@ MATERIALS = (
         "refractive_index":"1.523",
         "abbe":"59",
         "description":"""Excelente óptica.
-        Bajo costo.
-        Desventajas: pesado, quebradizo.""",
+Bajo costo.
+Desventajas: pesado, quebradizo.""",
     },
     {
         "name":"Resina CR-39",
         "refractive_index":"1.498",
         "abbe":"58",
         "description":"""Excelente óptica.
-        Bajo costo.
-        Desventaja: grosor.""",
+Bajo costo.
+Desventaja: grosor.""",
     },
     {
         "name":"Trivex",
         "refractive_index":"1.54",
         "abbe":"45",
         "description":"""Resistencia superior a impactos.
-        El material más liviano que se ofrece.""",
+El material más liviano que se ofrece.""",
     },
     {
         "name":"NK-55",
@@ -92,29 +92,29 @@ MATERIALS = (
         "refractive_index":"1.586",
         "abbe":"30",
         "description":"""Resistencia superior a impactos.
-        Más liviano que los cristales de plástico de alto índice.""",
+Más liviano que los cristales de plástico de alto índice.""",
     },
     {
         "name":"Tríbido",
         "refractive_index":"1.60",
         "abbe":"41",
         "description":"""Delgado y liviano.
-        Considerablemente más resistente a impactos que los cristales de plástico CR-39 y de alto índice (excepto el policarbonato y Trivex).
-        Desventaja: Todavía no está disponible en una amplia variedad de diseños de cristales.""",
+Considerablemente más resistente a impactos que los cristales de plástico CR-39 y de alto índice (excepto el policarbonato y Trivex).
+Desventaja: Todavía no está disponible en una amplia variedad de diseños de cristales.""",
     },
     {
         "name":"Alto indice 1.60",
         "refractive_index":"1.60",
         "abbe":"36",
         "description":"""Delgado y liviano.
-        Menos costoso que los lentes de 1.70-1.74 de índice alto.""",
+Menos costoso que los lentes de 1.70-1.74 de índice alto.""",
     },
     {
         "name":"Alto indice 1.67",
         "refractive_index":"1.67",
         "abbe":"32",
         "description":"""Delgado y liviano.
-        Menos costoso que los lentes de 1.70-1.74 de índice alto.""",
+Menos costoso que los lentes de 1.70-1.74 de índice alto.""",
     },
     {
         "name":"Alto indice 1.70",
