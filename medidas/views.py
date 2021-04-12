@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, FileResponse
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
@@ -8,6 +8,7 @@ from django.views import View
 from django.views.generic import ListView, UpdateView, TemplateView, CreateView, TemplateView
 from django.db.models.functions import Concat
 from django.core.serializers import serialize
+from django.core.exceptions import PermissionDenied
 from .forms import PatientForm, PrescriptionForm, CrystalForm, CrystalMaterialForm, CrystalTreatmentsForm
 from .models import Patient, Prescription, DiagnosisChoices, Crystal, CrystalTreatments, CrystalMaterial
 from users.models import EmployeeUser
@@ -18,26 +19,9 @@ from .custom_functions import django_admin_keyword_search
 from .decorators import model_owned_required
 from django.contrib.auth.views import PasswordResetView
 
-# Create your views here.
-
-# def patient_detail(request, pk):
-#     if request.method == 'GET':
-#         patient = get_object_or_404(Patient, pk=pk)
-#         data = {
-#             'first_name':patient.first_name,
-#             'last_name':patient.last_name,
-#             'dni':patient.dni,
-#             'gender':patient.gender,
-#             'phone':patient.phone,
-#             'job':patient.job,
-#         }
-#         return JsonResponse(data, safe=False)
-
-
 class IndexView(LoginRequiredMixin, ListView):
     model = EmployeeUser
     template_name = "medidas/index.html"
-
 
 @login_required
 def add_prescription(request):
@@ -84,7 +68,7 @@ def prescription_detail(request, pk):
     print(colored(f"{request} + {pk}", 'red'))
     context = {}
     if request.method == 'GET':
-        prescription = Prescription.objects.get(pk=pk)
+        prescription = get_object_or_404(Prescription, pk=pk)
         patient = prescription.patient
         patient_form = PatientForm(instance=patient, request=request)
         prescription_form = PrescriptionForm(
@@ -95,12 +79,12 @@ def prescription_detail(request, pk):
             'detail': True,
         })
 
-
 @login_required
+@model_owned_required(Prescription)
 def prescription_update(request, pk):
     context = {}
     if request.method == 'GET':
-        prescription = Prescription.objects.get(pk=pk)
+        prescription = get_object_or_404(Prescription, pk=pk)
         patient = prescription.patient
         patient_form = PatientForm(instance=patient, request=request)
         prescription_form = PrescriptionForm(
@@ -111,7 +95,7 @@ def prescription_update(request, pk):
             'update': True,
         })
     if request.method == 'POST':
-        prescription = Prescription.objects.get(pk=pk)
+        prescription = get_object_or_404(Prescription, pk=pk)
         patient = prescription.patient
         updated_request = request.POST.copy()
         updated_request.update({'patient': patient})
@@ -122,7 +106,7 @@ def prescription_update(request, pk):
             messages.success(request, 'Prescripcion actualizada exitosamente!')
             return redirect('medidas:prescription-detail', pk=pk)
         else:
-            prescription = Prescription.objects.get(pk=pk)
+            prescription = get_object_or_404(Prescription, pk=pk)
             patient = prescription.patient
             patient_form = PatientForm(instance=patient, request=request)
             print(colored(prescription_form.errors, 'red'))
@@ -136,15 +120,17 @@ def prescription_update(request, pk):
 def prescription_delete(request):
     if request.method == 'POST':
         pk = request.POST['prescription_id']
-        prescription = Prescription.objects.get(id=pk)
+        prescription = get_object_or_404(Prescription, pk=pk)
+        if request.user.get_opticuser() != prescription.optic:
+            raise PermissionDenied()
         prescription.delete()
         return redirect('medidas:prescriptions')
 
-
 @login_required
+@model_owned_required(Patient)
 def patient_add_prescription(request, pk):
     if request.method == 'GET':
-        patient = Patient.objects.get(pk=pk)
+        patient = get_object_or_404(Patient, pk=pk)
         patient_form = PatientForm(instance=patient, request=request)
         prescription_form = PrescriptionForm(request=request)
         return render(request, 'medidas/prescription.html', context={
@@ -153,7 +139,7 @@ def patient_add_prescription(request, pk):
             'update': True,
         })
     if request.method == 'POST':
-        patient = Patient.objects.get(pk=pk)
+        patient = get_object_or_404(Patient, pk=pk)
         updated_request = request.POST.copy()
         updated_request.update({'patient': patient})
         prescription_form = PrescriptionForm(updated_request, request=request)
@@ -164,16 +150,6 @@ def patient_add_prescription(request, pk):
             return redirect('medidas:prescriptions')
         else:
             print(colored(prescription_form.errors, 'red'))
-
-
-# def prescription_list(request):
-#     prescriptions = Prescription.objects.order_by(
-#         '-date'
-#     )
-#     context = {
-#         'prescriptions': prescriptions,
-#     }
-#     return render(request, 'medidas/prescription_list.html', context)
 
 class PrescriptionListView(LoginRequiredMixin, ListView):
     model = Prescription
@@ -201,16 +177,6 @@ class PatientListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context["patient_form"] = PatientForm(request=self.request)
         return context
-
-
-# class PrescriptionUpdateView(UpdateView):
-#     model = Prescription
-#     fields = '__all__'
-#     template_name = "medidas/prescription_update.html"
-
-class TestView(PasswordResetView):
-
-    template_name = "medidas/test.html"
 
 class CrystalListView(LoginRequiredMixin, ListView):
     model = Crystal
@@ -313,6 +279,8 @@ class CrystalMaterialDeleteView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         pk = request.POST['material_id']
         material = get_object_or_404(CrystalMaterial, pk=pk)
+        if material.optic != request.user.get_opticuser():
+            raise PermissionDenied()
         material.delete()
         return redirect('medidas:materials')
 
@@ -356,6 +324,8 @@ class CrystalTreatmentsDeleteView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         pk = request.POST.get('treatment_id')
         treatment = get_object_or_404(CrystalTreatments, pk=pk)
+        if treatment.optic != request.user.get_opticuser():
+            raise PermissionDenied()
         treatment.delete()
         return redirect('medidas:treatments')
 
