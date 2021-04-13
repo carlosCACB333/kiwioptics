@@ -11,6 +11,7 @@ urlpatterns = [
     path('prescriptions/', views.PrescriptionListView.as_view(), name='prescriptions'),
     path('prescriptions/add/', views.add_prescription, name='prescription-add'),
     path('prescriptions/<int:pk>/', views.prescription_detail, name='prescription-detail'),
+    path('prescriptions/<int:pk>/pdf/', views.PrescriptionPDFPrintView.as_view(), name='prescription-pdf'),
     path('prescriptions/<int:pk>/change/', views.prescription_update, name='prescription-update'),
     path('prescriptions/delete/', views.prescription_delete, name='prescription-delete'),
     path('crystals/', views.CrystalListView.as_view(), name='crystals'),

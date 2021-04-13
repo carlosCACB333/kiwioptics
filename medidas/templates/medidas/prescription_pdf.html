@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{prescription.patient.id}}</title>
+    <link href="{% static 'css/prescription.css' %}" rel="stylesheet" />
+<style>
+    table, th, td, tbody, thead {
+        border-collapse: collapse;
+    }
+    section {
+        line-height: 1.2;
+    }
+    .date {
+        width: 100px;
+    }
+</style>
+      <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  <!-- Hoja de estilos -->
+</head>
+<body>
+    <div class='container-fluid'>
+        <div class='row justify-content-center'>
+            <div class='col'>
+                <b>{{prescription.optic|title}}</b>
+                {% comment %} <b>{{prescription.doctor}}</b> {% endcomment %}
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col'>
+                <b>Paciente:</b> {{prescription.patient}}
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col'>
+                <b>Fecha:</b> {{prescription.date}}
+            </div>
+        </div>
+        <hr>
+        <div class='row'>
+            <div class='col'>
+                <b>Refraccion para lejos</b>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col'>
+                <div id='lejos'>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr class="">
+                                <th class="text-center bg-primary" scope="col"></th>
+                                <th class="text-center" scope="col">Esfera</th>
+                                <th class="text-center" scope="col">Cilindro</th>
+                                <th class="text-center" scope="col">Eje</th>
+                                <th class="text-center" scope="col">Av.</th>
+                                <th class="text-center" scope="col">Dnp.</th>
+                            </tr>
+                            <tr class="">
+                                <th style="vertical-align : middle;text-align:center;" class="text-center px-0" scope="row">OD</th>
+                                <td>{{prescription.far_spherical_right|default_if_none:"--"}}</td>
+                                <td>{{prescription.far_cylinder_right|default_if_none:"--"}}</td>
+                                <td>{{prescription.far_axis_right|default_if_none:"--"}}</td>
+                                <td>{{prescription.far_av_right|default_if_none:"--"}}</td>
+                                <td>{{prescription.far_dnp_right|default_if_none:"--"}}</td>
+                            </tr>
+                            <tr class="">
+                                <th style="vertical-align : middle;text-align:center;" class="text-center px-0" scope="row">OI</th>
+                                <td>{{prescription.far_spherical_left|default_if_none:"--"}}</td>
+                                <td>{{prescription.far_cylinder_left|default_if_none:"--"}}</td>
+                                <td>{{prescription.far_axis_left|default_if_none:"--"}}</td>
+                                <td>{{prescription.far_av_left|default_if_none:"--"}}</td>
+                                <td>{{prescription.far_dnp_left|default_if_none:"--"}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col'>
+                <b>Refraccion para intermedio</b>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col'>
+                <div id='lejos'>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr class="">
+                                <th class="text-center bg-primary" scope="col"></th>
+                                <th class="text-center" scope="col">Esfera</th>
+                                <th class="text-center" scope="col">Cilindro</th>
+                                <th class="text-center" scope="col">Eje</th>
+                                <th class="text-center" scope="col">Av.</th>
+                                <th class="text-center" scope="col">Dnp.</th>
+                            </tr>
+                            <tr class="">
+                                <th style="vertical-align : middle;text-align:center;" class="text-center px-0" scope="row">OD</th>
+                                <td>{{prescription.intermediate_spherical_right|default_if_none:"--"}}</td>
+                                <td>{{prescription.intermediate_cylinder_right|default_if_none:"--"}}</td>
+                                <td>{{prescription.intermediate_axis_right|default_if_none:"--"}}</td>
+                                <td>{{prescription.intermediate_av_right|default_if_none:"--"}}</td>
+                                <td>{{prescription.intermediate_dnp_right|default_if_none:"--"}}</td>
+                            </tr>
+                            <tr class="">
+                                <th style="vertical-align : middle;text-align:center;" class="text-center px-0" scope="row">OI</th>
+                                <td>{{prescription.intermediate_spherical_left|default_if_none:"--"}}</td>
+                                <td>{{prescription.intermediate_cylinder_left|default_if_none:"--"}}</td>
+                                <td>{{prescription.intermediate_axis_left|default_if_none:"--"}}</td>
+                                <td>{{prescription.intermediate_av_left|default_if_none:"--"}}</td>
+                                <td>{{prescription.intermediate_dnp_left|default_if_none:"--"}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col'>
+                <b>Refraccion para cerca</b>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col'>
+                <div id='lejos'>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr class="">
+                                <th class="text-center bg-primary" scope="col"></th>
+                                <th class="text-center" scope="col">Esfera</th>
+                                <th class="text-center" scope="col">Cilindro</th>
+                                <th class="text-center" scope="col">Eje</th>
+                                <th class="text-center" scope="col">Av.</th>
+                                <th class="text-center" scope="col">Dnp.</th>
+                            </tr>
+                            <tr class="">
+                                <th style="vertical-align : middle;text-align:center;" class="text-center px-0" scope="row">OD</th>
+                                <td>{{prescription.near_spherical_right|default_if_none:"--"}}</td>
+                                <td>{{prescription.near_cylinder_right|default_if_none:"--"}}</td>
+                                <td>{{prescription.near_axis_right|default_if_none:"--"}}</td>
+                                <td>{{prescription.near_av_right|default_if_none:"--"}}</td>
+                                <td>{{prescription.near_dnp_right|default_if_none:"--"}}</td>
+                            </tr>
+                            <tr class="">
+                                <th style="vertical-align : middle;text-align:center;" class="text-center px-0" scope="row">OI</th>
+                                <td>{{prescription.near_spherical_left|default_if_none:"--"}}</td>
+                                <td>{{prescription.near_cylinder_left|default_if_none:"--"}}</td>
+                                <td>{{prescription.near_axis_left|default_if_none:"--"}}</td>
+                                <td>{{prescription.near_av_left|default_if_none:"--"}}</td>
+                                <td>{{prescription.near_dnp_left|default_if_none:"--"}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
