@@ -21,7 +21,7 @@
   {% if messages %} {% for message in messages %}
   <div class="alert alert-{{message.tags}}">{{message}}</div>
   {% endfor %} {% endif %}
-  <form class="" action="">
+  {% comment %} <form class="" action="">
   <div class="input-group mb-3">
     <input
       class="form-control"
@@ -36,7 +36,17 @@
       </button>
     </div>
   </div>
-  </form>
+  </form> {% endcomment %}
+<form id='search_form' action="">
+  <div class="input-group mb-3">
+    <div class="box" style='width: 600px'>
+      <div class="container-buscador">
+          <span id='btn-search' class="icon"><i class="fa fa-search"></i></span>
+          <input type="search" id="search" placeholder="Apellidos, nombres o dni" name="q" />
+      </div>
+  </div>
+  </div>
+</form>
   
   <div class="row no-gutters">
     <div class="col-12">

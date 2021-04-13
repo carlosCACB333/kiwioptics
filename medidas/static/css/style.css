@@ -144,7 +144,7 @@ table tbody td {
 
 
   .container-buscador {
-    width: 300px;
+    width: 75vw;
     vertical-align: middle;
     white-space: nowrap;
     position: relative;
@@ -183,11 +183,11 @@ table tbody td {
 .container-buscador input#search:focus,
 .container-buscador input#search:active {
     outline: none;
-    width: 300px;
+    width: 75vw;
 }
 
 .container-buscador:hover input#search {
-    width: 300px;
+    width: 75vw;
 }
 
 .container-buscador:hover .icon {

@@ -26,7 +26,6 @@ urlpatterns = [
     path('crystals/treatments/add', views.CrystalTreatmentsCreateView.as_view(), name='treatment-add'),
     path('crystals/treatments/<int:pk>/change', views.CrystalTreatmentsUpdateView.as_view(), name='treatment-update'),
     path('crystals/treatments/delete', views.CrystalTreatmentsDeleteView.as_view(), name='treatment-delete'),
-    
     # api rest-framework
     path('api/patientList/', rest.PatientListApiView.as_view(),name='rest-patient-list'),
     path('api/patientCreate/', rest.PatientCreateApiView.as_view(),name='rest-patient-create'),

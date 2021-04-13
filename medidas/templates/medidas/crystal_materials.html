@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block crystals %}active{% endblock crystals %}
+{% block materials %}active{% endblock materials %}
 {% block styles %}
 <style>
   table, th, td, tbody, thead {
@@ -16,7 +16,7 @@
     <h1 class='display-4'>Lista de Materiales</h1>
   </div>
   <div class='col-4 align-self-end text-right pl-0'>
-    <a href='{% url 'medidas:material-add' %}' class='btn btn-primary border border-primary text-primary'>Nuevo Material</a>
+    <a href='{% url 'medidas:material-add' %}' class='btn btn-primary border border-primary text-primary'>Añadir Material</a>
   </div>
 </div>
 <div class="row no-gutters">
@@ -35,9 +35,9 @@
         {% for material in crystals_materials %}
         <tr class="">
           <th class="text-center align-middle p-auto" >{{forloop.counter}}</th>
-          <td class="align-middle">{{material.material_name|title}}</td>
-          <td class="align-middle"><div style='overflow:auto; max-height: 100px; word-wrap: break-word; max-width:57vw'>{{material.description}}</div></td>
-          <td class="align-middle">{{material.refractive_index|default_if_none:"--"}}</td>
+          <td style='max-width:12vw; word-wrap: break-word;' class="align-middle">{{material.material_name|title}}</td>
+          <td class="align-middle" style="max-width: 45vw"><div style='overflow:auto; max-height: 100px; word-wrap: break-word; width: 100%'>{{material.description}}</div></td>
+          <td style='width:10vw' class="align-middle">{{material.refractive_index|default_if_none:"--"}}</td>
           <td class="align-middle">{{material.abbe|default_if_none:"--"}}</td>
           <td class="align-middle text-center px-0"><a
               class="btn btn-primary text-primary border border-primary"
