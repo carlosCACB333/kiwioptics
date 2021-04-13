@@ -4,7 +4,7 @@ from firebase_admin import auth
 from django.shortcuts import render
 from django.shortcuts import redirect
 from termcolor import colored
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, PasswordResetConfirmView
 from django.views.generic import (
     UpdateView, CreateView, ListView, View
 )
@@ -29,7 +29,7 @@ from .serializer import LoginSocialSerializer
 def signup(request):
     if request.method == 'POST':
         optica_form = OpticaRegisterForm(request.POST)
-        print(colored(request.POST,'yellow'))
+        print(colored(request.POST, 'yellow'))
         if optica_form.is_valid():
             new_account = optica_form.save(commit=False)
             new_account.user_type = Account.Types.Optic
@@ -285,7 +285,7 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, CreateView):
                 cuenta = form_user.save(commit=False)
                 cuenta.set_password(request.POST['password'])
                 cuenta.user_type = Account.Types.Employee
-                cuenta.is_active=True
+                cuenta.is_active = True
 
                 if 'picture' in request.FILES:
                     cuenta.picture = request.FILES['picture']
@@ -315,3 +315,16 @@ class UserOfOpticDeleteView(OpticPermissionRequiredMixin, View):
         EmployeeUser.objects.filter(id=self.kwargs['id']).delete()
         messages.success(request, f'Tu empleado a sido borrado con éxito')
         return HttpResponseRedirect(reverse_lazy('users:userOfOptic'))
+
+
+class PasswordResetConfirmView2(PasswordResetConfirmView):
+    template_name = 'registrations/password_reset_confirm.html'
+    success_url = reverse_lazy('users:login')
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            messages.success(request, f'Su contraseña a sido recuperado con éxito. Inicie sesión con su nueva clave')
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)

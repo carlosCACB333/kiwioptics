@@ -16,7 +16,6 @@ from termcolor import colored
 from django.contrib import messages
 from .custom_functions import django_admin_keyword_search
 from .decorators import model_owned_required
-from django.contrib.auth.views import PasswordResetView
 
 # Create your views here.
 
@@ -201,9 +200,6 @@ class PatientListView(LoginRequiredMixin, ListView):
 #     fields = '__all__'
 #     template_name = "medidas/prescription_update.html"
 
-class TestView(PasswordResetView):
-
-    template_name = "medidas/test.html"
 
 class CrystalListView(LoginRequiredMixin, ListView):
     model = Crystal
