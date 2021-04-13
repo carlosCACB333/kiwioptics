@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from . import  rest
 
+
 app_name = 'medidas'
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),

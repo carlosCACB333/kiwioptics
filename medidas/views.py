@@ -185,6 +185,12 @@ class PatientListView(LoginRequiredMixin, ListView):
         context["patient_form"] = PatientForm(request=self.request)
         return context
 
+# class PrescriptionUpdateView(UpdateView):
+#     model = Prescription
+#     fields = '__all__'
+#     template_name = "medidas/prescription_update.html"
+
+
 class CrystalListView(LoginRequiredMixin, ListView):
     model = Crystal
     context_object_name = 'crystals'
