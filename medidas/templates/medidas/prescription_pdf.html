@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{prescription.patient.id}}</title>
+    <title>Receta-{{prescription.prescription_optic_id}}</title>
     <link href="{% static 'css/prescription.css' %}" rel="stylesheet" />
 <style>
     table, th, td, tbody, thead {
@@ -23,6 +23,9 @@
   <!-- Hoja de estilos -->
 </head>
 <body>
+    <div style='color:#fff'>
+        {{prescription.far_spherical_right}}
+    </div>
     <div class='container-fluid'>
         <div class='row justify-content-center'>
             <div class='col'>
@@ -32,12 +35,12 @@
         </div>
         <div class='row'>
             <div class='col'>
-                <b>Paciente:</b> {{prescription.patient}}
+                <b>Paciente:</b> <br>{{prescription.patient}}
             </div>
         </div>
         <div class='row'>
             <div class='col'>
-                <b>Fecha:</b> {{prescription.date}}
+                <b>Fecha:</b> <br>{{prescription.date}}
             </div>
         </div>
         <hr>
@@ -61,7 +64,7 @@
                             </tr>
                             <tr class="">
                                 <th style="vertical-align : middle;text-align:center;" class="text-center px-0" scope="row">OD</th>
-                                <td>{{prescription.far_spherical_right|default_if_none:"--"}}</td>
+                                <td>18,50</td>
                                 <td>{{prescription.far_cylinder_right|default_if_none:"--"}}</td>
                                 <td>{{prescription.far_axis_right|default_if_none:"--"}}</td>
                                 <td>{{prescription.far_av_right|default_if_none:"--"}}</td>

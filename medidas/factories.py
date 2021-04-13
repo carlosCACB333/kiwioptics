@@ -23,31 +23,39 @@ class PrescriptionFactory(DjangoModelFactory):
     far_cylinder_right = FuzzyChoice([choice[0] for choice in Prescription.cylinder_choices])
     far_axis_right = FuzzyChoice([choice[0] for choice in Prescription.axis_choices])
     far_av_right = '6/20'
+    far_dnp_right = FuzzyChoice([choice[0] for choice in Prescription.dnp_choices])
     far_spherical_left = FuzzyChoice([choice[0] for choice in Prescription.spherical_choices])
     far_cylinder_left = FuzzyChoice([choice[0] for choice in Prescription.cylinder_choices])
     far_axis_left = FuzzyChoice([choice[0] for choice in Prescription.axis_choices])
-    far_av_left = '6/20'
+    far_av_left = '9/20'
+    far_dnp_left = FuzzyChoice([choice[0] for choice in Prescription.dnp_choices])
     intermediate_spherical_right = FuzzyChoice([choice[0] for choice in Prescription.spherical_choices])
     intermediate_cylinder_right = FuzzyChoice([choice[0] for choice in Prescription.cylinder_choices])
     intermediate_axis_right = FuzzyChoice([choice[0] for choice in Prescription.axis_choices])
-    intermediate_av_right = '6/20'
+    intermediate_av_right = '12/20'
+    intermediate_dnp_right = FuzzyChoice([choice[0] for choice in Prescription.dnp_choices])
     intermediate_spherical_left = FuzzyChoice([choice[0] for choice in Prescription.spherical_choices])
     intermediate_cylinder_left = FuzzyChoice([choice[0] for choice in Prescription.cylinder_choices])
     intermediate_axis_left = FuzzyChoice([choice[0] for choice in Prescription.axis_choices])
-    intermediate_av_left = '6/20'
+    intermediate_av_left = '15/20'
+    intermediate_dnp_left = FuzzyChoice([choice[0] for choice in Prescription.dnp_choices])
     near_spherical_right = FuzzyChoice([choice[0] for choice in Prescription.spherical_choices])
     near_cylinder_right = FuzzyChoice([choice[0] for choice in Prescription.cylinder_choices])
     near_axis_right = FuzzyChoice([choice[0] for choice in Prescription.axis_choices])
     near_av_right = '6/20'
+    near_dnp_right = FuzzyChoice([choice[0] for choice in Prescription.dnp_choices])
     near_spherical_left = FuzzyChoice([choice[0] for choice in Prescription.spherical_choices])
     near_cylinder_left = FuzzyChoice([choice[0] for choice in Prescription.cylinder_choices])
     near_axis_left = FuzzyChoice([choice[0] for choice in Prescription.axis_choices])
     near_av_left = '6/20'
-    observation = factory.Faker('paragraph', nb_sentences=2)
-    far_dip = FuzzyChoice([choice[0] for choice in Prescription.dip_choices])
-    near_dip = FuzzyChoice([choice[0] for choice in Prescription.dip_choices])
+    near_dnp_left = FuzzyChoice([choice[0] for choice in Prescription.dnp_choices])
+    patient_notes = factory.Faker('paragraph', nb_sentences=2)
+    laboratory_notes = factory.Faker('paragraph', nb_sentences=2)
+    optic_notes = factory.Faker('paragraph', nb_sentences=2)
     intermediate_add = FuzzyChoice([choice[0] for choice in Prescription.add_choices])
     near_add = FuzzyChoice([choice[0] for choice in Prescription.add_choices])
-    price = FuzzyDecimal(20.5, 351.5)
+    measure_price = FuzzyDecimal(20.5, 351.5)
+    crystals_price = FuzzyDecimal(20.5, 351.5)
+    frame_price = FuzzyDecimal(20.5, 351.5)
 
 

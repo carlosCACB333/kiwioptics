@@ -6,13 +6,15 @@ from django.core.exceptions import ValidationError
 from django.db.utils import DataError
 
 from medidas.models import Patient, Prescription
+from users.models import Account
 from medidas.factories import (
     PatientFactory,
     PrescriptionFactory,
 )
 
+USERNAME = 'pajason2000@gmail.com'
 NUM_PATIENTS = 300
-NUM_PRESCRIPTIONS = 1000
+NUM_PRESCRIPTIONS = 3500
 
 class Command(BaseCommand):
     help = "Generates test data"
@@ -20,15 +22,16 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         self.stdout.write("Deleting old data...")
         models = [Prescription, Patient,]
+        account = Account.objects.get(username=USERNAME)
+        optic = account.get_opticuser()
         for model in models:
-            model.objects.all().delete()
-
+            model.objects.filter(optic=optic).delete()
         self.stdout.write("Creating new data...")
         # Create all the patients
         patients = []
         for _ in range(NUM_PATIENTS):
             try:
-                patient = PatientFactory()
+                patient = PatientFactory(optic=optic)
                 patients.append(patient)
             except DataError:
                 print('DataError')
@@ -37,7 +40,7 @@ class Command(BaseCommand):
         for _ in range(NUM_PRESCRIPTIONS):
             patient = random.choice(patients)
             try:
-                prescription = PrescriptionFactory(patient=patient)
+                prescription = PrescriptionFactory(optic=optic,patient=patient)
             except ValidationError:
                 print('ValidationError')
             except ValueError:

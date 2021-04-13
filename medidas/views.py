@@ -167,7 +167,7 @@ class PrescriptionListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         q = self.request.GET.get('q', '')
         opticUser = self.request.user.get_opticuser().id
-        return django_admin_keyword_search(Prescription, q, ['patient__full_name', 'patient__dni']).filter(optic_id=opticUser).order_by('-date')
+        return django_admin_keyword_search(Prescription, q, ['patient__full_name', 'patient__dni']).filter(optic_id=opticUser).order_by('-prescription_optic_id')
 
 
 class PatientListView(LoginRequiredMixin, ListView):
