@@ -12,7 +12,7 @@ from medidas.factories import (
     PrescriptionFactory,
 )
 
-USERNAME = 'pajason2000@gmail.com'
+USERNAME = 'carlosCACB333@gmail.com'
 NUM_PATIENTS = 300
 NUM_PRESCRIPTIONS = 3500
 
