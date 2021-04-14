@@ -140,7 +140,7 @@ class Prescription(models.Model):
     axis_choices.append(('','--'))
     dip_choices = [(i,f'{i}mm') for i in range(81,40,-1)]
     dip_choices.append(('','--'))
-    dnp_choices = [(decimal.Decimal(i/2),f'{i/2}mm' if i%2==1 else f'{int(i/2)}mm') for i in range(81,40,-1)]
+    dnp_choices = [(decimal.Decimal(f'{i/2}') if i%2==0 else decimal.Decimal(f'{i/2}'),f'{i/2}mm' if i%2==1 else f'{int(i/2)}mm') for i in range(81,40,-1)]
     dnp_choices.append(('','--'))
     add_choices = generateChoices.__func__(1, 25)
     add_choices.append(('','--'))

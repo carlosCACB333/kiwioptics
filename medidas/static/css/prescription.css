@@ -1,6 +1,6 @@
 @charset "UTF-8";
 @page {
-  margin: 3cm;
+  margin: 1.5cm;
   @bottom-left {
     color: #1ee494;
     font-family: Arial;
@@ -25,7 +25,7 @@ html {
     margin: 0; }
   html aside {
     display: flex;
-    margin: 2em 0 4em; }
+    margin: 0em 0 4em; }
     html aside address {
       font-style: normal;
       white-space: pre-line; }
@@ -52,6 +52,9 @@ html {
   html table {
     border-collapse: collapse;
     width: 100%; }
+  html table caption {
+    color: #1ee494;
+  }
     html table th {
       border-bottom: .2mm solid #a9a;
       color: #a9a;
@@ -61,23 +64,10 @@ html {
       text-transform: uppercase; }
     html table td {
       padding-top: 7mm; }
-      html table td:last-of-type {
-        color: #1ee494;
-        font-weight: bold;
-        text-align: right; }
+      html table th:first-of-type {
+        color: #1ee494; }
     html table th, html table td {
       text-align: center; }
       html table th:first-of-type, html table td:first-of-type {
         text-align: left; }
-      html table th:last-of-type, html table td:last-of-type {
-        text-align: right; }
-    html table#total {
-      background: #f6f6f6;
-      border-color: #f6f6f6;
-      border-style: solid;
-      border-width: 2cm 3cm;
-      bottom: 0;
-      font-size: 20pt;
-      margin: 0 -3cm;
-      position: absolute;
-      width: 18cm; }
+    

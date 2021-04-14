@@ -11,12 +11,12 @@
     <h1>{{prescription.optic|title}}</h1>
     <aside>
       <address id="from">
-        Weasyprint [ by Kozea ] 107 boulevard de Stalingrad 69100 Villeurbanne
-        City France
+        Jr. San Huliaga del Castillo 273
+        Huaraz, Peru
       </address>
 
       <address id="to">
-        Our awesome developers From all around the world Earth
+        {{prescription.patient_notes}}
       </address>
     </aside>
 
@@ -25,11 +25,13 @@
       <dd>{{prescription.prescription_optic_id}}</dd>
       <dt>Fecha</dt>
       <dd>{{prescription.date}}</dd>
+      <dt>Paciente</dt>
+      <dd>{{prescription.patient.full_name}}</dd>
     </dl>
 
     <table>
       <thead>
-        <th></th>
+        <th>Lejos</th>
         <th>Esfera</th>
         <th>Cilindro</th>
         <th>Eje</th>
@@ -39,34 +41,89 @@
       <tbody>
         <tr>
           <td>OD</td>
-          <td>{{prescription.far_spherical_right|default_if_none:"--"}}</td>
-          <td>{{prescription.far_cylinder_right|default_if_none:"--"}}</td>
-          <td>{{prescription.far_axis_right|default_if_none:"--"}}</td>
+          <td>{{prescription.get_far_spherical_right_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_far_cylinder_right_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_far_axis_right_display|default_if_none:"--"}}</td>
           <td>{{prescription.far_av_right|default_if_none:"--"}}</td>
-          <td>{{prescription.far_dnp_right|default_if_none:"--"}}</td>
+          <td>{{prescription.get_far_dnp_right_display|default_if_none:"--"}}</td>
         </tr>
         <tr>
           <td>OI</td>
-          <td>{{prescription.far_spherical_left|default_if_none:"--"}}</td>
-          <td>{{prescription.far_cylinder_left|default_if_none:"--"}}</td>
-          <td>{{prescription.far_axis_left|default_if_none:"--"}}</td>
+          <td>{{prescription.get_far_spherical_left_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_far_cylinder_left_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_far_axis_left_display|default_if_none:"--"}}</td>
           <td>{{prescription.far_av_left|default_if_none:"--"}}</td>
-          <td>{{prescription.far_dnp_left|default_if_none:"--"}}</td>
+          <td>{{prescription.get_far_dnp_left_display|default_if_none:"--"}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <br>
+    <table>
+      <thead>
+        <th>Intermedio</th>
+        <th>Esfera</th>
+        <th>Cilindro</th>
+        <th>Eje</th>
+        <th>Av.</th>
+        <th>Dnp.</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td>OD</td>
+          <td>{{prescription.get_intermediate_spherical_right_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_intermediate_cylinder_right_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_intermediate_axis_right_display|default_if_none:"--"}}</td>
+          <td>{{prescription.intermediate_av_right|default_if_none:"--"}}</td>
+          <td>{{prescription.get_intermediate_dnp_right_display|default_if_none:"--"}}</td>
+        </tr>
+        <tr>
+          <td>OI</td>
+          <td>{{prescription.get_intermediate_spherical_left_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_intermediate_cylinder_left_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_intermediate_axis_left_display|default_if_none:"--"}}</td>
+          <td>{{prescription.intermediate_av_left|default_if_none:"--"}}</td>
+          <td>{{prescription.get_intermediate_dnp_left_display|default_if_none:"--"}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <br>
+    <table>
+      <thead>
+        <th>Cerca</th>
+        <th>Esfera</th>
+        <th>Cilindro</th>
+        <th>Eje</th>
+        <th>Av.</th>
+        <th>Dnp.</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td>OD</td>
+          <td>{{prescription.get_near_spherical_right_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_near_cylinder_right_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_near_axis_right_display|default_if_none:"--"}}</td>
+          <td>{{prescription.near_av_right|default_if_none:"--"}}</td>
+          <td>{{prescription.get_near_dnp_right_display|default_if_none:"--"}}</td>
+        </tr>
+        <tr>
+          <td>OI</td>
+          <td>{{prescription.get_near_spherical_left_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_near_cylinder_left_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_near_axis_left_display|default_if_none:"--"}}</td>
+          <td>{{prescription.near_av_left|default_if_none:"--"}}</td>
+          <td>{{prescription.get_near_dnp_left_display|default_if_none:"--"}}</td>
         </tr>
       </tbody>
     </table>
 
     <table id="total">
       <thead>
-        <th>Due by</th>
-        <th>Account number</th>
-        <th>Total due</th>
       </thead>
       <tbody>
         <tr>
-          <td>May 10, 2018</td>
-          <td>132 456 789 012</td>
-          <td>€10,545.00</td>
+          <td style='color:#fff'>May 10, 2018</td>
         </tr>
       </tbody>
     </table>
