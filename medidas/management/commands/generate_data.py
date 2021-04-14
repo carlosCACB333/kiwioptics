@@ -13,8 +13,8 @@ from medidas.factories import (
 )
 
 USERNAME = 'pajason2000@gmail.com'
-NUM_PATIENTS = 300
-NUM_PRESCRIPTIONS = 3500
+NUM_PATIENTS = 500
+NUM_PRESCRIPTIONS = 4500
 
 class Command(BaseCommand):
     help = "Generates test data"

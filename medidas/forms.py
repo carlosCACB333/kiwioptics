@@ -34,7 +34,7 @@ class PrescriptionForm(ModelForm):
     class Meta:
         model = Prescription
         exclude = ('optic', 'prescription_optic_id',
-                   'doctor', 'prescription_type')
+                   'doctor', 'prescription_type','time')
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')

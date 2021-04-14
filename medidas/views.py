@@ -358,9 +358,9 @@ class CustomWeasyTemplateResponse(WeasyTemplateResponse):
 
 class PrescriptionPDFPrintView(WeasyTemplateResponseMixin, PrescriptionPDFDetailView):
     # output of PrescriptionView rendered as PDF with hardcoded CSS
-    # pdf_stylesheets = [
-    #     settings.STATIC_ROOT + 'css/app.css',
-    # ]
+    pdf_stylesheets = [
+        'medidas' + settings.STATIC_URL + 'css/prescription.css',
+    ]
     # show pdf in-line (default: True, show download dialog)
     pdf_attachment = False
     # custom response class to configure url-fetcher
