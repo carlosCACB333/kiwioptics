@@ -1,166 +1,131 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Receta-{{prescription.prescription_optic_id}}</title>
-    <link href="{% static 'css/prescription.css' %}" rel="stylesheet" />
-<style>
-    table, th, td, tbody, thead {
-        border-collapse: collapse;
-    }
-    section {
-        line-height: 1.2;
-    }
-    .date {
-        width: 100px;
-    }
-</style>
-      <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-        <link href="{% static 'css/style.css' %}" rel="stylesheet">
-  <!-- Hoja de estilos -->
-</head>
-<body>
-    <div style='color:#fff'>
-        {{prescription.far_spherical_right}}
-    </div>
-    <div class='container-fluid'>
-        <div class='row justify-content-center'>
-            <div class='col'>
-                <b>{{prescription.optic|title}}</b>
-                {% comment %} <b>{{prescription.doctor}}</b> {% endcomment %}
-            </div>
-        </div>
-        <div class='row'>
-            <div class='col'>
-                <b>Paciente:</b> <br>{{prescription.patient}}
-            </div>
-        </div>
-        <div class='row'>
-            <div class='col'>
-                <b>Fecha:</b> <br>{{prescription.date}}
-            </div>
-        </div>
-        <hr>
-        <div class='row'>
-            <div class='col'>
-                <b>Refraccion para lejos</b>
-            </div>
-        </div>
-        <div class='row'>
-            <div class='col'>
-                <div id='lejos'>
-                    <table class="table table-bordered">
-                        <tbody>
-                            <tr class="">
-                                <th class="text-center bg-primary" scope="col"></th>
-                                <th class="text-center" scope="col">Esfera</th>
-                                <th class="text-center" scope="col">Cilindro</th>
-                                <th class="text-center" scope="col">Eje</th>
-                                <th class="text-center" scope="col">Av.</th>
-                                <th class="text-center" scope="col">Dnp.</th>
-                            </tr>
-                            <tr class="">
-                                <th style="vertical-align : middle;text-align:center;" class="text-center px-0" scope="row">OD</th>
-                                <td>18,50</td>
-                                <td>{{prescription.far_cylinder_right|default_if_none:"--"}}</td>
-                                <td>{{prescription.far_axis_right|default_if_none:"--"}}</td>
-                                <td>{{prescription.far_av_right|default_if_none:"--"}}</td>
-                                <td>{{prescription.far_dnp_right|default_if_none:"--"}}</td>
-                            </tr>
-                            <tr class="">
-                                <th style="vertical-align : middle;text-align:center;" class="text-center px-0" scope="row">OI</th>
-                                <td>{{prescription.far_spherical_left|default_if_none:"--"}}</td>
-                                <td>{{prescription.far_cylinder_left|default_if_none:"--"}}</td>
-                                <td>{{prescription.far_axis_left|default_if_none:"--"}}</td>
-                                <td>{{prescription.far_av_left|default_if_none:"--"}}</td>
-                                <td>{{prescription.far_dnp_left|default_if_none:"--"}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class='row'>
-            <div class='col'>
-                <b>Refraccion para intermedio</b>
-            </div>
-        </div>
-        <div class='row'>
-            <div class='col'>
-                <div id='lejos'>
-                    <table class="table table-bordered">
-                        <tbody>
-                            <tr class="">
-                                <th class="text-center bg-primary" scope="col"></th>
-                                <th class="text-center" scope="col">Esfera</th>
-                                <th class="text-center" scope="col">Cilindro</th>
-                                <th class="text-center" scope="col">Eje</th>
-                                <th class="text-center" scope="col">Av.</th>
-                                <th class="text-center" scope="col">Dnp.</th>
-                            </tr>
-                            <tr class="">
-                                <th style="vertical-align : middle;text-align:center;" class="text-center px-0" scope="row">OD</th>
-                                <td>{{prescription.intermediate_spherical_right|default_if_none:"--"}}</td>
-                                <td>{{prescription.intermediate_cylinder_right|default_if_none:"--"}}</td>
-                                <td>{{prescription.intermediate_axis_right|default_if_none:"--"}}</td>
-                                <td>{{prescription.intermediate_av_right|default_if_none:"--"}}</td>
-                                <td>{{prescription.intermediate_dnp_right|default_if_none:"--"}}</td>
-                            </tr>
-                            <tr class="">
-                                <th style="vertical-align : middle;text-align:center;" class="text-center px-0" scope="row">OI</th>
-                                <td>{{prescription.intermediate_spherical_left|default_if_none:"--"}}</td>
-                                <td>{{prescription.intermediate_cylinder_left|default_if_none:"--"}}</td>
-                                <td>{{prescription.intermediate_axis_left|default_if_none:"--"}}</td>
-                                <td>{{prescription.intermediate_av_left|default_if_none:"--"}}</td>
-                                <td>{{prescription.intermediate_dnp_left|default_if_none:"--"}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class='row'>
-            <div class='col'>
-                <b>Refraccion para cerca</b>
-            </div>
-        </div>
-        <div class='row'>
-            <div class='col'>
-                <div id='lejos'>
-                    <table class="table table-bordered">
-                        <tbody>
-                            <tr class="">
-                                <th class="text-center bg-primary" scope="col"></th>
-                                <th class="text-center" scope="col">Esfera</th>
-                                <th class="text-center" scope="col">Cilindro</th>
-                                <th class="text-center" scope="col">Eje</th>
-                                <th class="text-center" scope="col">Av.</th>
-                                <th class="text-center" scope="col">Dnp.</th>
-                            </tr>
-                            <tr class="">
-                                <th style="vertical-align : middle;text-align:center;" class="text-center px-0" scope="row">OD</th>
-                                <td>{{prescription.near_spherical_right|default_if_none:"--"}}</td>
-                                <td>{{prescription.near_cylinder_right|default_if_none:"--"}}</td>
-                                <td>{{prescription.near_axis_right|default_if_none:"--"}}</td>
-                                <td>{{prescription.near_av_right|default_if_none:"--"}}</td>
-                                <td>{{prescription.near_dnp_right|default_if_none:"--"}}</td>
-                            </tr>
-                            <tr class="">
-                                <th style="vertical-align : middle;text-align:center;" class="text-center px-0" scope="row">OI</th>
-                                <td>{{prescription.near_spherical_left|default_if_none:"--"}}</td>
-                                <td>{{prescription.near_cylinder_left|default_if_none:"--"}}</td>
-                                <td>{{prescription.near_axis_left|default_if_none:"--"}}</td>
-                                <td>{{prescription.near_av_left|default_if_none:"--"}}</td>
-                                <td>{{prescription.near_dnp_left|default_if_none:"--"}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</body>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Invoice</title>
+    <meta name="description" content="Invoice demo sample" />
+    <meta name="author" content="Kozea" />
+  </head>
+  <body>
+
+    <h1>{{prescription.optic|title}}</h1>
+    <aside>
+      <address id="from">
+        Jr. San Huliaga del Castillo 273
+        Huaraz, Peru
+      </address>
+
+      <address id="to">
+        {{prescription.patient_notes}}
+      </address>
+    </aside>
+
+    <dl id="informations">
+      <dt>Número</dt>
+      <dd>{{prescription.prescription_optic_id}}</dd>
+      <dt>Fecha</dt>
+      <dd>{{prescription.date}}</dd>
+      <dt>Paciente</dt>
+      <dd>{{prescription.patient.full_name}}</dd>
+    </dl>
+
+    <table>
+      <thead>
+        <th>Lejos</th>
+        <th>Esfera</th>
+        <th>Cilindro</th>
+        <th>Eje</th>
+        <th>Av.</th>
+        <th>Dnp.</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td>OD</td>
+          <td>{{prescription.get_far_spherical_right_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_far_cylinder_right_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_far_axis_right_display|default_if_none:"--"}}</td>
+          <td>{{prescription.far_av_right|default_if_none:"--"}}</td>
+          <td>{{prescription.get_far_dnp_right_display|default_if_none:"--"}}</td>
+        </tr>
+        <tr>
+          <td>OI</td>
+          <td>{{prescription.get_far_spherical_left_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_far_cylinder_left_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_far_axis_left_display|default_if_none:"--"}}</td>
+          <td>{{prescription.far_av_left|default_if_none:"--"}}</td>
+          <td>{{prescription.get_far_dnp_left_display|default_if_none:"--"}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <br>
+    <table>
+      <thead>
+        <th>Intermedio</th>
+        <th>Esfera</th>
+        <th>Cilindro</th>
+        <th>Eje</th>
+        <th>Av.</th>
+        <th>Dnp.</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td>OD</td>
+          <td>{{prescription.get_intermediate_spherical_right_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_intermediate_cylinder_right_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_intermediate_axis_right_display|default_if_none:"--"}}</td>
+          <td>{{prescription.intermediate_av_right|default_if_none:"--"}}</td>
+          <td>{{prescription.get_intermediate_dnp_right_display|default_if_none:"--"}}</td>
+        </tr>
+        <tr>
+          <td>OI</td>
+          <td>{{prescription.get_intermediate_spherical_left_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_intermediate_cylinder_left_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_intermediate_axis_left_display|default_if_none:"--"}}</td>
+          <td>{{prescription.intermediate_av_left|default_if_none:"--"}}</td>
+          <td>{{prescription.get_intermediate_dnp_left_display|default_if_none:"--"}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <br>
+    <table>
+      <thead>
+        <th>Cerca</th>
+        <th>Esfera</th>
+        <th>Cilindro</th>
+        <th>Eje</th>
+        <th>Av.</th>
+        <th>Dnp.</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td>OD</td>
+          <td>{{prescription.get_near_spherical_right_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_near_cylinder_right_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_near_axis_right_display|default_if_none:"--"}}</td>
+          <td>{{prescription.near_av_right|default_if_none:"--"}}</td>
+          <td>{{prescription.get_near_dnp_right_display|default_if_none:"--"}}</td>
+        </tr>
+        <tr>
+          <td>OI</td>
+          <td>{{prescription.get_near_spherical_left_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_near_cylinder_left_display|default_if_none:"--"}}</td>
+          <td>{{prescription.get_near_axis_left_display|default_if_none:"--"}}</td>
+          <td>{{prescription.near_av_left|default_if_none:"--"}}</td>
+          <td>{{prescription.get_near_dnp_left_display|default_if_none:"--"}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <table id="total">
+      <thead>
+      </thead>
+      <tbody>
+        <tr>
+          <td style='color:#fff'>May 10, 2018</td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
 </html>

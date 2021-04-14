@@ -6,12 +6,11 @@ function graficar(labels,data){
         data: {
             labels: labels,
             datasets: [{
-                label: 'Reporte prescripciones',
+                label: 'Prescripciones',
                 data: data,
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(0, 123, 255, .1)',
+                borderColor: 'rgba(0, 123, 255, .5)',
                 borderWidth: 3,
-                borderColor: 'rgb(75, 192, 192)',
             }]
         },
         options: {

@@ -46,7 +46,7 @@
             <td class="text-center px-0">{{patient|truncatechars:25}}</td>
             <td class="text-center px-0">{{patient.dni|default_if_none:'--'|truncatechars:12}}</td>
             <td class="text-center px-0">{{patient.phone|truncatechars:12}}</td>
-            <td class="text-center px-0">{{patient.job|truncatechars:12}}</td>
+            <td class="text-center px-0">{{patient.job|truncatechars:15}}</td>
             <td class="text-center px-0">{{patient.prescription_set.count}}</td>
             <td class="text-center px-0" >
             <button
@@ -81,7 +81,7 @@
                       <th class='text-center px-0'>N°</th>
                       <th class='text-center px-0'>Fecha</th>
                       <th class='text-center px-0'>Total</th>
-                      <th class='text-center px-0' colspan='1'>Opciones</th>
+                      <th class='text-center px-0' colspan='4'>Opciones</th>
                     </tr>
                   </thead>
 
@@ -93,6 +93,9 @@
                       <td class='text-center px-0'>{{prescription.date|date:'d/m/Y'}}</td>
                       <td class='text-center px-0'>S/.{{prescription.get_total}}</td>
                       <td class='text-center px-0'>
+                        <a class='btn btn-primary border border-primary text-primary' href="{% url 'medidas:prescription-pdf' prescription.id %}" class="btn btn-default btn-sm">
+                          <i class="far fa-file-pdf px-1"></i>
+                        </a>
                         <a class='btn btn-primary border border-primary text-primary' href="{% url 'medidas:prescription-detail' prescription.id %}" class="btn btn-default btn-sm">
                           <i class="far fa-eye"></i>
                         </a>

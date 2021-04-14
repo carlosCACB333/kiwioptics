@@ -63,7 +63,7 @@ class OpticUser(models.Model):
     prescription_name = models.CharField(
         "Nombre en la prescripcion", max_length=100)
     optic_name = models.CharField(
-        "Nombre de la optica", max_length=50, null=False)
+        "Nombre de la optica", max_length=30, null=False)
     phone = models.CharField("Celular", max_length=30, blank=True)
     # logo = models.ImageField("Logo", upload_to=None, height_field=None, width_field=None, max_length=None)
 

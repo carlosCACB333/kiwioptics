@@ -1,8 +1,9 @@
 import factory
 from factory.django import DjangoModelFactory
-from factory.fuzzy import FuzzyInteger, FuzzyChoice, FuzzyDecimal
+from factory.fuzzy import FuzzyInteger, FuzzyChoice, FuzzyDecimal, FuzzyDate
 from .models import Prescription, Patient
 import random
+import datetime
 
 class PatientFactory(DjangoModelFactory):
     class Meta:
@@ -19,6 +20,8 @@ class PrescriptionFactory(DjangoModelFactory):
         model = Prescription
 
     patient = factory.SubFactory(PatientFactory)
+    date = FuzzyDate(datetime.date(2008, 1, 1))
+    time = factory.Faker('time')
     far_spherical_right = FuzzyChoice([choice[0] for choice in Prescription.spherical_choices])
     far_cylinder_right = FuzzyChoice([choice[0] for choice in Prescription.cylinder_choices])
     far_axis_right = FuzzyChoice([choice[0] for choice in Prescription.axis_choices])

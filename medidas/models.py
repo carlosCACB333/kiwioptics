@@ -16,7 +16,7 @@ class Patient(models.Model):
     patient_optic_id = models.PositiveIntegerField(blank=True)
     optic = models.ForeignKey(OpticUser, verbose_name="Optica", on_delete=models.CASCADE, null=False)
     full_name = models.CharField("Nombre completo", max_length=100)  
-    dni = models.CharField("Dni",max_length=20, blank=True, null=True)    
+    dni = models.CharField("Dni o Pasaporte",max_length=20, blank=True, null=True)    
     gender = models.CharField("Genero", max_length=20, blank=True, choices=Gender.choices)
     phone = models.CharField("Celular",max_length=30, blank=True)
     job = models.CharField('Ocupacion', max_length=70, blank=True)
@@ -140,7 +140,7 @@ class Prescription(models.Model):
     axis_choices.append(('','--'))
     dip_choices = [(i,f'{i}mm') for i in range(81,40,-1)]
     dip_choices.append(('','--'))
-    dnp_choices = [(decimal.Decimal(i/2),f'{i/2}mm' if i%2==1 else f'{int(i/2)}mm') for i in range(81,40,-1)]
+    dnp_choices = [(decimal.Decimal(f'{i/2}') if i%2==0 else decimal.Decimal(f'{i/2}'),f'{i/2}mm' if i%2==1 else f'{int(i/2)}mm') for i in range(81,40,-1)]
     dnp_choices.append(('','--'))
     add_choices = generateChoices.__func__(1, 25)
     add_choices.append(('','--'))
@@ -156,9 +156,9 @@ class Prescription(models.Model):
     doctor = models.ForeignKey(Account, verbose_name="Doctor", on_delete=models.SET_NULL, blank=True, null=True)
     prescription_optic_id = models.PositiveIntegerField(blank=True)
     prescription_type = models.CharField("Tipo", max_length=50, choices=PrescriptionType.choices, null=True, blank=True)
-    # laboratory = models.ForeignKey(Laboratory, on_delete=models.SET_NULL,verbose_name="Laboratorio", blank=True, null=True)
     date = models.DateField(verbose_name='Fecha', default=now)
-    time = models.TimeField(verbose_name='Hora', auto_now=False, auto_now_add=True)
+    # time = models.TimeField(verbose_name='Hora', auto_now=False, auto_now_add=True)
+    time = models.TimeField(verbose_name='Hora', default=now)
     far_spherical_right = models.DecimalField("Esf. derecho Lejos", max_digits=4, decimal_places=2, blank=True, null=True,choices=spherical_choices)
     far_cylinder_right = models.DecimalField("Cil. derecho Lejos", max_digits=4, decimal_places=2, blank=True, null=True, choices=cylinder_choices)
     far_axis_right = models.PositiveSmallIntegerField("Eje derecho Lejos", validators=[MaxValueValidator(180,'El eje solo permite valores entre 0° y 180°')], blank=True, null=True, choices=axis_choices)

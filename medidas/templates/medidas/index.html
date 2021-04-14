@@ -164,7 +164,7 @@ Optica
 
       {% else %}
       <div class="alert alert-primary text-center" role="alert">
-        <div>La optica aún no tiene empleados. Preciona <strong>Nuevo empleado</strong> para crear un nuevo empleado</div>
+        <div>La optica aún no tiene empleados. Presiona <strong>Nuevo empleado</strong> para crear un nuevo empleado</div>
         <div><a href="{% url 'users:userOfOptic' %}" type="button" class="btn btn-outline-primary border-5"><strong>Nuevo empleado</strong></a></div>
       </div>
       {% endif %}
@@ -232,11 +232,11 @@ Optica
         </label>
      </div>
         <div> 
-          <a href="#" id="id_previus"> <i class="fas fa-chevron-left"></i></a>
-          <input type="button" class="btn btn-primary text-primary mt-1 btn-sm" id="id_current">
-          <input type="button" class="btn btn-primary text-primary mt-1 btn-sm" id="id_current_month">
-          <input type="button" class="btn btn-primary text-primary mt-1 btn-sm" id="id_current_year">
-          <a href="#" id="id_next">  <i class="fas fa-chevron-right"></i></a>
+          <a href="#" id="id_previus" class="btn"> <i class="fas fa-chevron-left"></i></a>
+          <input type="button" class="btn text-primary mt-1 btn-sm" disabled id="id_current">
+          <input type="button" class="btn text-primary mt-1 btn-sm" disabled id="id_current_month">
+          <input type="button" class="btn text-primary mt-1 btn-sm" disabled id="id_current_year">
+          <a href="#" id="id_next" class="btn">  <i class="fas fa-chevron-right"></i></a>
       </div>
     
      

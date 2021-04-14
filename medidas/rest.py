@@ -76,6 +76,7 @@ class ReportPrescriptionCount(ListAPIView):
         actual = self.request.GET.get('current', None)
         option = self.request.GET.get('option', '')
         hoy = datetime.today()
+        optica=self.request.user.get_opticuser()
 
         if(calendar == 'month'):
             self.label = 'Día'
@@ -108,7 +109,7 @@ class ReportPrescriptionCount(ListAPIView):
                         self.current = MESES[12]
                         self.current_year -= 1
 
-            query = Prescription.objects.filter(date__month=list(MESES.keys())[list(MESES.values()).index(self.current)], date__year=self.current_year).annotate(
+            query = Prescription.objects.filter(optic=optica,date__month=list(MESES.keys())[list(MESES.values()).index(self.current)], date__year=self.current_year).annotate(
                 dato=Day('date')).values('dato').annotate(total=Count('date')).order_by('dato')
         elif calendar == 'year':
             self.label = 'Mes'
@@ -123,7 +124,7 @@ class ReportPrescriptionCount(ListAPIView):
                 elif option == 'previus':
                     self.current = int(actual)-1
 
-            query = Prescription.objects.filter(date__year=self.current).annotate(dato=Month(
+            query = Prescription.objects.filter(optic=optica,date__year=self.current).annotate(dato=Month(
                 'date')).values('dato').annotate(total=Count('date')).order_by('dato')
         elif calendar == 'week':
             self.label = 'Día'
@@ -150,7 +151,7 @@ class ReportPrescriptionCount(ListAPIView):
                         self.current = 53
                         self.current_year -= 1
 
-            query = Prescription.objects.filter(date__week=self.current, date__year=self.current_year).annotate(
+            query = Prescription.objects.filter(optic=optica,date__week=self.current, date__year=self.current_year).annotate(
                 dato=Day('date')).values('dato').annotate(total=Count('date')).order_by('dato')
         elif calendar == 'day':
             self.label = 'hora'
@@ -189,7 +190,7 @@ class ReportPrescriptionCount(ListAPIView):
                         self.current = c.monthrange(
                             self.current_year, self.current_month)[1]
 
-            query = Prescription.objects.filter(date__day=self.current, date__year=self.current_year).annotate(dato=Hour(
+            query = Prescription.objects.filter(optic=optica,date__day=self.current, date__year=self.current_year,date__month=self.current_month).annotate(dato=Hour(
                 'time')).values('dato').annotate(total=Count('time')).order_by('dato')
 
         return query

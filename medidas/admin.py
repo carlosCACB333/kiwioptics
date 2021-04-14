@@ -3,24 +3,21 @@ from .models import Prescription, Patient, Crystal, CrystalMaterial, CrystalTrea
 from users.models import Account
 # Register your models here.
 
-admin.site.register(CrystalMaterial)
-admin.site.register(CrystalTreatments)
+# @admin.register(Crystal)
+# class CrystalAdmin(admin.ModelAdmin):
+#     list_display = (
+#         'id',
+#         'crystal_name',
+#         'material',
+#         'get_treatments',
+#         'default_price',
+#         'optic',
+#     )
 
-@admin.register(Crystal)
-class CrystalAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'crystal_name',
-        'material',
-        'get_treatments',
-        'default_price',
-        'optic',
-    )
-
-    def get_treatments(self, obj):
-        return ", ".join([p.name for p in obj.treatments.all()])
+#     def get_treatments(self, obj):
+#         return ", ".join([p.name for p in obj.treatments.all()])
     
-    get_treatments.short_description = 'Tratamientos'
+#     get_treatments.short_description = 'Tratamientos'
 
 
 @admin.register(Patient)
@@ -67,7 +64,7 @@ class PrescriptionAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             "fields": (
-                'patient', 'date', 'price'
+                'patient', 'date',
             ),
         }),
         ('Medidas de Lejos', {
@@ -88,12 +85,17 @@ class PrescriptionAdmin(admin.ModelAdmin):
                 ('near_spherical_left','near_cylinder_left','near_axis_left'),
             ),
         }),
-        ('Otras medidas', {
+        ('Otros', {
             'classes': (
                 'collapse',
             ),
             "fields": (
-                'far_dip','near_dip','intermediate_add','near_add','observation',
+                'intermediate_add','near_add','patient_notes','laboratory_notes','optic_notes'
+            ),
+        }),
+        ('Lunas y monturas', {
+            "fields": (
+                'measure_price', 'crystals','crystals_price','frame','frame_price'
             ),
         }),
     )
