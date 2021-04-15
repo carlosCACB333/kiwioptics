@@ -23,7 +23,7 @@ class PatientForm(ModelForm):
 
     def clean(self):
         cleaned_data = self.cleaned_data
-        if Patient.objects.filter(dni=cleaned_data['dni'], optic=self.request.user.get_opticuser()).exists():
+        if cleaned_data['dni'] and Patient.objects.filter(dni=cleaned_data['dni'], optic=self.request.user.get_opticuser()).exists():
             msg = 'Ya existe un paciente con este dni.'
             self.add_error('dni', ValidationError(msg))
         return cleaned_data

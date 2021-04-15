@@ -15,16 +15,22 @@
  {% block content %}
  <h1 class='display-4'>Lista de pacientes</h1>
   <div class="col-md-12 p-0">
-<form id='search_form' action="">
+<form class="" action="">
   <div class="input-group mb-3">
-    <div class="box" style='width: 600px'>
-      <div class="container-buscador">
-          <span id='btn-search' class="icon"><i class="fa fa-search"></i></span>
-          <input type="search" id="search" placeholder="Nombres o dni" name="q" />
-      </div>
+    <input
+      class="form-control"
+      placeholder="Apellidos, nombres o dni"
+      type="search"
+      name="q"
+      id="search"
+    />
+    <div class="input-group-append">
+      <button class="btn btn-primary text-primary" type="submit" value="Buscar">
+        <i class="fas fa-search"></i> Buscar
+      </button>
+    </div>
   </div>
-  </div>
-</form>
+  </form>
       <table class="table table-hover table-responsive-md">
           <thead class='table-primary'>
             <tr>
@@ -145,7 +151,6 @@
 
                   <button type="submit" name="" class="btn btn-success text-light" onclick="update_patient()" >actualizar</button>
                   <button type="submit" name="prescription_id" class="btn btn-danger text-light" onclick="delete_patient()">Eliminar</button>
-                  <input type="reset" form="prescription_form" value="limpiar datos" class="btn">
                 <button
                   type="button"
                   class="btn btn-secondary"
@@ -153,8 +158,6 @@
                 >
                   Cerrar
                 </button>
-
-
               </div>
             </div>
           </div>

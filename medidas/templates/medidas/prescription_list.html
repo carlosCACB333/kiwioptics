@@ -21,7 +21,7 @@
   {% if messages %} {% for message in messages %}
   <div class="alert alert-{{message.tags}}">{{message}}</div>
   {% endfor %} {% endif %}
-  {% comment %} <form class="" action="">
+  <form class="" action="">
   <div class="input-group mb-3">
     <input
       class="form-control"
@@ -31,23 +31,12 @@
       id="search"
     />
     <div class="input-group-append">
-      <button class="btn btn-primary border border-primary text-primary" type="submit" value="Buscar">
+      <button class="btn btn-primary text-primary" type="submit" value="Buscar">
         <i class="fas fa-search"></i> Buscar
       </button>
     </div>
   </div>
-  </form> {% endcomment %}
-<form id='search_form' action="">
-  <div class="input-group mb-3">
-    <div class="box" style='width: 600px'>
-      <div class="container-buscador">
-          <span id='btn-search' class="icon"><i class="fa fa-search"></i></span>
-          <input type="search" id="search" placeholder="Apellidos, nombres o dni" name="q" />
-      </div>
-  </div>
-  </div>
-</form>
-  
+  </form>
   <div class="row no-gutters">
     <div class="col-12">
       <table class="table table-hover table-responsive-md">
@@ -56,7 +45,7 @@
           <th class="text-center align-middle" scope="col">N°</th>
           <th class="align-middle p-0" scope="col">Fecha</th>
           <th class="align-middle" scope="col">Paciente</th>
-          <th class="align-middle" scope="col">Dni</th>
+          <th class="align-middle" scope="col">Tipo</th>
           <th class="align-middle" scope="col">Total</th>
           <th colspan="4" class="align-middle text-center" scope="col">Opciones</th>
         </tr>
@@ -67,9 +56,14 @@
           <td class="align-middle" >
             {{prescription.date|date:'d/m/Y'}}
           </td>
-          <td class="align-middle" >{{prescription.patient|title|truncatechars:30}}</td>
           <td class="align-middle" >
-            {{prescription.patient.dni|default_if_none:"--"|truncatechars:12}}
+            <form action="{% url 'medidas:patients' %}">
+              <button type='submit' class='btn btn-link'><a>{{prescription.patient|title|truncatechars:30}}</a></button>
+              <input style='display:none' type="search" id="search" name="q" value='{{prescription.patient}}'/>
+            </form>
+          </td>
+          <td class="align-middle" >
+            {{prescription.get_prescription_type_display|default_if_none:"--"|truncatechars:12}}
           </td>
           <td class="align-middle" >
             {% if prescription.get_total is None %}

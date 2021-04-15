@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.timezone import now
+from .custom_functions import isOnlyOneTrue
 from users.models import OpticUser, Account
 import decimal
 from termcolor import colored
@@ -123,6 +124,7 @@ class Prescription(models.Model):
     class PrescriptionType(models.TextChoices):
         MONOFOCAL = 'MONOFOCAL','Monofocal'
         BIFOCAL = 'BIFOCAL','Bifocal'
+        OCCUPATIONAL = 'OCCUPATIONAL','Ocupacional'
         PROGRESSIVE = 'PROGRESSIVE','Progressivo'
 
     @staticmethod
@@ -221,9 +223,20 @@ class Prescription(models.Model):
                 prescription_optic_id = last_prescription.prescription_optic_id + 1
             else:
                 prescription_optic_id = 1
-            self.prescription_optic_id = prescription_optic_id
-        return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
-    
+            self.prescription_optic_id = prescription_optic_id 
+        near = self.has_near_table() or self.near_add is not None
+        intermediate = self.has_intermediate_table() or self.intermediate_add is not None
+        far = self.has_far_table()
+        if isOnlyOneTrue(near, intermediate, far):
+            self.prescription_type = Prescription.PrescriptionType.MONOFOCAL
+        elif near and intermediate and far:
+            self.prescription_type = Prescription.PrescriptionType.PROGRESSIVE
+        elif near and intermediate:
+            self.prescription_type = Prescription.PrescriptionType.OCCUPATIONAL
+        elif (near and far) or (intermediate and far):
+            self.prescription_type = Prescription.PrescriptionType.BIFOCAL
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
     def get_total(self):
         if self.frame_price is None and self.crystals_price is None and self.measure_price is None:
             return None
@@ -244,3 +257,31 @@ class Prescription(models.Model):
             measure_price = self.measure_price
         total = frame_price + crystals_price + measure_price
         return total
+
+    def has_far_table(self):
+        if (self.far_spherical_right is not None or self.far_cylinder_right is not None
+         or self.far_axis_right is not None or self.far_av_right is not None or
+          self.far_dnp_right is not None
+          or self.far_spherical_left is not None or self.far_cylinder_left is not None
+         or self.far_axis_left is not None or self.far_av_left is not None or
+          self.far_dnp_left is not None):
+            return True
+        return False
+    def has_intermediate_table(self):
+        if (self.intermediate_spherical_right is not None or self.intermediate_cylinder_right is not None
+         or self.intermediate_axis_right is not None or self.intermediate_av_right is not None or
+          self.intermediate_dnp_right is not None
+          or self.intermediate_spherical_left is not None or self.intermediate_cylinder_left is not None
+         or self.intermediate_axis_left is not None or self.intermediate_av_left is not None or
+          self.intermediate_dnp_left is not None):
+            return True
+        return False
+    def has_near_table(self):
+        if (self.near_spherical_right is not None or self.near_cylinder_right is not None
+         or self.near_axis_right is not None or self.near_av_right is not None or
+          self.near_dnp_right is not None
+          or self.near_spherical_left is not None or self.near_cylinder_left is not None
+         or self.near_axis_left is not None or self.near_av_left is not None or
+          self.near_dnp_left is not None):
+            return True
+        return False

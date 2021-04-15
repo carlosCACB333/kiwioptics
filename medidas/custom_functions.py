@@ -23,3 +23,11 @@ def django_admin_keyword_search(model, keywords, search_fields):
     result_set = model.objects.filter(all_queries).distinct()
 
     return result_set
+
+def isOnlyOneTrue(*args):
+    result = False
+    for v in args:
+        if result and v:
+            return False
+        result = result or v
+    return result
