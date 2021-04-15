@@ -1,12 +1,9 @@
-
 from django.forms import ModelForm, ModelChoiceField, ModelMultipleChoiceField
 from django.contrib.auth.forms import PasswordResetForm
 from django.core.exceptions import ValidationError
-from .models import Patient, Prescription, Crystal, CrystalTreatments, CrystalMaterial
+from .models import Patient, Prescription, Crystal, CrystalTreatments, CrystalMaterial, Subsidiary
 from termcolor import colored
-
 from users.models import Account
-
 
 class PatientForm(ModelForm):
 
@@ -90,3 +87,15 @@ class CrystalTreatmentsForm(ModelForm):
         self.fields['description'].widget.attrs['rows'] = '3'
         for fname, f in self.fields.items():
             f.widget.attrs['class'] = 'form-control form-control-sm'
+
+class SubsidiaryForm(ModelForm):
+    
+    class Meta:
+        model = Subsidiary
+        exclude = ('optic',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for fname, f in self.fields.items():
+            f.widget.attrs['class'] = 'form-control form-control-sm'
+

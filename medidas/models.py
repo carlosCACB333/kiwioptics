@@ -59,8 +59,9 @@ class DiagnosisChoices(models.TextChoices):
     MACULAR_DEGENERATION = 'MACULAR_DEGENERATION', 'Degeneración macular'
     
 class Subsidiary(models.Model):
-    subsidiary_name = models.CharField("Nombre Sucursal",max_length=50, blank=True)
-    direction = models.CharField("Dirección",max_length=80, blank=True)
+    subsidiary_name = models.CharField("Nombre Sucursal",max_length=30, blank=True)
+    direction = models.CharField("Dirección",max_length=50, blank=True)
+    phone = models.CharField("Telefono", max_length=23, blank=True)
     optic = models.ForeignKey(OpticUser, verbose_name="Optica", on_delete=models.CASCADE, null=False)
 
     class Meta:

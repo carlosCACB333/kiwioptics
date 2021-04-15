@@ -38,11 +38,10 @@
         </div>
       </div>
       <div class="menu list-group-flush">
-        <a href="{% url 'medidas:index' %}" class="list-group-item list-group-item-action p-3 border-0 {% block dashboard %}{% endblock dashboard %}"><i class="fas fa-ellipsis-v"></i><i class="fas fa-ellipsis-v"></i><i class="fas fa-ellipsis-v"></i> Dashboard</a>
+        <a href="{% url 'medidas:index' %}" class="list-group-item list-group-item-action p-3 border-0 {% block dashboard %}{% endblock dashboard %}"><i class="fas fa-ellipsis-v"></i><i class="fas fa-ellipsis-v"></i><i class="fas fa-ellipsis-v"></i> Administracion</a>
         <a href="{% url 'medidas:prescription-add' %}" class="list-group-item list-group-item-action p-3 border-0 {% block prescription-add %}{% endblock prescription-add %}"><i class="fas fa-file-medical"></i> Añadir prescripcion</a>
         <a href="{% url 'medidas:prescriptions' %}" class="list-group-item list-group-item-action p-3 border-0 {% block prescriptions %}{% endblock prescriptions %}"><i class="fas fa-book-medical"></i> Prescripciones</a>
         <a href="{% url 'medidas:patients' %}" class="list-group-item list-group-item-action p-3 border-0 {% block patients %}{% endblock patients %}"><i class="fas fa-blind"></i> Pacientes</a>
-        <a href="{% url 'medidas:patients' %}" class="list-group-item list-group-item-action p-3 border-0 {% block office %}{% endblock office %}"><i class="fas fa-store-alt"></i> Sucursales</a>
         <a href="#crystalsSubMenu" data-toggle='collapse' aria-expanded='false' class="dropdown-toggle list-group-item list-group-item-action p-3 border-0"><i class="fas fa-adjust"></i> Lunas </a>
         <ul class="collapse list-unstyled my-0" id="crystalsSubMenu">
             <li>
@@ -55,7 +54,6 @@
                 <a href="{% url 'medidas:treatments' %}" class='list-group-item list-group-item-action pl-4 p-3 border-0 {% block treatments %}{% endblock treatments %}'>Tratamientos</a>
             </li>
         </ul>
-        <a href="{% url 'users:userOfOptic' %}" class="list-group-item list-group-item-action p-3 border-0 {% block user_of_optic %}{% endblock user_of_optic %}"><i class="fas fa-users"></i>Añadir usuario</a>
       </div>  
     </div>
     <!-- Fin sidebar -->

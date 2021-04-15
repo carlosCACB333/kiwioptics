@@ -9,8 +9,8 @@ from django.views.generic import ListView, UpdateView, TemplateView, CreateView,
 from django.db.models.functions import Concat
 from django.core.serializers import serialize
 from django.core.exceptions import PermissionDenied
-from .forms import PatientForm, PrescriptionForm, CrystalForm, CrystalMaterialForm, CrystalTreatmentsForm
-from .models import Patient, Prescription, DiagnosisChoices, Crystal, CrystalTreatments, CrystalMaterial
+from .forms import PatientForm, PrescriptionForm, CrystalForm, CrystalMaterialForm, CrystalTreatmentsForm, SubsidiaryForm
+from .models import Patient, Prescription, DiagnosisChoices, Crystal, CrystalTreatments, CrystalMaterial, Subsidiary
 from users.models import EmployeeUser
 from users.mixins import OpticPermissionRequiredMixin
 from termcolor import colored
@@ -29,6 +29,13 @@ import ssl
 class IndexView(LoginRequiredMixin, ListView):
     model = EmployeeUser
     template_name = "medidas/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        optic = self.request.user.get_opticuser()
+        context["subsidiary_list"] = Subsidiary.objects.filter(optic=optic)
+        return context
+    
 
 @login_required
 def add_prescription(request):
@@ -379,4 +386,35 @@ class PrescriptionPDFImageView(WeasyTemplateResponseMixin, PrescriptionPDFDetail
         return 'foo-{at}.pdf'.format(
             at=timezone.now().strftime('%Y%m%d-%H%M'),
         )
+
+class SubsidiaryCreateView(LoginRequiredMixin,CreateView):
+    model = Subsidiary
+    template_name = "medidas/subsidiary_add.html"
+    form_class = SubsidiaryForm
+    success_url = reverse_lazy('medidas:index')
+
+    def form_valid(self, form):
+        optic = self.request.user.get_opticuser()
+        form.instance.optic = optic
+        return super().form_valid(form)
+
+class SubsidiaryUpdateView(LoginRequiredMixin,UpdateView):
+    model = Subsidiary
+    template_name = "medidas/subsidiary_add.html"
+    form_class = SubsidiaryForm
+    success_url = reverse_lazy('medidas:index')    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["update"] = True
+        return context
+
+class ModelDeleteView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        pass
+
+
+    
+
+
 
