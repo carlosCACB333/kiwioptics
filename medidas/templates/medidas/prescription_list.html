@@ -74,6 +74,9 @@
           </td>
           <td class="align-middle text-center px-0" >
             <a
+              data-toggle='tooltip'
+              data-placement='top'
+              title='Visualizar en PDF'
               target="_blank"
               class="btn btn-primary border border-primary text-primary"
               href="{% url 'medidas:prescription-pdf' prescription.id %}"
@@ -82,12 +85,18 @@
           </td>
           <td class="align-middle text-center px-0" >
             <a
+              data-toggle='tooltip'
+              data-placement='top'
+              title='Visualizar prescripcion'
               class="btn btn-primary border border-primary text-primary"
               href="{% url 'medidas:prescription-detail' prescription.id %}"
               ><i class="far fa-eye"></i
             ></a>
           </td>
           <td class="align-middle text-center px-0"><a
+              data-toggle='tooltip'
+              data-placement='top'
+              title='Editar Prescripcion'
               class="btn btn-primary border border-primary text-primary"
               href="{% url 'medidas:prescription-update' prescription.id %}"
               ><i class="far fa-edit"></i
@@ -99,7 +108,12 @@
               data-target="#prescription_delete"
               class="btn btn-primary border border-primary text-primary"
             >
+              <div 
+              data-toggle='tooltip'
+              data-placement='top'
+              title='Eliminar prescripcion'>
               <i class="far fa-trash-alt"></i>
+              </div>
             </button></td>
           {% comment %} href="{% url 'medidas:prescription-delete'
           prescription.id %} {% endcomment %}
@@ -195,5 +209,8 @@
       .text("¿Seguro que desea eliminar la Prescripcion N°" + prescription_optic_id + "?");
     modal.find("#prescription_button_id").val(recipient);
   });
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
 </script>
 {% endblock script %}

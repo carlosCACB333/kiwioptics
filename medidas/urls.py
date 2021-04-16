@@ -14,6 +14,7 @@ urlpatterns = [
     path('prescriptions/add/', views.add_prescription, name='prescription-add'),
     path('prescriptions/<int:pk>/', views.prescription_detail, name='prescription-detail'),
     path('prescriptions/<int:pk>/pdf/', views.PrescriptionPDFPrintView.as_view(), name='prescription-pdf'),
+    path('prescriptions/<int:pk>/pdf/test', views.TestView.as_view(), name='prescription-pdf-test'),
     path('prescriptions/<int:pk>/change/', views.prescription_update, name='prescription-update'),
     path('prescriptions/delete/', views.prescription_delete, name='prescription-delete'),
     #crystals
@@ -34,6 +35,7 @@ urlpatterns = [
     #subsidiarys
     path('subsidiarys/add/', views.SubsidiaryCreateView.as_view(), name='subsidiary-add'),
     path('subsidiarys/<int:pk>/change/', views.SubsidiaryUpdateView.as_view(), name='subsidiary-update'),
+    path('subsidiarys/<int:pk>/delete/', views.SubsidiaryDeleteView.as_view(), name='subsidiary-delete'),
     # api rest-framework
     path('api/patientList/', rest.PatientListApiView.as_view(),name='rest-patient-list'),
     path('api/patientCreate/', rest.PatientCreateApiView.as_view(),name='rest-patient-create'),

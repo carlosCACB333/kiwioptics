@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block dashboard %}active{% endblock dashboard %}
+{% block content %}
+<h1 class='display-4'>Confirmar Eliminacion</h1>
+<form method="post">{% csrf_token %}
+    <p>¿Estás seguro que quieres eliminar la sucursal <b>"{{ object }}"</b>?
+    <br>Las prescripciones que tengan esta sucursal no se eliminaran.</p>
+    <button class='btn btn-danger' type="submit" value="Confirm">Confirmar</button>
+</form>
+{% endblock content %}

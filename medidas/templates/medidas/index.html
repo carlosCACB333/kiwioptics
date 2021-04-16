@@ -121,6 +121,7 @@ thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index
               <th colspan="2" class=""><small class="font-weight-bold">Usuarios<small>
                     <div class='' style='position:absolute ;display: inline-block ;top: 5px;'><a
                         href="{% url 'users:userOfOptic' %}"
+                        data-toggle='tooltip' data-placement='top' title='Añadir Usuario'
                         class='circle-sm rounded-circle bg-primary align-self-center d-flex p-0 mx-2'><i
                           style='font-size:1rem'
                           class='fas fa-user-plus text-primary align-self-center mx-auto lead'></i></a></div>
@@ -151,7 +152,7 @@ thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index
                   " class="img-fluid rounded-circle avatar" alt="https://generated.photos/" /></td>
               <td><span class="d-block">{{empleado.account.full_name|truncatechars:25}}</span><small
                   class="text-muted">{{empleado.email}}</small></td>
-              <td class="align-middle"><span class="badge badge-primary text-primary">
+              <td class="align-middle"><span class="badge badge-secondary text-black">
                   {% if empleado.account.is_active %}
                   Activo
                   {% else %}
@@ -159,8 +160,8 @@ thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index
                   {% endif %}
                 </span></td>
               <td class="align-middle">
-                <a href="{% url 'users:userOfOptic' %}?id={{empleado.id}}" class="shadow-hover "><span
-                    class="badge badge-secondary">Editar <i class="icon ion-md-settings ml-2"></i></span></a>
+                <a data-toggle='tooltip' data-placement='top' title='Editar Usuario' href="{% url 'users:userOfOptic' %}?id={{empleado.id}}" class="shadow-hover "><span
+                    class="badge badge-primary text-primary">Editar <i class="icon ion-md-settings ml-2"></i></span></a>
               </td>
             </tr>
 
@@ -264,6 +265,7 @@ thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index
                       <th class=""><small class="font-weight-bold">Sucursales<small>
                             <div class='' style='position:absolute ;display: inline-block ;top: 5px;'><a
                                 href="{% url 'medidas:subsidiary-add' %}"
+                                data-toggle='tooltip' data-placement='top' title='Añadir Sucursal'
                                 class='circle-sm rounded-circle bg-primary align-self-center d-flex p-0 mx-2'><i
                                   style='font-size:1rem'
                                   class='fas fa-plus text-primary align-self-center mx-auto lead'></i></a></div>
@@ -279,8 +281,8 @@ thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index
                         </td>
                         <td class="align-middle"><span class="text-dark"><small>{{subsidiary.phone}}</small></span></td>
                         <td class="align-middle">
-                <a href="{% url 'medidas:subsidiary-update' subsidiary.id %}" class="shadow-hover "><span
-                    class="badge badge-secondary">Editar <i class="icon ion-md-settings ml-2"></i></span></a>
+                <a data-toggle='tooltip' data-placement='top' title='Editar Sucursal' href="{% url 'medidas:subsidiary-update' subsidiary.id %}" class="shadow-hover "><span
+                    class="badge badge-primary text-primary">Editar <i class="icon ion-md-settings ml-2"></i></span></a>
               </td>
                       </tr>
                     {% endfor %}
@@ -373,6 +375,10 @@ thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index
   {% block script %}
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="{% static 'js/graficas.js' %}"></script>
-    
+  <script>
+      $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+  </script>
   {% endblock script %}
     

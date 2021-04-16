@@ -22,7 +22,7 @@
     <br>
     {% if update %}
     <button class='btn btn-primary text-primary border border-primary' type='submit'>Actualizar Sucursal</button>
-    <button class='btn btn-danger text-light border border-dark' type='submit'>Eliminar Sucursal</button>
+    <a href="{% url 'medidas:subsidiary-delete' form.instance.id %} " class='btn btn-danger text-light border border-dark' type='submit'>Eliminar Sucursal</a>
     {% else %}
     <button class='btn btn-primary text-primary border border-primary' type='submit'>Guardar Sucursal</button>
     {% endif %}

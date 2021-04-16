@@ -5,18 +5,21 @@
     <title>Invoice</title>
     <meta name="description" content="Invoice demo sample" />
     <meta name="author" content="Kozea" />
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/prescription.css' %}">
   </head>
   <body>
 
     <h1>{{prescription.optic|title}}</h1>
     <aside>
       <address id="from">
-        Jr. San Huliaga del Castillo 273
-        Huaraz, Peru
+    <b id='subsidiary_name'>{{prescription.subsidiary.subsidiary_name}}</b>
+        {{prescription.subsidiary.direction}}
+        {{prescription.subsidiary.phone}}
       </address>
 
       <address id="to">
-        {{prescription.patient_notes}}
+        {{prescription.doctor.get_optictype.prescription_name}}
       </address>
     </aside>
 
@@ -123,7 +126,13 @@
       </thead>
       <tbody>
         <tr>
-          <td style='color:#fff'>May 10, 2018</td>
+          <td class='add'>Add. cerca: <b>{{prescription.get_near_add_display|default_if_none:"--"}}</b> Add. intermedio: <b>{{prescription.get_intermediate_add_display|default_if_none:"--"}}</b></td>
+        </tr>
+        <tr>
+          <td>Diagnostico: <b>{{prescription.diagnosis}}</b></td>
+        </tr>
+        <tr>
+          <td>Observaciones: <b>{{prescription.patient_notes}}</b></td>
         </tr>
       </tbody>
     </table>

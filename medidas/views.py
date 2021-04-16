@@ -5,7 +5,7 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
-from django.views.generic import ListView, UpdateView, TemplateView, CreateView, TemplateView, DetailView
+from django.views.generic import ListView, UpdateView, TemplateView, CreateView, TemplateView, DetailView, DeleteView
 from django.db.models.functions import Concat
 from django.core.serializers import serialize
 from django.core.exceptions import PermissionDenied
@@ -25,6 +25,9 @@ from django_weasyprint.utils import django_url_fetcher
 from django.utils import timezone
 import functools
 import ssl
+
+class TestView(TemplateView):
+    template_name = "medidas/prescription_pdf.html"
 
 class IndexView(LoginRequiredMixin, ListView):
     model = EmployeeUser
@@ -409,9 +412,9 @@ class SubsidiaryUpdateView(LoginRequiredMixin,UpdateView):
         context["update"] = True
         return context
 
-class ModelDeleteView(LoginRequiredMixin, View):
-    def post(self, request, *args, **kwargs):
-        pass
+class SubsidiaryDeleteView(LoginRequiredMixin, DeleteView):
+    model = Subsidiary
+    success_url = reverse_lazy('medidas:index')
 
 
     

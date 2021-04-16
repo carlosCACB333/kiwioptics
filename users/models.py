@@ -40,7 +40,7 @@ class Account(AbstractUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
-    def get_optic_type(self):
+    def get_optictype(self):
         opticuser = None
         if self.user_type == str(Account.Types.Optic):
             opticuser = self.opticuser

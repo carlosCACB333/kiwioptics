@@ -236,6 +236,8 @@ class Prescription(models.Model):
             self.prescription_type = Prescription.PrescriptionType.OCCUPATIONAL
         elif (near and far) or (intermediate and far):
             self.prescription_type = Prescription.PrescriptionType.BIFOCAL
+        else:
+            self.prescription_type = None
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
     def get_total(self):
