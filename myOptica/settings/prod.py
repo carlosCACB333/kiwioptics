@@ -6,14 +6,9 @@ DEBUG = True
 ALLOWED_HOSTS = ['https://kiwioptics.herokuapp.com/']
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('PROD_DB_NAME'),
-        'USER': config('PROD_DB_USER'),
-        'PASSWORD': config('PROD_DB_PASSWORD'),
-        'HOST': config('PROD_DB_HOST'),
-        'PORT': config('PROD_DB_PORT'),
-    }
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL')
+    )
 }
 
 MIDDLEWARE = [
