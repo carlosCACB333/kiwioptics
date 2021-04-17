@@ -1,1 +1,1 @@
-web: gunicorn myOptica.wsgi
+web: gunicorn myOptica.wsgi --log-file -

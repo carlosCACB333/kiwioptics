@@ -27,4 +27,7 @@ MIDDLEWARE = [
 
 STATIC_ROOT = BASE_DIR.joinpath('staticfiles')
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (BASE_DIR, 'static')
+STATICFILES_DIRS = (
+    BASE_DIR.joinpath('static'),
+)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
