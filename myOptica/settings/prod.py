@@ -3,7 +3,7 @@ import dj_database_url
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://kiwioptics.herokuapp.com']
+ALLOWED_HOSTS = ['kiwioptics.herokuapp.com']
 
 DATABASES = {
     'default': dj_database_url.config(
