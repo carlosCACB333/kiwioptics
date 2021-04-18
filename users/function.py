@@ -2,7 +2,7 @@ import random
 import string
 from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
-from myOptica import settings
+from django.conf import settings
 
 
 def create_mail(user_mail, subject, template_name, context):
