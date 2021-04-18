@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'rest_framework',
     'rest_framework.authtoken',
+    'storages',
 ]
 
 ROOT_URLCONF = 'myOptica.urls'
