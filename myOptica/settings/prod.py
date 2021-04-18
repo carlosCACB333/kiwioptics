@@ -3,7 +3,7 @@ import dj_database_url
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['kiwioptics.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 DATABASES = {
     'default': dj_database_url.config(
@@ -31,6 +31,10 @@ STATICFILES_DIRS = (
     BASE_DIR.joinpath('static'),
 )
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+AWS_STORAGE_BUCKET_NAME = 'kiwioptics'
+AWS_ACCESS_KEY_ID = 'AKIASLIJ76VBKZERZK47'
+AWS_SECRET_ACCESS_KEY = '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'
+S3_BUCKET_NAME = 'kiwioptics'
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
