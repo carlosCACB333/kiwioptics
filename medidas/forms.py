@@ -49,7 +49,11 @@ class PrescriptionForm(ModelForm):
         self.request = kwargs.pop('request')
         super(PrescriptionForm, self).__init__(*args, **kwargs)
         self.fields['crystals'].queryset = Crystal.objects.filter(
-            optic=self.request.user.get_opticuser())
+            optic=self.request.user.get_opticuser()
+        )
+        self.fields['subsidiary'].queryset = Subsidiary.objects.filter(
+            optic=self.request.user.get_opticuser()
+        )
         for fname, f in self.fields.items():
             f.widget.attrs['class'] = 'form-control form-control-sm'
             f.widget.attrs['form'] = 'prescription_form'
