@@ -27,7 +27,15 @@ medica {% endblock title %}
     <option value="{{value}}"></option>
 {% endfor %}
 </datalist>
-<h1 class='display-4'>Añadir Prescripción</h1>
+{% if detail %}
+<h1 class='display-4'>Prescripción {{prescription_form.instance.prescription_optic_id}}</h1>
+{% else %}
+    {% if update %}
+    <h1 class='display-4'>Modificar Prescripción {{prescription_form.instance.prescription_optic_id}}</h1>
+    {% else %}
+    <h1 class='display-4'>Añadir Prescripción</h1>
+    {% endif %}
+{% endif %}
 <div class="row no-gutters">
     <div class="col-lg-3 px-0 pr-lg-2">
         <div class="card mx-0 mb-3">
@@ -144,15 +152,15 @@ medica {% endblock title %}
                     <div class='accordion'>
                         <ul class="list-group list-group-flush">
                             <button class="list-group-item btn btn-primary border border-primary text-primary text-left" data-toggle='collapse' data-target='#lejos' aria-expanded='true' aria-controls='lejos'>Mostrar / esconder Lejos</button>
-                            <div id='lejos' class='collapse show'>
+                            <div id='lejos' class="collapse {% if detail or update %}{% if prescription_form.instance.has_far_table %}show{% endif %}{% else %}show{% endif %}">
                             {% include 'medidas/far_table.html' %}
                             </div>
                             <button class="list-group-item btn btn-primary border border-primary text-primary text-left" data-toggle='collapse' data-target='#intermedio' aria-expanded='true' aria-controls='intermedio'>Mostrar / esconder Intermedio</button>
-                            <div id='intermedio' class='collapse'>
+                            <div id='intermedio' class='collapse {% if prescription_form.instance.has_intermediate_table %}show{% endif %}'>
                             {% include 'medidas/intermediate_table.html' %}
                             </div>
                             <button class="list-group-item btn btn-primary border border-primary text-primary text-left" data-toggle='collapse' data-target='#cerca' aria-expanded='true' aria-controls='cerca'>Mostrar / esconder Cerca</button>
-                            <div id='cerca' class='collapse'>
+                            <div id='cerca' class='collapse {% if prescription_form.instance.has_near_table %}show{% endif %}'>
                             {% include 'medidas/near_table.html' %}
                             </div>
                         </ul>

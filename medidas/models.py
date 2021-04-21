@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.utils.timezone import now
+from django.utils import timezone
 from .custom_functions import isOnlyOneTrue
 from users.models import OpticUser, Account
 import decimal
@@ -154,14 +154,14 @@ class Prescription(models.Model):
     # print(colored(add_choices,'green'))
 
     optic = models.ForeignKey(OpticUser, verbose_name="Optica", on_delete=models.CASCADE, null=False)
+    is_dip = models.BooleanField('Dip o Dnp')
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, verbose_name="Paciente")
     subsidiary = models.ForeignKey(Subsidiary, on_delete=models.SET_NULL, verbose_name="Sucursal", blank=True, null=True)
     doctor = models.ForeignKey(Account, verbose_name="Doctor", on_delete=models.SET_NULL, blank=True, null=True)
     prescription_optic_id = models.PositiveIntegerField(blank=True)
     prescription_type = models.CharField("Tipo", max_length=50, choices=PrescriptionType.choices, null=True, blank=True)
-    date = models.DateField(verbose_name='Fecha', default=now)
-    # time = models.TimeField(verbose_name='Hora', auto_now=False, auto_now_add=True)
-    time = models.TimeField(verbose_name='Hora', default=now)
+    date = models.DateField(verbose_name='Fecha', default=timezone.now)
+    time = models.TimeField(verbose_name='Hora', default=timezone.now)
     far_spherical_right = models.DecimalField("Esf. derecho Lejos", max_digits=4, decimal_places=2, blank=True, null=True,choices=spherical_choices)
     far_cylinder_right = models.DecimalField("Cil. derecho Lejos", max_digits=4, decimal_places=2, blank=True, null=True, choices=cylinder_choices)
     far_axis_right = models.PositiveSmallIntegerField("Eje derecho Lejos", validators=[MaxValueValidator(180,'El eje solo permite valores entre 0° y 180°')], blank=True, null=True, choices=axis_choices)

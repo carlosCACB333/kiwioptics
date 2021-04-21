@@ -34,7 +34,7 @@
     <div id="sidebar-container" class="bg-light border-right">
       <div class="logo">
         <div>
-        <h6 style='width:10px' class="font-weight-bold mb-0 overflow-auto">{{user.get_opticuser|upper|truncatechars:20}}</h6>
+        <h6 style='width:10px' class="font-weight-bold mb-0 overflow-auto">{{user.get_opticuser|upper|truncatechars:30}}</h6>
         </div>
       </div>
       <div class="menu list-group-flush">
@@ -71,6 +71,9 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+              <li class="nav-item">
+                <a class="nav-link text-dark" href="#"><i style='font-size:1.3em;' class="pt-2 fas fa-cog"></i></a>
+              </li>
               <li class="nav-item dropdown">
                 <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarDropdown" role="button"
                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

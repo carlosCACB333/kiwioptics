@@ -12,7 +12,7 @@ from medidas.factories import (
     PrescriptionFactory,
 )
 
-USERNAME = 'pajason2000@gmail.com'
+USERNAME = 'solanito2000@hotmail.com'
 NUM_PATIENTS = 500
 NUM_PRESCRIPTIONS = 5000
 
@@ -40,7 +40,7 @@ class Command(BaseCommand):
         for _ in range(NUM_PRESCRIPTIONS):
             patient = random.choice(patients)
             try:
-                prescription = PrescriptionFactory(optic=optic,patient=patient)
+                prescription = PrescriptionFactory(optic=optic,patient=patient, is_dip=True)
                 print(f'{_/NUM_PRESCRIPTIONS*100}%')
             except ValidationError:
                 print('ValidationError')

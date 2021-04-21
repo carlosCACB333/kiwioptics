@@ -2,9 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User, AbstractUser, PermissionsMixin, AbstractBaseUser
 from .managers import CustomUserManager, EmployeeUserManager
 
-from .signals import verify_email
-from django.db.models.signals import post_save
-
 
 class Account(AbstractUser, PermissionsMixin):
     class Types(models.TextChoices):
@@ -94,5 +91,14 @@ class EmployeeUser(models.Model):
     def __str__(self):
         return str(self.account)
 
-#coneect signals
-post_save.connect(verify_email,Account)
+class Configuration(models.Model):
+
+    account = models.OneToOneField(Account, on_delete=models.CASCADE)
+    is_dip = models.BooleanField('Dip o Dnp', default=True)
+
+    class Meta:
+        verbose_name = "Configuración"
+        verbose_name_plural = "Configuraciones"
+
+    def __str__(self):
+        return str(self.is_dip)

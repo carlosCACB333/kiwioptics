@@ -1,29 +1,20 @@
 @charset "UTF-8";
-@page {
-  margin: 1.5cm;
-  @bottom-left {
-    color: #4ca2ff;
-    font-family: Arial;
-    content: '♥ Gracias!'; }
-  @bottom-right {
-    color: #a9a;
-    content: 'community@kozea.fr | +33 4 78 84 19 28 | community.kozea.fr';
-    font-family: Arial;
-    font-size: 9pt; } }
+
 
 html {
   font-family: Arial;
   color: #14213d;
   font-size: 11pt;
-  line-height: 1.6; }
+  line-height: 1.2; }
   html body {
     margin: 0; }
   html h1 {
+    text-align: center;
     color: #4ca2ff;
     font-family: Arial;
-    font-size: 40pt;
+    font-size: 30pt;
     padding: 0;
-    margin: 0; }
+    margin: 0;}
   html aside {
     display: flex;
     margin: 0em 0 3em; }

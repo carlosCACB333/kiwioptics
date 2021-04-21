@@ -19,7 +19,7 @@ from django.http import Http404
 from termcolor import colored
 
 from .forms import *
-from .models import Account, OpticUser, EmployeeUser
+from .models import Account, OpticUser, EmployeeUser, Configuration
 from .mixins import OpticPermitMixin, OpticPermissionRequiredMixin
 from .serializer import LoginSocialSerializer
 
@@ -328,3 +328,4 @@ class PasswordResetConfirmView2(PasswordResetConfirmView):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
