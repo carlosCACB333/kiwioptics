@@ -13,10 +13,10 @@
     <form action="{% url 'users:opticUpdate' user.get_opticuser.id %}" method="POST" id="form_optic_user_update">
         {% csrf_token %}
 
-        <h1>Datos de tu cuenta</h1>
+        <h1>Tus Datos</h1>
         <div class="form-row">
             <div class="col-md-12 mb-3">
-                <label for="validationDefault02">Nombre de usuario</label>
+                <label for="validationDefault02">Nombre de usuario:</label>
                 <div class="form-control"> {{user.get_opticuser.account.username}}</div> 
                 <div class='col-12 invalid-feedback d-block'>
                     {% for error in form_change_account.username.errors %} {{error}} {% endfor %}
@@ -25,7 +25,7 @@
 
         </div><div class="form-row">
             <div class="col-md-12 mb-3">
-                <label for="validationDefault02">Nombre y Apellidos del dueño
+                <label for="validationDefault02">{{ form_change_account.full_name.label_tag }}
                 </label>
                 {{ form_change_account.full_name }}
                 <div class='col-12 invalid-feedback d-block'>
@@ -35,33 +35,34 @@
 
         </div>
 
-        <h2>Datos de tu optica</h2>
+        
 
         <div class="form-row">
-            <div class="col-md-12 mb-3">
-                <label for="validationDefault02">Nombre en la prescripcion</label>
+            <div class="col-md-6 mb-3">
+                <label for="validationDefault02">{{form.prescription_name.label_tag}}</label>
                 {{ form.prescription_name }}
                 <div class='col-12 invalid-feedback d-block'>
                     {% for error in form.prescription_name.errors %} {{error}} {% endfor %}
                 </div>
             </div>
-
-        </div>
-        <div class="form-row">
             <div class="col-md-6 mb-3">
-                <label for="validationDefault01">Nombre de la optica</label>
-                {{form.optic_name}}
-                <div class='col-12 invalid-feedback d-block'>
-                    {% for error in form.optic_name.errors %} {{error}} {% endfor %}
-                </div>
-            </div>
-            <div class="col-md-6 mb-3">
-                <label for="validationDefault02">celular</label>
+                <label for="validationDefault02">{{form.phone.label_tag}}</label>
                 {{form.phone}}
                 <div class='col-12 invalid-feedback d-block'>
                     {% for error in form.phone.errors %} {{error}} {% endfor %}
                 </div>
             </div>
+        </div>
+        <h2>Datos de tu optica</h2>
+        <div class="form-row">
+            <div class="col-md-12 mb-3">
+                <label for="validationDefault01">{{form.optic_name.label_tag}}</label>
+                {{form.optic_name}}
+                <div class='col-12 invalid-feedback d-block'>
+                    {% for error in form.optic_name.errors %} {{error}} {% endfor %}
+                </div>
+            </div>
+            
         </div>
         <div class="form-row">
             <div class="col-md-12 mb-3">

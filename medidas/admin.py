@@ -64,7 +64,7 @@ class PrescriptionAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             "fields": (
-                'patient', 'date',
+                'patient', 'date', 'doctor',
             ),
         }),
         ('Medidas de Lejos', {

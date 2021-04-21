@@ -15,16 +15,22 @@
  {% block content %}
  <h1 class='display-4'>Lista de pacientes</h1>
   <div class="col-md-12 p-0">
-<form id='search_form' action="">
+<form class="" action="">
   <div class="input-group mb-3">
-    <div class="box" style='width: 600px'>
-      <div class="container-buscador">
-          <span id='btn-search' class="icon"><i class="fa fa-search"></i></span>
-          <input type="search" id="search" placeholder="Nombres o dni" name="q" />
-      </div>
+    <input
+      class="form-control"
+      placeholder="Apellidos, nombres o dni"
+      type="search"
+      name="q"
+      id="search"
+    />
+    <div class="input-group-append">
+      <button class="btn btn-primary text-primary" type="submit" value="Buscar">
+        <i class="fas fa-search"></i> Buscar
+      </button>
+    </div>
   </div>
-  </div>
-</form>
+  </form>
       <table class="table table-hover table-responsive-md">
           <thead class='table-primary'>
             <tr>
@@ -56,11 +62,13 @@
               class="btn btn-primary border border-primary text-primary"
               onclick="get_patient('{% url 'medidas:rest-patient-detail' patient.id %}')"
             >
-              <i class="far fa-eye"></i>
+              <div data-toggle='tooltip' data-placement='top' title='Visualizar paciente'>
+                <i class="far fa-eye"></i>
+              </div>
             </button>
           </td>
             <td class='text-center px-0'>
-              <a href='{% url 'medidas:patient-add' patient.id %}' class='btn btn-primary border border-primary text-primary'>
+              <a data-toggle='tooltip' data-placement='top' title='Añadir nueva prescripcion' href='{% url 'medidas:patient-add' patient.id %}' class='btn btn-primary border border-primary text-primary'>
                 <i class="fas fa-file-medical"></i>
               </a>
             </td>
@@ -68,7 +76,9 @@
               <button data-toggle="collapse"
             data-target="#patient{{forloop.counter}}"
             class="btn btn-primary border border-primary text-primary accordion-toggle">
-                <i style='transform: rotate(180deg);' class="fas fa-chevron-up"></i>
+                <div data-toggle='tooltip' data-placement='top' title='Visualizar prescripciones'>
+                  <i style='transform: rotate(180deg);' class="fas fa-chevron-up"></i>
+                </div>
               </button>
             </td>
           </tr>
@@ -93,13 +103,24 @@
                       <td class='text-center px-0'>{{prescription.date|date:'d/m/Y'}}</td>
                       <td class='text-center px-0'>S/.{{prescription.get_total}}</td>
                       <td class='text-center px-0'>
-                        <a class='btn btn-primary border border-primary text-primary' href="{% url 'medidas:prescription-pdf' prescription.id %}" class="btn btn-default btn-sm">
+                        <a
+                        data-toggle='tooltip'
+                        data-placement='top'
+                        title = 'Visualizar en PDF' 
+                        class='btn btn-primary border border-primary text-primary' href="{% url 'medidas:prescription-pdf' prescription.id %}" class="btn btn-default btn-sm">
                           <i class="far fa-file-pdf px-1"></i>
                         </a>
-                        <a class='btn btn-primary border border-primary text-primary' href="{% url 'medidas:prescription-detail' prescription.id %}" class="btn btn-default btn-sm">
+                        <a 
+                          data-toggle='tooltip'
+                          data-placement='top'
+                          title='Visualizar Prescripcion' 
+                          class='btn btn-primary border border-primary text-primary' href="{% url 'medidas:prescription-detail' prescription.id %}" class="btn btn-default btn-sm">
                           <i class="far fa-eye"></i>
                         </a>
                         <a
+                          data-toggle='tooltip'
+                          data-placement='top'
+                          title='Editar Prescripcion'                        
               class="btn btn-primary border border-primary text-primary"
               href="{% url 'medidas:prescription-update' prescription.id %}"
               ><i class="far fa-edit"></i
@@ -111,7 +132,11 @@
               data-target="#prescription_delete"
               class="btn btn-primary border border-primary text-primary"
             >
-              <i class="far fa-trash-alt"></i>
+              <div        data-toggle='tooltip'
+                          data-placement='top'
+                          title='Eliminar Prescripcion'>
+                <i class="far fa-trash-alt"></i>
+              </div>
             </button>
                     </tr>
                     {% endfor %}
@@ -145,7 +170,6 @@
 
                   <button type="submit" name="" class="btn btn-success text-light" onclick="update_patient()" >actualizar</button>
                   <button type="submit" name="prescription_id" class="btn btn-danger text-light" onclick="delete_patient()">Eliminar</button>
-                  <input type="reset" form="prescription_form" value="limpiar datos" class="btn">
                 <button
                   type="button"
                   class="btn btn-secondary"
@@ -153,8 +177,6 @@
                 >
                   Cerrar
                 </button>
-
-
               </div>
             </div>
           </div>
@@ -247,6 +269,9 @@
       .text("¿Seguro que desea eliminar la Prescripcion N°" + prescription_optic_id + "?");
     modal.find("#prescription_button_id").val(recipient);
   });
+    $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
 </script>
 {% load static%}
 <script src="{% static 'js/app-patients.js' %}"></script>

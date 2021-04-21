@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.utils.timezone import now
+from django.utils import timezone
+from .custom_functions import isOnlyOneTrue
 from users.models import OpticUser, Account
 import decimal
 from termcolor import colored
@@ -58,8 +59,9 @@ class DiagnosisChoices(models.TextChoices):
     MACULAR_DEGENERATION = 'MACULAR_DEGENERATION', 'Degeneración macular'
     
 class Subsidiary(models.Model):
-    subsidiary_name = models.CharField("Nombre Sucursal",max_length=50, blank=True)
-    direction = models.CharField("Dirección",max_length=80, blank=True)
+    subsidiary_name = models.CharField("Nombre Sucursal",max_length=30, blank=True)
+    direction = models.CharField("Dirección",max_length=50, blank=True)
+    phone = models.CharField("Telefono", max_length=23, blank=True)
     optic = models.ForeignKey(OpticUser, verbose_name="Optica", on_delete=models.CASCADE, null=False)
 
     class Meta:
@@ -123,6 +125,7 @@ class Prescription(models.Model):
     class PrescriptionType(models.TextChoices):
         MONOFOCAL = 'MONOFOCAL','Monofocal'
         BIFOCAL = 'BIFOCAL','Bifocal'
+        OCCUPATIONAL = 'OCCUPATIONAL','Ocupacional'
         PROGRESSIVE = 'PROGRESSIVE','Progressivo'
 
     @staticmethod
@@ -151,14 +154,14 @@ class Prescription(models.Model):
     # print(colored(add_choices,'green'))
 
     optic = models.ForeignKey(OpticUser, verbose_name="Optica", on_delete=models.CASCADE, null=False)
+    is_dip = models.BooleanField('Dip o Dnp')
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, verbose_name="Paciente")
     subsidiary = models.ForeignKey(Subsidiary, on_delete=models.SET_NULL, verbose_name="Sucursal", blank=True, null=True)
     doctor = models.ForeignKey(Account, verbose_name="Doctor", on_delete=models.SET_NULL, blank=True, null=True)
     prescription_optic_id = models.PositiveIntegerField(blank=True)
     prescription_type = models.CharField("Tipo", max_length=50, choices=PrescriptionType.choices, null=True, blank=True)
-    date = models.DateField(verbose_name='Fecha', default=now)
-    # time = models.TimeField(verbose_name='Hora', auto_now=False, auto_now_add=True)
-    time = models.TimeField(verbose_name='Hora', default=now)
+    date = models.DateField(verbose_name='Fecha', default=timezone.now)
+    time = models.TimeField(verbose_name='Hora', default=timezone.now)
     far_spherical_right = models.DecimalField("Esf. derecho Lejos", max_digits=4, decimal_places=2, blank=True, null=True,choices=spherical_choices)
     far_cylinder_right = models.DecimalField("Cil. derecho Lejos", max_digits=4, decimal_places=2, blank=True, null=True, choices=cylinder_choices)
     far_axis_right = models.PositiveSmallIntegerField("Eje derecho Lejos", validators=[MaxValueValidator(180,'El eje solo permite valores entre 0° y 180°')], blank=True, null=True, choices=axis_choices)
@@ -221,9 +224,22 @@ class Prescription(models.Model):
                 prescription_optic_id = last_prescription.prescription_optic_id + 1
             else:
                 prescription_optic_id = 1
-            self.prescription_optic_id = prescription_optic_id
-        return super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
-    
+            self.prescription_optic_id = prescription_optic_id 
+        near = self.has_near_table() or self.near_add is not None
+        intermediate = self.has_intermediate_table() or self.intermediate_add is not None
+        far = self.has_far_table()
+        if isOnlyOneTrue(near, intermediate, far):
+            self.prescription_type = Prescription.PrescriptionType.MONOFOCAL
+        elif near and intermediate and far:
+            self.prescription_type = Prescription.PrescriptionType.PROGRESSIVE
+        elif near and intermediate:
+            self.prescription_type = Prescription.PrescriptionType.OCCUPATIONAL
+        elif (near and far) or (intermediate and far):
+            self.prescription_type = Prescription.PrescriptionType.BIFOCAL
+        else:
+            self.prescription_type = None
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
     def get_total(self):
         if self.frame_price is None and self.crystals_price is None and self.measure_price is None:
             return None
@@ -244,3 +260,31 @@ class Prescription(models.Model):
             measure_price = self.measure_price
         total = frame_price + crystals_price + measure_price
         return total
+
+    def has_far_table(self):
+        if (self.far_spherical_right is not None or self.far_cylinder_right is not None
+         or self.far_axis_right is not None or self.far_av_right is not None or
+          self.far_dnp_right is not None
+          or self.far_spherical_left is not None or self.far_cylinder_left is not None
+         or self.far_axis_left is not None or self.far_av_left is not None or
+          self.far_dnp_left is not None):
+            return True
+        return False
+    def has_intermediate_table(self):
+        if (self.intermediate_spherical_right is not None or self.intermediate_cylinder_right is not None
+         or self.intermediate_axis_right is not None or self.intermediate_av_right is not None or
+          self.intermediate_dnp_right is not None
+          or self.intermediate_spherical_left is not None or self.intermediate_cylinder_left is not None
+         or self.intermediate_axis_left is not None or self.intermediate_av_left is not None or
+          self.intermediate_dnp_left is not None):
+            return True
+        return False
+    def has_near_table(self):
+        if (self.near_spherical_right is not None or self.near_cylinder_right is not None
+         or self.near_axis_right is not None or self.near_av_right is not None or
+          self.near_dnp_right is not None
+          or self.near_spherical_left is not None or self.near_cylinder_left is not None
+         or self.near_axis_left is not None or self.near_av_left is not None or
+          self.near_dnp_left is not None):
+            return True
+        return False

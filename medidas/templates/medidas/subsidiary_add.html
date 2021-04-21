@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block dashboard %}active{% endblock dashboard %}
+{% block content %}
+{% if update %}
+<h1 class='display-4'>Modificar Sucursal</h1>
+{% else %}
+<h1 class='display-4'>Añadir Sucursal</h1>
+{% endif %}
+<form action="" method='POST'>{% csrf_token %}
+    {% for field in form %}
+      {{field.label}}
+      {% if field.errors %}
+          {{field|attr:"class:form-control form-control-sm is-invalid"}}
+          <div id="{{ field.id_for_label }}" class="invalid-feedback">
+          {{field.errors}}
+          </div>
+      {% else %}
+          {{field}}
+      {% endif %}    
+    {% endfor %}
+    <br>
+    {% if update %}
+    <button class='btn btn-primary text-primary border border-primary' type='submit'>Actualizar Sucursal</button>
+    <a href="{% url 'medidas:subsidiary-delete' form.instance.id %} " class='btn btn-danger text-light border border-dark' type='submit'>Eliminar Sucursal</a>
+    {% else %}
+    <button class='btn btn-primary text-primary border border-primary' type='submit'>Guardar Sucursal</button>
+    {% endif %}
+</form>
+{% endblock content %}

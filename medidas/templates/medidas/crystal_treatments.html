@@ -35,7 +35,7 @@
           <th class="text-center align-middle p-auto" >{{forloop.counter}}</th>
           <td class="align-middle">{{treatment.treatment_name|title}}</td>
           <td class="align-middle"><div style='overflow:auto; max-height: 100px; word-wrap: break-word; max-width:55vw'>{{treatment.description}}</div></td>
-          <td class="align-middle text-center px-0"><a
+          <td class="align-middle text-center px-0"><a data-toggle='tooltip' data-placement='top' title='Editar Tratamiento'
               class="btn btn-primary text-primary border border-primary"
               href="{% url 'medidas:treatment-update' treatment.id%}"
               ><i class="far fa-edit"></i
@@ -47,7 +47,9 @@
               data-target="#treatment_delete"
               class="btn btn-primary border border-primary text-primary"
             >
-              <i class="far fa-trash-alt"></i>
+              <div data-toggle='tooltip' data-placement='top' title='Eliminar Tratamiento'>
+                <i class="far fa-trash-alt"></i>
+              </div>
             </button></td>
         </tr>
         {% endfor %}
@@ -110,5 +112,8 @@
       .text("¿Seguro que desea eliminar el tratamiento N°" + treatment_optic_id + "?");
     modal.find("#treatment_button_id").val(recipient);
   });
+      $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
 </script>
 {% endblock script %}

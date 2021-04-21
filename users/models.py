@@ -2,9 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User, AbstractUser, PermissionsMixin, AbstractBaseUser
 from .managers import CustomUserManager, EmployeeUserManager
 
-from .signals import verify_email
-from django.db.models.signals import post_save
-
 
 class Account(AbstractUser, PermissionsMixin):
     class Types(models.TextChoices):
@@ -40,7 +37,7 @@ class Account(AbstractUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
-    def get_optic_type(self):
+    def get_optictype(self):
         opticuser = None
         if self.user_type == str(Account.Types.Optic):
             opticuser = self.opticuser
@@ -64,7 +61,7 @@ class OpticUser(models.Model):
         "Nombre en la prescripcion", max_length=100)
     optic_name = models.CharField(
         "Nombre de la optica", max_length=30, null=False)
-    phone = models.CharField("Celular", max_length=30, blank=True)
+    phone = models.CharField("Numero de contacto", max_length=30, blank=True)
     # logo = models.ImageField("Logo", upload_to=None, height_field=None, width_field=None, max_length=None)
 
     class Meta:
@@ -94,5 +91,14 @@ class EmployeeUser(models.Model):
     def __str__(self):
         return str(self.account)
 
-#coneect signals
-post_save.connect(verify_email,Account)
+class Configuration(models.Model):
+
+    account = models.OneToOneField(Account, on_delete=models.CASCADE)
+    is_dip = models.BooleanField('Dip o Dnp', default=True)
+
+    class Meta:
+        verbose_name = "Configuración"
+        verbose_name_plural = "Configuraciones"
+
+    def __str__(self):
+        return str(self.is_dip)

@@ -287,7 +287,7 @@
 {% if user.user_type == 'EMPLOYEE' %}
     <script>
         $(document).ready(function () {
-            $("#employee_update_container").load("{% url 'users:employeeUpdate' user.get_optic_type.id %} #employee_update");
+            $("#employee_update_container").load("{% url 'users:employeeUpdate' user.get_optictype.id %} #employee_update");
         });
     </script>
     
@@ -299,7 +299,7 @@
 {% if user.user_type == 'OPTIC' %}
     <script>
         $(document).ready(function () {
-            $("#employee_update_container").load("{% url 'users:opticUpdate' user.get_optic_type.id %} #employee_update",function(){
+            $("#employee_update_container").load("{% url 'users:opticUpdate' user.get_optictype.id %} #employee_update",function(){
                 // $("#id_username").val('{{user}}');
                 //  $("#id_full_name").val('{{user.full_name}}');
             });           

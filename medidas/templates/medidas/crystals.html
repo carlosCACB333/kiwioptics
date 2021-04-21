@@ -47,7 +47,7 @@
             --
           {% endif %}
           </td>
-          <td class="align-middle text-center px-0"><a
+          <td class="align-middle text-center px-0"><a data-toggle='tooltip' data-placement='top' title='Editar Luna'
               class="btn btn-primary text-primary border border-primary"
               href="{% url 'medidas:crystal-update' crystal.id %}"
               ><i class="far fa-edit"></i
@@ -59,7 +59,9 @@
               data-target="#crystal_delete"
               class="btn btn-primary border border-primary text-primary"
             >
-              <i class="far fa-trash-alt"></i>
+              <div data-toggle='tooltip' data-placement='top' title='Eliminar luna'>
+                <i class="far fa-trash-alt"></i>
+              </div>
             </button></td>
         </tr>
         {% endfor %}
@@ -122,5 +124,8 @@
       .text("¿Seguro que desea eliminar la luna N°" + crystal_optic_id + "?");
     modal.find("#crystal_button_id").val(recipient);
   });
+      $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
 </script>
 {% endblock script %}

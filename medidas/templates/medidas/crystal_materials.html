@@ -39,7 +39,7 @@
           <td class="align-middle" style="max-width: 45vw"><div style='overflow:auto; max-height: 100px; word-wrap: break-word; width: 100%'>{{material.description}}</div></td>
           <td style='width:10vw' class="align-middle">{{material.refractive_index|default_if_none:"--"}}</td>
           <td class="align-middle">{{material.abbe|default_if_none:"--"}}</td>
-          <td class="align-middle text-center px-0"><a
+          <td class="align-middle text-center px-0"><a data-toggle='tooltip' data-placement='top' title='Editar Material'
               class="btn btn-primary text-primary border border-primary"
               href="{% url 'medidas:material-update' material.id %}"
               ><i class="far fa-edit"></i
@@ -51,7 +51,9 @@
               data-target="#material_delete"
               class="btn btn-primary border border-primary text-primary"
             >
-              <i class="far fa-trash-alt"></i>
+              <div data-toggle='tooltip' data-placement='top' title='Eliminar Material'>
+                <i class="far fa-trash-alt"></i>
+              </div>
             </button></td>
         </tr>
         {% endfor %}
@@ -114,5 +116,8 @@
       .text("¿Seguro que desea eliminar el material N°" + material_optic_id + "?");
     modal.find("#material_button_id").val(recipient);
   });
+      $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
 </script>
 {% endblock script %}

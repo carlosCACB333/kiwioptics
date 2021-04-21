@@ -20,7 +20,7 @@ class PrescriptionFactory(DjangoModelFactory):
         model = Prescription
 
     patient = factory.SubFactory(PatientFactory)
-    date = FuzzyDate(datetime.date(2008, 1, 1))
+    date = FuzzyDate(datetime.date(2020, 1, 1))
     time = factory.Faker('time')
     far_spherical_right = FuzzyChoice([choice[0] for choice in Prescription.spherical_choices])
     far_cylinder_right = FuzzyChoice([choice[0] for choice in Prescription.cylinder_choices])

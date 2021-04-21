@@ -5,12 +5,12 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
-from django.views.generic import ListView, UpdateView, TemplateView, CreateView, TemplateView, DetailView
+from django.views.generic import ListView, UpdateView, TemplateView, CreateView, TemplateView, DetailView, DeleteView
 from django.db.models.functions import Concat
 from django.core.serializers import serialize
 from django.core.exceptions import PermissionDenied
-from .forms import PatientForm, PrescriptionForm, CrystalForm, CrystalMaterialForm, CrystalTreatmentsForm
-from .models import Patient, Prescription, DiagnosisChoices, Crystal, CrystalTreatments, CrystalMaterial
+from .forms import PatientForm, PrescriptionForm, CrystalForm, CrystalMaterialForm, CrystalTreatmentsForm, SubsidiaryForm
+from .models import Patient, Prescription, DiagnosisChoices, Crystal, CrystalTreatments, CrystalMaterial, Subsidiary
 from users.models import EmployeeUser
 from users.mixins import OpticPermissionRequiredMixin
 from termcolor import colored
@@ -26,9 +26,19 @@ from django.utils import timezone
 import functools
 import ssl
 
+class TestView(TemplateView):
+    template_name = "medidas/prescription_pdf.html"
+
 class IndexView(LoginRequiredMixin, ListView):
     model = EmployeeUser
     template_name = "medidas/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        optic = self.request.user.get_opticuser()
+        context["subsidiary_list"] = Subsidiary.objects.filter(optic=optic)
+        return context
+    
 
 @login_required
 def add_prescription(request):
@@ -66,6 +76,7 @@ def add_prescription(request):
     context['patient_form'] = patient_form
     context['prescription_form'] = prescription_form
     context['diagnosis_choices'] = DiagnosisChoices.choices
+    context['is_dip'] = request.user.configuration.is_dip
     return render(request, 'medidas/prescription.html', context)
 
 
@@ -78,12 +89,24 @@ def prescription_detail(request, pk):
         prescription = get_object_or_404(Prescription, pk=pk)
         patient = prescription.patient
         patient_form = PatientForm(instance=patient, request=request)
+        initial = {}
+        if prescription.is_dip:
+            if prescription.far_dnp_left:
+                far_dip = prescription.far_dnp_left * 2
+                initial['far_dip'] = far_dip
+            if prescription.intermediate_dnp_left:
+                intermediate_dip = prescription.intermediate_dnp_left * 2
+                initial['intermediate_dip'] = intermediate_dip
+            if prescription.near_dnp_left:
+                near_dip = prescription.near_dnp_left * 2
+                initial['near_dip'] = near_dip
         prescription_form = PrescriptionForm(
-            instance=prescription, request=request)
+            instance=prescription, request=request, initial=initial)
         return render(request, 'medidas/prescription.html', context={
             'patient_form': patient_form,
             'prescription_form': prescription_form,
             'detail': True,
+            'is_dip': prescription.is_dip,
         })
 
 @login_required
@@ -94,12 +117,24 @@ def prescription_update(request, pk):
         prescription = get_object_or_404(Prescription, pk=pk)
         patient = prescription.patient
         patient_form = PatientForm(instance=patient, request=request)
+        initial = {}
+        if prescription.is_dip:
+            if prescription.far_dnp_left:
+                far_dip = prescription.far_dnp_left * 2
+                initial['far_dip'] = far_dip
+            if prescription.intermediate_dnp_left:
+                intermediate_dip = prescription.intermediate_dnp_left * 2
+                initial['intermediate_dip'] = intermediate_dip
+            if prescription.near_dnp_left:
+                near_dip = prescription.near_dnp_left * 2
+                initial['near_dip'] = near_dip
         prescription_form = PrescriptionForm(
-            instance=prescription, request=request)
+            instance=prescription, request=request, initial=initial)
         return render(request, 'medidas/prescription.html', context={
             'patient_form': patient_form,
             'prescription_form': prescription_form,
             'update': True,
+            'is_dip': prescription.is_dip,
         })
     if request.method == 'POST':
         prescription = get_object_or_404(Prescription, pk=pk)
@@ -121,6 +156,7 @@ def prescription_update(request, pk):
             'patient_form': patient_form,
             'prescription_form': prescription_form,
             'update': True,
+            'ís_dip': prescription.is_dip,
             })
 
 @login_required
@@ -144,6 +180,7 @@ def patient_add_prescription(request, pk):
             'patient_form': patient_form,
             'prescription_form': prescription_form,
             'update': True,
+            'is_dip': request.user.configuration.is_dip,
         })
     if request.method == 'POST':
         patient = get_object_or_404(Patient, pk=pk)
@@ -347,6 +384,25 @@ class PrescriptionPDFDetailView(DetailView):
     template_name = "medidas/prescription_pdf.html"
     context_object_name = 'prescription'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["is_dip"] = self.object.is_dip
+        if self.object.is_dip:
+            if self.object.far_dnp_left:
+                context["far_dip"] = str(self.object.far_dnp_left * 2)[:-2]+"mm"
+            else:
+                context["far_dip"] = None
+            if self.object.intermediate_dnp_left:
+                context["intermediate_dip"] = str(self.object.intermediate_dnp_left * 2)[:-2]+"mm"
+            else:
+                context["intermediate_dip"] = None
+            if self.object.near_dnp_left:
+                context["near_dip"] = str(self.object.near_dnp_left * 2)[:-2]+"mm"
+            else:
+                context["near_dip"] = None
+        return context
+    
+
 class CustomWeasyTemplateResponse(WeasyTemplateResponse):
     # customized response class to change the default URL fetcher
     def get_url_fetcher(self):
@@ -379,4 +435,35 @@ class PrescriptionPDFImageView(WeasyTemplateResponseMixin, PrescriptionPDFDetail
         return 'foo-{at}.pdf'.format(
             at=timezone.now().strftime('%Y%m%d-%H%M'),
         )
+
+class SubsidiaryCreateView(LoginRequiredMixin,CreateView):
+    model = Subsidiary
+    template_name = "medidas/subsidiary_add.html"
+    form_class = SubsidiaryForm
+    success_url = reverse_lazy('medidas:index')
+
+    def form_valid(self, form):
+        optic = self.request.user.get_opticuser()
+        form.instance.optic = optic
+        return super().form_valid(form)
+
+class SubsidiaryUpdateView(LoginRequiredMixin,UpdateView):
+    model = Subsidiary
+    template_name = "medidas/subsidiary_add.html"
+    form_class = SubsidiaryForm
+    success_url = reverse_lazy('medidas:index')    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["update"] = True
+        return context
+
+class SubsidiaryDeleteView(LoginRequiredMixin, DeleteView):
+    model = Subsidiary
+    success_url = reverse_lazy('medidas:index')
+
+
+    
+
+
 
