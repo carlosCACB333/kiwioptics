@@ -172,7 +172,8 @@ Optica
     <!-- Fin tabla usarios -->
 
     <!-- Mensajes -->
-    {% comment %} <div class="col-xl-5 col-lg-12">
+    {% comment %}
+     <div class="col-xl-5 col-lg-12">
       <div class="card mb-5 shadow-sm border-0 shadow-hover">
         <div class="card-header bg-light border-0 pt-3 pb-0">
           <h6 class="mb-0">Mensajes</h6>
@@ -211,38 +212,47 @@ Optica
           </div>
         </div>
       </div>
-    </div> {% endcomment %}
+    </div>
+     {% endcomment %}
     <!-- Fin mensajes -->
 
     <!-- graficas -->
     <div class="col-xl-5 col-lg-12 text-center">
-      <input type="hidden" value="{% url 'medidas:rest-report-prescription' %}" id="url_rest_patient_list">
-      <div class="btn-group btn-group-toggle" data-toggle="buttons" id="radio-calendar">
-        <label class="btn btn-primary btn-sm text-primary">
-            <input type="radio" name="calendar" value="day" autocomplete="off"> dia
-        </label>
-        <label class="btn btn-primary btn-sm text-primary">
-            <input type="radio" name="calendar" value="week" autocomplete="off"> semana
-        </label>
-        <label class="btn btn-primary btn-sm text-primary">
-            <input type="radio" name="calendar" value="month" autocomplete="off" checked> mes
-        </label>
-        <label class="btn btn-primary btn-sm text-primary">
-            <input type="radio" name="calendar" value="year" autocomplete="off"> año
-        </label>
-     </div>
-        <div> 
-          <a href="#" id="id_previus" class="btn"> <i class="fas fa-chevron-left"></i></a>
-          <input type="button" class="btn text-primary mt-1 btn-sm" disabled id="id_current">
-          <input type="button" class="btn text-primary mt-1 btn-sm" disabled id="id_current_month">
-          <input type="button" class="btn text-primary mt-1 btn-sm" disabled id="id_current_year">
-          <a href="#" id="id_next" class="btn">  <i class="fas fa-chevron-right"></i></a>
-      </div>
-    
-     
-    <canvas id="prescripciones" >
-      
-    </canvas>
+   <div class="card mb-5 shadow-sm border-0 shadow-hover">
+       <div class="card-header bg-light border-0 pt-3 pb-0">
+       <div style="float: right;">
+          <span class="badge badge-secondary d-block mb-1" onclick="myChart.config.type='line';tipo='line';myChart.update();"><i class="fas fa-chart-line"></i></span>
+          <span class="badge badge-secondary " onclick="myChart.config.type='bar';tipo='bar';myChart.update();"><i class="fas fa-chart-bar"></i></span>
+       </div>
+          <input type="hidden" value="{% url 'medidas:rest-report-prescription' %}" id="url_rest_patient_list">
+          <div class="btn-group btn-group-toggle" data-toggle="buttons" id="radio-calendar">
+            <label class="btn btn-primary btn-sm text-primary">
+                <input type="radio" name="calendar" value="day" autocomplete="off"> dia
+            </label>
+            <label class="btn btn-primary btn-sm text-primary">
+                <input type="radio" name="calendar" value="week" autocomplete="off"> semana
+            </label>
+            <label class="btn btn-primary btn-sm text-primary">
+                <input type="radio" name="calendar" value="month" autocomplete="off" checked> mes
+            </label>
+            <label class="btn btn-primary btn-sm text-primary">
+                <input type="radio" name="calendar" value="year" autocomplete="off"> año
+            </label>
+         </div>
+            <div> 
+              <a href="#" id="id_previus" class="btn"> <i class="fas fa-chevron-left"></i></a>
+              <input type="button" class="btn btn-primary font-weight-bold text-primary mt-1 btn-sm" disabled id="id_current">
+              <input type="button" class="btn btn-primary font-weight-bold text-primary mt-1 btn-sm" disabled id="id_current_month">
+              <input type="button" class="btn btn-primary font-weight-bold text-primary mt-1 btn-sm" disabled id="id_current_year">
+              <a href="#" id="id_next" class="btn">  <i class="fas fa-chevron-right"></i></a>
+          </div>
+        
+         
+          <canvas id="prescripciones" >
+            
+          </canvas>
+       </div>
+   </div>
     </div>
     <!-- fin graficas -->
   </div>

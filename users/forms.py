@@ -108,21 +108,16 @@ class UserOfOpticForm(forms.ModelForm):
         model = Account
         # fields='__all__'
         exclude = ('last_login', 'date_joined',
-                   'user_type', 'is_superuser', 'is_staff')
+                   'user_type', 'is_superuser', 'is_staff','verification_code','verify_email')
         widgets = {
-            'password': forms.PasswordInput(
-                attrs={
-                    'value': ''
-                },
-            ),
-
+           # 'password': forms.PasswordInput(),
             'user_permissions': forms.CheckboxSelectMultiple(),
             'groups': forms.CheckboxSelectMultiple(),
         }
 
     def __init__(self, *args, **kwargs):
         super(UserOfOpticForm, self).__init__(*args, **kwargs)
-
+        #self.fields['password'].required = False 
         for field_name, field in self.fields.items():
             field.widget.attrs['placeholder'] = field.label
             field.widget.attrs['class'] = "form-control"

@@ -218,7 +218,7 @@ class OpticUserUpdateView(OpticPermitMixin, UpdateView):
 class UserOfOpticCreateView(OpticPermissionRequiredMixin, CreateView):
     """ vista para crear y actualizar los datos de los empleados """
 
-    permission_required = ('users.view_employeeuser',)
+    permission_required = ('users.add_employeeuser','users.add_account')
     # url_redirect = None
     model = Account
     template_name = "optic/user_of_optic.html"
@@ -234,6 +234,7 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, CreateView):
             context['form_employee'] = self.form_class_secondary(
                 instance=EmployeeUser.objects.get(id=request.GET['id']))
             context['id'] = request.GET['id']
+            self.permission_required=('users.change_employeeuser','users.change_account')
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
@@ -252,6 +253,7 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, CreateView):
         if id:
             # actualizamos
             instancia_cuenta = Account.objects.get(employeeuser__id=id)
+            password_out=instancia_cuenta.password
             instancia_empleado = EmployeeUser.objects.get(id=id)
             form_user = self.form_class(
                 request.POST, instance=instancia_cuenta,)
@@ -259,7 +261,8 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, CreateView):
                 request.POST, instance=instancia_empleado,)
             if form_user.is_valid() and form_employees.is_valid():
                 cuenta = form_user.save(commit=False)
-                cuenta.set_password(request.POST['password'])
+                if not (form_user.cleaned_data['password']==password_out):
+                    cuenta.set_password(form_user.cleaned_data['password'])
                 if 'picture' in request.FILES:
                     cuenta.picture = request.FILES['picture']
                 cuenta.save()

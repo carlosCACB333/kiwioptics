@@ -42,3 +42,9 @@ class Hour(Func):
     function = 'EXTRACT'
     template = '%(function)s(HOUR from %(expressions)s)'
     output_field = models.IntegerField()
+
+
+class Dayname(Func):
+    function = 'EXTRACT'
+    template = '%(function)s(iso_week_day from %(expressions)s)'
+    output_field = models.IntegerField()

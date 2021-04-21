@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import calendar as c
 
 from django.db.models import Count
+from django.db.models.functions import (ExtractDay, ExtractMonth, ExtractQuarter, ExtractWeek,ExtractIsoWeekDay, ExtractWeekDay, ExtractIsoYear, ExtractYear)
 
 from rest_framework.generics import (
     ListAPIView,
@@ -15,7 +16,7 @@ from rest_framework.generics import (
 )
 from rest_framework.permissions import IsAuthenticated
 
-from .functions import monthdelta, Day, Week, Month, Year, Hour
+from .functions import monthdelta, Day, Week, Month, Year, Hour,Dayname
 from .models import Patient, Prescription
 from .serializers import PatientSerializer, PrescriptionSerializer
 
@@ -69,6 +70,7 @@ class ReportPrescriptionCount(ListAPIView):
     current_year = None
     current_month = None
     label = None
+    size=None
 
     def get_queryset(self):
 
@@ -79,7 +81,7 @@ class ReportPrescriptionCount(ListAPIView):
         optica=self.request.user.get_opticuser()
 
         if(calendar == 'month'):
-            self.label = 'Día'
+            self.label = 'Mes'
             if not actual:
                 self.current_year = hoy.year
                 self.current = MESES[hoy.month]
@@ -87,8 +89,7 @@ class ReportPrescriptionCount(ListAPIView):
             else:
                 self.current_year = int(
                     self.request.GET.get('current_year', None))
-                actual_num = list(MESES.keys())[
-                    list(MESES.values()).index(actual)]
+                actual_num = list(MESES.keys())[list(MESES.values()).index(actual)]
 
                 if option == 'next':
                     if not (actual_num+1 > hoy.month and self.current_year == hoy.year):
@@ -108,11 +109,12 @@ class ReportPrescriptionCount(ListAPIView):
                     else:
                         self.current = MESES[12]
                         self.current_year -= 1
-
+            self.size= c.monthrange(self.current_year, list(MESES.keys())[list(MESES.values()).index(self.current)])[1]
             query = Prescription.objects.filter(optic=optica,date__month=list(MESES.keys())[list(MESES.values()).index(self.current)], date__year=self.current_year).annotate(
                 dato=Day('date')).values('dato').annotate(total=Count('date')).order_by('dato')
         elif calendar == 'year':
-            self.label = 'Mes'
+            self.size=12
+            self.label = 'Año'
             if not actual:
                 self.current = hoy.year
             else:
@@ -127,13 +129,13 @@ class ReportPrescriptionCount(ListAPIView):
             query = Prescription.objects.filter(optic=optica,date__year=self.current).annotate(dato=Month(
                 'date')).values('dato').annotate(total=Count('date')).order_by('dato')
         elif calendar == 'week':
-            self.label = 'Día'
+            self.size=7
+            self.label = 'Semana'
             if not actual:
-                self.current = hoy.isocalendar().week
+                self.current =hoy.isocalendar().week #int(hoy.strftime('%W'))
                 self.current_year = hoy.year
             else:
-                self.current_year = int(
-                    self.request.GET.get('current_year', None))
+                self.current_year = int(self.request.GET.get('current_year', None))
                 self.current = int(actual)
                 if option == 'next':
                     if not (self.current+1 > hoy.isocalendar().week and self.current_year == hoy.year):
@@ -150,11 +152,16 @@ class ReportPrescriptionCount(ListAPIView):
                     else:
                         self.current = 53
                         self.current_year -= 1
-
             query = Prescription.objects.filter(optic=optica,date__week=self.current, date__year=self.current_year).annotate(
-                dato=Day('date')).values('dato').annotate(total=Count('date')).order_by('dato')
+                dato=ExtractIsoWeekDay('date')).values('dato').annotate(total=Count('date')).order_by('dato')
+            query2 = Prescription.objects.filter(optic=optica,date__week=self.current, date__year=self.current_year).annotate(
+                dato=ExtractIsoWeekDay('date')).values('dato','date__iso_week_day')
+            print("lllllllllllllllllllllllll",query2)    
+            for i in query2 :
+                print(i)
         elif calendar == 'day':
-            self.label = 'hora'
+            self.size=24
+            self.label = 'Dia'
             if not actual:
                 self.current = hoy.day
                 self.current_year = hoy.year
@@ -165,8 +172,7 @@ class ReportPrescriptionCount(ListAPIView):
                 self.current = int(actual)
                 self.current_month = int(
                     self.request.GET.get('current_month', None))
-                cant_dias_mes = c.monthrange(
-                    self.current_year, self.current_month)[1]
+                cant_dias_mes = c.monthrange(self.current_year, self.current_month)[1]
                 if option == 'next':
                     if not (self.current+1 > hoy.day and self.current == hoy.day):
                         if self.current+1 <= cant_dias_mes:
@@ -203,11 +209,13 @@ class ReportPrescriptionCount(ListAPIView):
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
+        op=self.request.GET.get('option','')
         new = {
             'current': self.current,
             'current_year': self.current_year,
             'current_month': self.current_month,
-            'label': self.label
+            'label': self.label,
+            'size':self.size,
         }
         data = {'data': serializer.data, 'options': new}
         return Response(data)
