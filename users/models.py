@@ -79,7 +79,7 @@ class EmployeeUser(models.Model):
     prescription_name = models.CharField(
         "Nombre en la prescripcion", max_length=100)
     phone = models.CharField("Celular", max_length=30, blank=True)
-    other_phone = models.CharField("Celular", max_length=30, blank=True)
+    other_phone = models.CharField("Celular 2", max_length=30, blank=True)
     # photo = models.ImageField("Foto", upload_to=None, height_field=None, width_field=None, max_length=None)
 
     objects = EmployeeUserManager()

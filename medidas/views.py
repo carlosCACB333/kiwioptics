@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, FileResponse
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.views.generic import ListView, UpdateView, TemplateView, CreateView, TemplateView, DetailView, DeleteView
@@ -16,31 +16,33 @@ from users.mixins import OpticPermissionRequiredMixin
 from termcolor import colored
 from django.contrib import messages
 from .custom_functions import django_admin_keyword_search
-from .decorators import model_owned_required
+from .decorators import model_owned_required, logout_required, roles_required
 from django.contrib.auth.views import PasswordResetView
 from django.conf import settings
 from django_weasyprint import WeasyTemplateResponseMixin
 from django_weasyprint.views import CONTENT_TYPE_PNG, WeasyTemplateResponse
 from django_weasyprint.utils import django_url_fetcher
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 import functools
 import ssl
 
 class TestView(TemplateView):
     template_name = "medidas/prescription_pdf.html"
 
-class IndexView(LoginRequiredMixin, ListView):
+@method_decorator(login_required, 'dispatch')
+class IndexView(ListView):
     model = EmployeeUser
     template_name = "medidas/index.html"
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         optic = self.request.user.get_opticuser()
         context["subsidiary_list"] = Subsidiary.objects.filter(optic=optic)
         return context
     
-
 @login_required
+@permission_required('medidas.add_prescription', raise_exception=True)
 def add_prescription(request):
     context = {}
     if request.method == 'POST':
@@ -110,6 +112,7 @@ def prescription_detail(request, pk):
         })
 
 @login_required
+@permission_required('medidas.change_prescription', raise_exception=True)
 @model_owned_required(Prescription)
 def prescription_update(request, pk):
     context = {}
@@ -160,6 +163,7 @@ def prescription_update(request, pk):
             })
 
 @login_required
+@permission_required('medidas.delete_prescription', raise_exception=True)
 def prescription_delete(request):
     if request.method == 'POST':
         pk = request.POST['prescription_id']
@@ -170,6 +174,7 @@ def prescription_delete(request):
         return redirect('medidas:prescriptions')
 
 @login_required
+@permission_required('medidas.add_prescription', raise_exception=True)
 @model_owned_required(Patient)
 def patient_add_prescription(request, pk):
     if request.method == 'GET':
@@ -195,7 +200,8 @@ def patient_add_prescription(request, pk):
         else:
             print(colored(prescription_form.errors, 'red'))
 
-class PrescriptionListView(LoginRequiredMixin, ListView):
+@method_decorator(login_required, 'dispatch')
+class PrescriptionListView(ListView):
     model = Prescription
     context_object_name = 'prescriptions'
     template_name = 'medidas/prescription_list.html'
@@ -206,8 +212,8 @@ class PrescriptionListView(LoginRequiredMixin, ListView):
         opticUser = self.request.user.get_opticuser().id
         return django_admin_keyword_search(Prescription, q, ['patient__full_name', 'patient__dni']).filter(optic_id=opticUser).order_by('-prescription_optic_id')
 
-
-class PatientListView(LoginRequiredMixin, ListView):
+@method_decorator(login_required, 'dispatch')
+class PatientListView(ListView):
     model = Patient
     context_object_name = 'patients'
     paginate_by = 20
@@ -227,8 +233,8 @@ class PatientListView(LoginRequiredMixin, ListView):
 #     fields = '__all__'
 #     template_name = "medidas/prescription_update.html"
 
-
-class CrystalListView(LoginRequiredMixin, ListView):
+@method_decorator(login_required, 'dispatch')
+class CrystalListView(ListView):
     model = Crystal
     context_object_name = 'crystals'
     template_name = "medidas/crystals.html"
@@ -237,8 +243,9 @@ class CrystalListView(LoginRequiredMixin, ListView):
         opticUser = self.request.user.get_opticuser().id
         return Crystal.objects.filter(optic=opticUser)
 
-
-class CrystalCreateView(LoginRequiredMixin, CreateView):
+@method_decorator(login_required, 'dispatch')
+@method_decorator(permission_required('medidas.add_crystal', raise_exception=True),'dispatch')
+class CrystalCreateView(CreateView):
     model = Crystal
     template_name = "medidas/crystal_add.html"
     form_class = CrystalForm
@@ -259,8 +266,9 @@ class CrystalCreateView(LoginRequiredMixin, CreateView):
         kwargs['request'] = self.request
         return kwargs
 
-
-class CrystalUpdateView(LoginRequiredMixin, UpdateView):
+@method_decorator(login_required, 'dispatch')
+@method_decorator(permission_required('medidas.change_crystal', raise_exception=True),'dispatch')
+class CrystalUpdateView(UpdateView):
     model = Crystal
     success_url = reverse_lazy('medidas:crystals')
     form_class = CrystalForm
@@ -281,7 +289,9 @@ class CrystalUpdateView(LoginRequiredMixin, UpdateView):
         context['update'] = True
         return context
 
-class CrystalDeleteView(LoginRequiredMixin, View):
+@method_decorator(login_required, 'dispatch')
+@method_decorator(permission_required('medidas.delete_crystal', raise_exception=True),'dispatch')
+class CrystalDeleteView(View):
     
     def post(self, request, *args, **kwargs):
         pk = request.POST['crystal_id']
@@ -289,7 +299,8 @@ class CrystalDeleteView(LoginRequiredMixin, View):
         crystal.delete()
         return redirect('medidas:crystals')
 
-class CrystalMaterialListView(LoginRequiredMixin, ListView):
+@method_decorator(login_required, 'dispatch')
+class CrystalMaterialListView(ListView):
     model = CrystalMaterial
     context_object_name = 'crystals_materials'
     template_name = "medidas/crystal_materials.html"
@@ -298,7 +309,9 @@ class CrystalMaterialListView(LoginRequiredMixin, ListView):
         opticUser = self.request.user.get_opticuser().id
         return CrystalMaterial.objects.filter(optic=opticUser)
 
-class CrystalMaterialCreateView(LoginRequiredMixin, CreateView):
+@method_decorator(login_required, 'dispatch')
+@method_decorator(permission_required('medidas.add_crystalmaterial', raise_exception=True),'dispatch')
+class CrystalMaterialCreateView(CreateView):
     model = CrystalMaterial
     form_class = CrystalMaterialForm
     template_name = "medidas/crystal_material_add.html"
@@ -313,7 +326,9 @@ class CrystalMaterialCreateView(LoginRequiredMixin, CreateView):
         print(colored(form.errors, 'red'))
         return super().form_invalid(form)
 
-class CrystalMaterialUpdateView(LoginRequiredMixin, UpdateView):
+@method_decorator(login_required, 'dispatch')
+@method_decorator(permission_required('medidas.change_crystalmaterial', raise_exception=True),'dispatch')
+class CrystalMaterialUpdateView(UpdateView):
     model = CrystalMaterial
     template_name = "medidas/crystal_material_add.html"
     form_class = CrystalMaterialForm
@@ -324,7 +339,9 @@ class CrystalMaterialUpdateView(LoginRequiredMixin, UpdateView):
         context['update'] = True
         return context
 
-class CrystalMaterialDeleteView(LoginRequiredMixin, View):
+@method_decorator(login_required, 'dispatch')
+@method_decorator(permission_required('medidas.delete_crystalmaterial', raise_exception=True),'dispatch')
+class CrystalMaterialDeleteView(View):
 
     def post(self, request, *args, **kwargs):
         pk = request.POST['material_id']
@@ -334,7 +351,8 @@ class CrystalMaterialDeleteView(LoginRequiredMixin, View):
         material.delete()
         return redirect('medidas:materials')
 
-class CrystalTreatmentsListView(LoginRequiredMixin, ListView):
+@method_decorator(login_required, 'dispatch')
+class CrystalTreatmentsListView(ListView):
     model = CrystalTreatments
     context_object_name = 'crystals_treatments'
     template_name = "medidas/crystal_treatments.html"
@@ -343,7 +361,9 @@ class CrystalTreatmentsListView(LoginRequiredMixin, ListView):
         opticUser = self.request.user.get_opticuser().id
         return CrystalTreatments.objects.filter(optic=opticUser)
 
-class CrystalTreatmentsCreateView(LoginRequiredMixin, CreateView):
+@method_decorator(login_required, 'dispatch')
+@method_decorator(permission_required('medidas.add_crystaltreatments', raise_exception=True),'dispatch')
+class CrystalTreatmentsCreateView(CreateView):
     model = CrystalTreatments
     form_class = CrystalTreatmentsForm
     template_name = "medidas/crystal_treatment_add.html"
@@ -358,7 +378,9 @@ class CrystalTreatmentsCreateView(LoginRequiredMixin, CreateView):
         print(colored(form.errors, 'red'))
         return super().form_invalid(form)
 
-class CrystalTreatmentsUpdateView(LoginRequiredMixin, UpdateView):
+@method_decorator(login_required, 'dispatch')
+@method_decorator(permission_required('medidas.change_crystaltreatments', raise_exception=True),'dispatch')
+class CrystalTreatmentsUpdateView(UpdateView):
     model = CrystalTreatments
     template_name = "medidas/crystal_treatment_add.html"
     form_class = CrystalTreatmentsForm
@@ -368,8 +390,10 @@ class CrystalTreatmentsUpdateView(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context["update"] = True
         return context
-    
-class CrystalTreatmentsDeleteView(LoginRequiredMixin, View):
+
+@method_decorator(login_required, 'dispatch')
+@method_decorator(permission_required('medidas.delete_crystaltreatments', raise_exception=True),'dispatch')
+class CrystalTreatmentsDeleteView(View):
     
     def post(self, request, *args, **kwargs):
         pk = request.POST.get('treatment_id')
@@ -379,6 +403,7 @@ class CrystalTreatmentsDeleteView(LoginRequiredMixin, View):
         treatment.delete()
         return redirect('medidas:treatments')
 
+@method_decorator(login_required, 'dispatch')
 class PrescriptionPDFDetailView(DetailView):
     model = Prescription
     template_name = "medidas/prescription_pdf.html"
@@ -412,6 +437,7 @@ class CustomWeasyTemplateResponse(WeasyTemplateResponse):
         context.verify_mode = ssl.CERT_NONE
         return functools.partial(django_url_fetcher, ssl_context=context)
 
+@method_decorator(login_required, 'dispatch')
 class PrescriptionPDFPrintView(WeasyTemplateResponseMixin, PrescriptionPDFDetailView):
     # output of PrescriptionView rendered as PDF with hardcoded CSS
     pdf_stylesheets = [
@@ -436,7 +462,9 @@ class PrescriptionPDFImageView(WeasyTemplateResponseMixin, PrescriptionPDFDetail
             at=timezone.now().strftime('%Y%m%d-%H%M'),
         )
 
-class SubsidiaryCreateView(LoginRequiredMixin,CreateView):
+@method_decorator(login_required, 'dispatch')
+@method_decorator(permission_required('medidas.add_subsidiary', raise_exception=True),'dispatch')
+class SubsidiaryCreateView(CreateView):
     model = Subsidiary
     template_name = "medidas/subsidiary_add.html"
     form_class = SubsidiaryForm
@@ -447,7 +475,9 @@ class SubsidiaryCreateView(LoginRequiredMixin,CreateView):
         form.instance.optic = optic
         return super().form_valid(form)
 
-class SubsidiaryUpdateView(LoginRequiredMixin,UpdateView):
+@method_decorator(login_required, 'dispatch')
+@method_decorator(permission_required('medidas.change_subsidiary', raise_exception=True),'dispatch')
+class SubsidiaryUpdateView(UpdateView):
     model = Subsidiary
     template_name = "medidas/subsidiary_add.html"
     form_class = SubsidiaryForm
@@ -458,7 +488,9 @@ class SubsidiaryUpdateView(LoginRequiredMixin,UpdateView):
         context["update"] = True
         return context
 
-class SubsidiaryDeleteView(LoginRequiredMixin, DeleteView):
+@method_decorator(login_required, 'dispatch')
+@method_decorator(permission_required('medidas.delete_subsidiary', raise_exception=True),'dispatch')
+class SubsidiaryDeleteView(DeleteView):
     model = Subsidiary
     success_url = reverse_lazy('medidas:index')
 

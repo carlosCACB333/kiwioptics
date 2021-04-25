@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.contrib import messages
-
+from django.core.exceptions import PermissionDenied
 
 class OpticPermitMixin(LoginRequiredMixin):
     login_url = reverse_lazy('users:login')
@@ -39,7 +39,5 @@ class OpticPermissionRequiredMixin(object):
         if request.user.has_perms(self.get_perms()):
             return super().dispatch(request, *args, **kwargs)
         else:
-            messages.error(request,"No tiene permisos para hacer esta accion")
-            return redirect(self.get_url_redirec())
-    
+            raise PermissionDenied
 

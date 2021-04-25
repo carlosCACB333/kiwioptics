@@ -63,10 +63,6 @@
         width: auto;
         margin-right: 5px;
     }
-
-
-  
-
 </style>
 
 {% endblock styles %}
@@ -210,7 +206,7 @@
                 </div>
             </div>
 
-            {% if perms.users.add_account and perms.users.add_employeeuser %}
+            {% if perms.users.add_employeeuser %}
             <button type="submit" class="btn btn-primary text-primary"
                 onclick="$('#id').remove();$('#submit_form_employee').click();">Guardar nuevo empleado</button>
 
@@ -218,19 +214,19 @@
 
 
 
-            {% if id and perms.users.change_account and perms.users.change_employeeuser %}
+            {% if id and perms.users.change_employeeuser %}
             <button type="submit" class="btn btn-success" id="submit_form_employee">Actualizar empleado</button>
             {% endif %}
 
 
             <!-- ***modal eliminar empleado** -->
 
-            {% if id and perms.users.delete_account and perms.users.delete_employeeuser %}
+            {% if id and perms.users.delete_employeeuser %}
 
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal"
                 onclick="$('#modal_body_delete_empleado').html('¿Deseas eliminar el empleado : <strong>'+$('#id_username').val()+'</strong> ?')">
-                eliminar empleado
+                Eliminar empleado
             </button>
 
             <!-- Modal -->
@@ -245,11 +241,11 @@
                             </button>
                         </div>
                         <div class="modal-body" id="modal_body_delete_empleado">
-                            ¿confirmar eliminación?
+                            ¿Confirmar eliminación?
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">cerrar</button>
-                            <a href="{% url 'users:userOfOpticDelete' id %}" class="btn btn-danger">eliminar</a>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <a href="{% url 'users:userOfOpticDelete' id %}" class="btn btn-danger">Eliminar</a>
                         </div>
                     </div>
                 </div>

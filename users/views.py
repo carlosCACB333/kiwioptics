@@ -218,7 +218,7 @@ class OpticUserUpdateView(OpticPermitMixin, UpdateView):
 class UserOfOpticCreateView(OpticPermissionRequiredMixin, CreateView):
     """ vista para crear y actualizar los datos de los empleados """
 
-    permission_required = ('users.add_employeeuser','users.add_account')
+    permission_required = ('users.add_employeeuser',)
     # url_redirect = None
     model = Account
     template_name = "optic/user_of_optic.html"
@@ -234,7 +234,7 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, CreateView):
             context['form_employee'] = self.form_class_secondary(
                 instance=EmployeeUser.objects.get(id=request.GET['id']))
             context['id'] = request.GET['id']
-            self.permission_required=('users.change_employeeuser','users.change_account')
+            self.permission_required=('users.change_employeeuser',)
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
@@ -312,7 +312,7 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, CreateView):
 
 class UserOfOpticDeleteView(OpticPermissionRequiredMixin, View):
     """ vista para eliminar un empleado """
-    permission_required = ('users.delete_account', 'users.delete_employeeuser')
+    permission_required = ('users.delete_employeeuser',)
 
     def get(self, request, *args, **kwargs):
         EmployeeUser.objects.filter(id=self.kwargs['id']).delete()

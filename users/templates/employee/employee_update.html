@@ -8,7 +8,7 @@
         {% csrf_token %}
         <div class="form-row">
             <div class="col-md-12 mb-3">
-                <label for="validationDefault01">optica</label>
+                <label for="validationDefault01">Optica</label>
                 <div class="border border-secondary rounded p-1 "> {{user.get_opticuser}}</div> 
                 <div class='col-12 invalid-feedback d-block'>
                     {% for error in form.optic.errors %} {{error}} {% endfor %}
@@ -16,7 +16,7 @@
             </div>
             
             <div class="col-md-12 mb-3">
-                <label for="validationDefault02">cuenta</label>
+                <label for="validationDefault02">Cuenta</label>
                 <div class="border border-secondary rounded p-1 "> {{user}}</div> 
                 <div class='col-12 invalid-feedback d-block'>
                     {% for error in form.account.errors %} {{error}} {% endfor %}
@@ -42,14 +42,14 @@
         </div>
         <div class="form-row">
             <div class="col-md-6 mb-3">
-                <label for="validationDefault01">Teléfono</label>
+                <label for="validationDefault01">Celular</label>
                 {{form.phone}}
                 <div class='col-12 invalid-feedback d-block'>
                     {% for error in form.phone.errors %} {{error}} {% endfor %}
                 </div>
             </div>
             <div class="col-md-6 mb-3">
-                <label for="validationDefault02">celular</label>
+                <label for="validationDefault02">Celular 2</label>
                 {{form.other_phone}}
                 <div class='col-12 invalid-feedback d-block'>
                     {% for error in form.other_phone.errors %} {{error}} {% endfor %}
@@ -58,13 +58,9 @@
         </div>
         <div class="form-row">
             <div class="col-md-12 mb-3">
-                <button class="btn btn-success btn-block" type="submit" form="form_employee_update">actualizar datos</button>
+                <button class="btn btn-success btn-block" type="submit" form="form_employee_update">Actualizar datos</button>
             </div>
         </div>
-
-
-
-
     </form>
 </div>
 
