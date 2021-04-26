@@ -155,7 +155,7 @@ class Prescription(models.Model):
 
     optic = models.ForeignKey(OpticUser, verbose_name="Optica", on_delete=models.CASCADE, null=False)
     is_dip = models.BooleanField('Dip o Dnp')
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, verbose_name="Paciente")
+    patient = models.ForeignKey(Patient, on_delete=models.PROTECT, verbose_name="Paciente")
     subsidiary = models.ForeignKey(Subsidiary, on_delete=models.SET_NULL, verbose_name="Sucursal", blank=True, null=True)
     doctor = models.ForeignKey(Account, verbose_name="Doctor", on_delete=models.SET_NULL, blank=True, null=True)
     prescription_optic_id = models.PositiveIntegerField(blank=True)

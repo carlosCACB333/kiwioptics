@@ -75,5 +75,9 @@ function delete_patient() {
         }, //End of AJAX Success function
     }).fail(function(e) {
         console.log(e.message)
+        $('#patient_view').modal("hide");
+        $("#error-header").html(e.responseJSON.error);
+        $("#error-content").html("Si desea eliminar al paciente, primero elimine todas sus prescripciones manualmente");
+        $('#errorModal').modal("show");
     });
 }

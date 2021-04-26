@@ -16,13 +16,21 @@
           {{field.errors}}
           </div>
       {% else %}
+          {% if perms.medidas.change_subsidiary %}
           {{field}}
+          {% else %}
+          {{field|attr:"disabled"}}
+          {% endif %}
       {% endif %}    
     {% endfor %}
     <br>
     {% if update %}
-    <button class='btn btn-primary text-primary border border-primary' type='submit'>Actualizar Sucursal</button>
-    <a href="{% url 'medidas:subsidiary-delete' form.instance.id %} " class='btn btn-danger text-light border border-dark' type='submit'>Eliminar Sucursal</a>
+        {% if perms.medidas.change_subsidiary %}
+        <button class='btn btn-primary text-primary border border-primary' type='submit'>Actualizar Sucursal</button>
+        {% endif %}
+        {% if perms.medidas.delete_subsidiary %}
+        <a href="{% url 'medidas:subsidiary-delete' form.instance.id %} " class='btn btn-danger text-light border border-dark' type='submit'>Eliminar Sucursal</a>
+        {% endif %}
     {% else %}
     <button class='btn btn-primary text-primary border border-primary' type='submit'>Guardar Sucursal</button>
     {% endif %}

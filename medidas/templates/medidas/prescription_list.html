@@ -97,21 +97,22 @@
               data-toggle='tooltip'
               data-placement='top'
               title='Editar Prescripcion'
-              class="btn btn-primary border border-primary text-primary"
+              class="{% if perms.medidas.change_prescription %}btn btn-primary border border-primary text-primary{% else %}btn border text-muted disabled{% endif %}"
               href="{% url 'medidas:prescription-update' prescription.id %}"
               ><i class="far fa-edit"></i
             ></a></td>
           <td class="align-middle text-center px-0"><button
+              {% if perms.medidas.delete_prescription %}{% else %}disabled{% endif %}
               data-toggle="modal"
               data-id="{{prescription.id}}"
               data-prescription-optic-id="{{prescription.prescription_optic_id}}"
               data-target="#prescription_delete"
-              class="btn btn-primary border border-primary text-primary"
+              class="{% if perms.medidas.delete_prescription %}btn btn-primary border border-primary text-primary{% else %}btn border bg-transparent text-muted{% endif %}"
             >
               <div 
               data-toggle='tooltip'
               data-placement='top'
-              title='Eliminar prescripcion'>
+              title='{% if perms.medidas.delete_prescription %}Eliminar Prescripcion{% endif %}'>
               <i class="far fa-trash-alt"></i>
               </div>
             </button></td>

@@ -16,7 +16,7 @@
     <h1 class='display-4'>Lista de Tratamientos</h1>
   </div>
   <div class='col-4 align-self-end text-right pl-0'>
-    <a href='{% url 'medidas:treatment-add' %}' class='btn btn-primary border border-primary text-primary'>Añadir Tratamiento</a>
+    <a href='{% url 'medidas:treatment-add' %}' class="{% if perms.medidas.add_crystaltreatments %}btn btn-primary border border-primary text-primary{% else %}btn border text-muted disabled{% endif %}">Añadir Tratamiento</a>
   </div>
 </div>
 <div class="row no-gutters">
@@ -36,18 +36,19 @@
           <td class="align-middle">{{treatment.treatment_name|title}}</td>
           <td class="align-middle"><div style='overflow:auto; max-height: 100px; word-wrap: break-word; max-width:55vw'>{{treatment.description}}</div></td>
           <td class="align-middle text-center px-0"><a data-toggle='tooltip' data-placement='top' title='Editar Tratamiento'
-              class="btn btn-primary text-primary border border-primary"
+              class="{% if perms.medidas.change_crystaltreatments %}btn btn-primary text-primary border border-primary{% else %}btn text-muted border bg-transparent disabled{% endif %}"
               href="{% url 'medidas:treatment-update' treatment.id%}"
               ><i class="far fa-edit"></i
             ></a></td>
           <td class="align-middle text-center px-0"><button
+              {% if perms.medidas.delete_crystaltreatments %}{% else %}disabled{% endif %}
               data-toggle="modal"
               data-id="{{treatment.id}}"
               data-treatment-optic-id="{{forloop.counter}}"
               data-target="#treatment_delete"
-              class="btn btn-primary border border-primary text-primary"
+              class="{% if perms.medidas.delete_crystaltreatments %}btn btn-primary text-primary border border-primary{% else %}btn text-muted border bg-transparent disabled{% endif %}"
             >
-              <div data-toggle='tooltip' data-placement='top' title='Eliminar Tratamiento'>
+              <div data-toggle='tooltip' data-placement='top' title="{% if perms.medidas.delete_crystaltreatments %}Eliminar Tratamiento{% endif %}">
                 <i class="far fa-trash-alt"></i>
               </div>
             </button></td>
@@ -109,7 +110,7 @@
     var modal = $(this);
     modal
       .find(".modal-body")
-      .text("¿Seguro que desea eliminar el tratamiento N°" + treatment_optic_id + "?");
+      .text("¿Seguro que desea eliminar el tratamiento N°" + treatment_optic_id + "? Las lunas que tengan este tratamiento no se eliminarán, sin embargo se quedarán sin este tratamiento.");
     modal.find("#treatment_button_id").val(recipient);
   });
       $(function () {
