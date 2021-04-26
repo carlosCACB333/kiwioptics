@@ -16,7 +16,7 @@ Optica
 #table_subsidiary {
   max-height: 250px;
 } {% endcomment %}
-.table-responsive{height:250px;overflow:auto;} 
+.table-responsive{height:300px;overflow:auto;} 
 thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index: 10;}
 </style>
 {% endblock styles %}
@@ -109,7 +109,7 @@ thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index
   <div class="row mb-3">
 
     <!-- Tabla usuarios -->
-    <div class="col-xl-7 col-lg-12">
+    <div class="col-xl-7 col-lg-12 container-table-responsive">
 
       {% if user.get_opticuser.employeeuser_set.all %}
 
@@ -224,7 +224,7 @@ thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index
      {% endcomment %}
     <!-- Fin mensajes -->
 
-    <!-- graficas -->
+    <!-- graficas prescripciones por dia-->
     <div class="col-xl-5 col-lg-12 text-center">
    <div class="card mb-5 shadow-sm border-0 shadow-hover">
        <div class="card-header bg-light border-0 pt-3 pb-0">
@@ -265,43 +265,83 @@ thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index
     <!-- fin graficas -->
   </div>
 
-         <div class="row mb-3">
-            <!-- Tabla Sucursales -->
-            <div class="col-xl-7 col-lg-12">
-              <div class="table-responsive" id='table_subsidiary'>
-                <table id='' class="table">
-                  <thead>
-                    <tr>
-                      <th class=""><small class="font-weight-bold">Sucursales<small>
-                            <div class='' style='position:absolute ;display: inline-block ;top: 5px;'><a
-                                href="{% url 'medidas:subsidiary-add' %}"
-                                data-toggle='tooltip' data-placement='top' title='Añadir Sucursal'
-                                class='circle-sm rounded-circle bg-primary align-self-center d-flex p-0 mx-2'><i
-                                  style='font-size:1rem'
-                                  class='fas fa-plus text-primary align-self-center mx-auto lead'></i></a></div>
-                      </th>
-                      <th scope="col"><small class="font-weight-bold">Telefono<small></th>
-                      <th scope="col"><small class="font-weight-bold">Configuración<small></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for subsidiary in subsidiary_list %}
-                      <tr class="shadow-sm">
-                        <td><span class="d-block">{{subsidiary.subsidiary_name|truncatechars:"25"}}</span><small class="text-muted">{{subsidiary.direction|truncatechars:"35"}}</small>
-                        </td>
-                        <td class="align-middle"><span class="text-dark"><small>{{subsidiary.phone}}</small></span></td>
-                        <td class="align-middle">
-                <a data-toggle='tooltip' data-placement='top' title='Editar Sucursal' href="{% url 'medidas:subsidiary-update' subsidiary.id %}" class="shadow-hover "><span
-                    class="badge badge-primary text-primary">Editar <i class="icon ion-md-settings ml-2"></i></span></a>
-              </td>
-                      </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </div>
+  <div class="row mb-3">
+    <!-- Tabla Sucursales -->
+    <div class="col-xl-7 col-lg-12">
+      <div class="table-responsive" id='table_subsidiary'>
+        <table id='' class="table">
+          <thead>
+            <tr>
+              <th class=""><small class="font-weight-bold">Sucursales<small>
+                    <div class='' style='position:absolute ;display: inline-block ;top: 5px;'><a
+                        href="{% url 'medidas:subsidiary-add' %}"
+                        data-toggle='tooltip' data-placement='top' title='Añadir Sucursal'
+                        class='circle-sm rounded-circle bg-primary align-self-center d-flex p-0 mx-2'><i
+                          style='font-size:1rem'
+                          class='fas fa-plus text-primary align-self-center mx-auto lead'></i></a></div>
+              </th>
+              <th scope="col"><small class="font-weight-bold">Telefono<small></th>
+              <th scope="col"><small class="font-weight-bold">Configuración<small></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for subsidiary in subsidiary_list %}
+              <tr class="shadow-sm">
+                <td><span class="d-block">{{subsidiary.subsidiary_name|truncatechars:"25"}}</span><small class="text-muted">{{subsidiary.direction|truncatechars:"35"}}</small>
+                </td>
+                <td class="align-middle"><span class="text-dark"><small>{{subsidiary.phone}}</small></span></td>
+                <td class="align-middle">
+        <a data-toggle='tooltip' data-placement='top' title='Editar Sucursal' href="{% url 'medidas:subsidiary-update' subsidiary.id %}" class="shadow-hover "><span
+            class="badge badge-primary text-primary">Editar <i class="icon ion-md-settings ml-2"></i></span></a>
+      </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- Fin Sucursales -->
+
+    <!-- graficas de sucursales -->
+    <div class="col-xl-5 col-lg-12 text-center">
+      <div class="card mb-5 shadow-sm border-0 shadow-hover">
+          <div class="card-header bg-light border-0 pt-3 pb-0">
+          <div style="float: right;">
+             <span class="badge badge-secondary d-block mb-1" onclick="charSucursal.config.type='line';charSucursalType='line';charSucursal.update();"><i class="fas fa-chart-line"></i></span>
+             <span class="badge badge-secondary " onclick="charSucursal.config.type='bar';charSucursalType='bar';charSucursal.update();"><i class="fas fa-chart-bar"></i></span>
+          </div>
+             <input type="hidden" value="{% url 'medidas:rest-report-subsidiary-prescription' %}" id="url_rest_subsidiary_prescription">
+             <div class="btn-group btn-group-toggle" data-toggle="buttons" id="subsidiary_radio_calendar">
+               <label class="btn btn-primary btn-sm text-primary">
+                   <input type="radio" name="calendar" value="day" autocomplete="off"> dia
+               </label>
+               <label class="btn btn-primary btn-sm text-primary">
+                   <input type="radio" name="calendar" value="week" autocomplete="off"> semana
+               </label>
+               <label class="btn btn-primary btn-sm text-primary">
+                   <input type="radio" name="calendar" value="month" autocomplete="off" checked> mes
+               </label>
+               <label class="btn btn-primary btn-sm text-primary">
+                   <input type="radio" name="calendar" value="year" autocomplete="off"> año
+               </label>
             </div>
-            <!-- Fin Sucursales -->
-          </div>  
+               <div> 
+                 <a href="#" id="subsidiary_previus" class="btn"> <i class="fas fa-chevron-left"></i></a>
+                 <input type="button" class="btn btn-primary font-weight-bold text-primary mt-1 btn-sm" disabled id="subsidiary_current">
+                 <input type="button" class="btn btn-primary font-weight-bold text-primary mt-1 btn-sm" disabled id="subsidiary_current_month">
+                 <input type="button" class="btn btn-primary font-weight-bold text-primary mt-1 btn-sm" disabled id="subsidiary_current_year">
+                 <a href="#" id="subsidiary_next" class="btn">  <i class="fas fa-chevron-right"></i></a>
+             </div>
+           
+            
+             <canvas id="subsidiary" >
+               
+             </canvas>
+          </div>
+      </div>
+    </div>
+     <!-- fin graficas -->
+  </div>  
   <!-- Eventos -->
   {% comment %} <div class="row">
     <div class="col-lg-4">

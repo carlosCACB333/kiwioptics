@@ -1,5 +1,4 @@
 import unicodedata
-
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, UserChangeForm, UserChangeForm, AuthenticationForm, PasswordResetForm
 from django.contrib.auth.models import User, Group, Permission
@@ -36,15 +35,18 @@ class OpticaRegisterForm(UserCreationForm):
 
 
 class EmployeeUserForm(forms.ModelForm):
+    full_name = forms.CharField(label='Nombres y apellidos', max_length=100, required=True) 
     class Meta:
         model = EmployeeUser
         exclude = ('account', 'optic')
 
     def __init__(self, *args, **kwargs):
         super(EmployeeUserForm, self).__init__(*args, **kwargs)
+        self.fields['full_name'].widget.attrs['value'] = self.instance.account.full_name
         for field_name, field in self.fields.items():
             field.widget.attrs['placeholder'] = field.label
             field.widget.attrs['class'] = "form-control border-md"
+        
 
 
 class EmployeeUserForm2(forms.ModelForm):
@@ -110,14 +112,18 @@ class UserOfOpticForm(forms.ModelForm):
         exclude = ('last_login', 'date_joined',
                    'user_type', 'is_superuser', 'is_staff','verification_code','verify_email')
         widgets = {
-           # 'password': forms.PasswordInput(),
+            'password': forms.PasswordInput(),
             'user_permissions': forms.CheckboxSelectMultiple(),
             'groups': forms.CheckboxSelectMultiple(),
         }
 
     def __init__(self, *args, **kwargs):
         super(UserOfOpticForm, self).__init__(*args, **kwargs)
-        #self.fields['password'].required = False 
+        self.fields['password'].required = False 
+        self.fields['user_permissions'].queryset=Permission.objects.all().exclude(
+            codename__icontains="view_"
+            ).exclude(codename__icontains="_Token").exclude(codename__icontains="_session").exclude(codename__icontains="_contenttype").exclude(codename__icontains='_logentry')
+            
         for field_name, field in self.fields.items():
             field.widget.attrs['placeholder'] = field.label
             field.widget.attrs['class'] = "form-control"
@@ -127,6 +133,11 @@ class UserOfOpticForm(forms.ModelForm):
         if email_v == True:
             raise forms.ValidationError('Este campo no puede ser un email')
         return self.cleaned_data['username']
+
+    def clean_password(self):
+        if not self.instance.id and not self.cleaned_data['password']:
+            raise forms.ValidationError('Este campo es requerido')
+        return self.cleaned_data['password']
 
 
 class AccountCreatePasswordForm(UserCreationForm):
