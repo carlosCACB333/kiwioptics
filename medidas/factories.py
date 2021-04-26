@@ -1,9 +1,17 @@
 import factory
 from factory.django import DjangoModelFactory
 from factory.fuzzy import FuzzyInteger, FuzzyChoice, FuzzyDecimal, FuzzyDate
-from .models import Prescription, Patient
+from .models import Prescription, Patient, Subsidiary
 import random
 import datetime
+
+class SubsidiaryFactory(DjangoModelFactory):
+    class Meta:
+        model = Subsidiary
+
+    subsidiary_name = factory.Sequence(lambda x: f"Sucursal {x}")
+    direction = factory.Faker('address')
+    phone = factory.Faker('phone_number')
 
 class PatientFactory(DjangoModelFactory):
     class Meta:
