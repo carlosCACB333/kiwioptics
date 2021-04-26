@@ -3,7 +3,6 @@
 {% block content %}
 <div class="card mb-5 shadow-sm border-0 shadow-hover p-5" id="employee_update">
     <h2>Tus datos</h2>
-
     <form action="{% url 'users:employeeUpdate' user.employeeuser.id %}"  method="POST" id="form_employee_update">
         {% csrf_token %}
         <div class="form-row">
@@ -23,6 +22,15 @@
                 </div>
                 
             </div>
+            <div class="col-md-12 mb-3">
+                <label for="validationDefault02">Nombres Completos</label>
+                 {{form.full_name}}
+                <div class='col-12 invalid-feedback d-block'>
+                    {% for error in form.full_name.errors %} {{error}} {% endfor %}
+                </div>
+                
+            </div>
+
         </div>
         <div class="form-row">
             <div class="col-md-6 mb-3">

@@ -13,11 +13,12 @@
     }
 
 
-
+/* 
     #profile_picture a,
     #picture-clear_id {
         position: absolute;
         top: 40px;
+        padding-right: 70px;
     }
 
     #picture-clear_id {
@@ -40,7 +41,7 @@
 
     .custom-file-input {
         height: 1px !important;
-    }
+    } */
 
     /* check */
     #id_permissions,
@@ -113,14 +114,18 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-12">
                     <label for="inputEmail4">Nombres Y Apellidos</label>
                     {{form.full_name}}
                     <div class='col-12 invalid-feedback d-block'>
                         {% for error in form.full_name.errors %} {{error}} {% endfor %}
                     </div>
                 </div>
-                <div class="form-group col-md-6">
+                
+            </div>
+
+            <div class="form-row  mb-3 pb-3 d-block">
+                <!-- <div class="form-group col-md-12">
                     <label>selecciona la foto de perfil</label>
                     <div class="custom-file" id="profile_picture">
                         {{form.picture|attr:"class:custom-file-input"}}
@@ -130,7 +135,13 @@
                     <div class='col-12 invalid-feedback d-block'>
                         {% for error in form.picture.errors %} {{error}} {% endfor %}
                     </div>
+                </div> -->
+                <label>selecciona la foto de perfil</label>
+                <div class="form-control">
+                    {{form.picture}}
+
                 </div>
+
             </div>
 
             
@@ -151,26 +162,36 @@
             </div>
 
             {% endif %}
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="">Permisos del empleado</label>
-                    {{form.user_permissions}}
-                    <div class='col-12 invalid-feedback d-block'>
-                        {% for error in form.user_permissions.errors %} {{error}} {% endfor %}
+            <p>
+                <a class="text-primary font-weight-bold" data-toggle="collapse" href="#advancedOptions" role="button" aria-expanded="false" aria-controls="advancedOptions">
+                  Opciones avanzadas
+                </a>
+              </p>
+              <div class="collapse" id="advancedOptions">
+                <div class="card card-body ">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="">Permisos del empleado</label>
+                            {{form.user_permissions}}
+                            <div class='col-12 invalid-feedback d-block'>
+                                {% for error in form.user_permissions.errors %} {{error}} {% endfor %}
+                            </div>
+        
+                        </div>
+                        <div class="form-group col-md-6">
+        
+                            <label for="">Grupos de Permisos</label>
+                            {{form.groups}}
+                            <div class='col-12 invalid-feedback d-block'>
+                                {% for error in form.groups.errors %} {{error}} {% endfor %}
+                            </div>
+        
+                        </div>
                     </div>
-
                 </div>
-                <div class="form-group col-md-6">
+              </div>
 
-                    <label for="">Grupos de Permisos</label>
-                    {{form.groups}}
-                    <div class='col-12 invalid-feedback d-block'>
-                        {% for error in form.groups.errors %} {{error}} {% endfor %}
-                    </div>
-
-                </div>
-            </div>
-
+         
             <h1>Datos del empleado</h1>
 
             <div class="form-row">
@@ -206,7 +227,7 @@
                 </div>
             </div>
 
-            {% if perms.users.add_employeeuser %}
+            {% if perms.users.add_employeeuser and not id %}
             <button type="submit" class="btn btn-primary text-primary"
                 onclick="$('#id').remove();$('#submit_form_employee').click();">Guardar nuevo usuario</button>
 

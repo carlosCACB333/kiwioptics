@@ -11,6 +11,7 @@ from django.views.generic import (
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth import login
 from django.contrib.auth.models import Permission, Group
 from django.core.paginator import Paginator
@@ -163,7 +164,17 @@ class EmployeeUserUpdateView(OpticPermitMixin, UpdateView):
         messages.success(
             self.request, f'Tus datos han sido actuliazados correctamente')
         self.object = form.save()
+        cuenta=self.object.account
+        cuenta.full_name=form.cleaned_data['full_name']
+        cuenta.save()
         return super().form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        if int(kwargs.get('pk'))==request.user.employeeuser.id:
+            return super().post(request, *args, **kwargs)
+        else:
+            raise PermissionDenied()     
+
 
 
 class OpticUserUpdateView(OpticPermitMixin, UpdateView):
@@ -183,7 +194,6 @@ class OpticUserUpdateView(OpticPermitMixin, UpdateView):
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        pk = self.kwargs.get("pk", 0)
         contexto = super(OpticUserUpdateView, self).get_context_data(**kwargs)
         cuenta = self.request.user
         if 'form' not in contexto:
@@ -191,16 +201,12 @@ class OpticUserUpdateView(OpticPermitMixin, UpdateView):
         if 'form_change_account' not in contexto:
             contexto['form_change_account'] = self.form_class_secondary(
                 instance=cuenta)
-
-        contexto["id"] = pk
         return contexto
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object
-        id_optic = kwargs["pk"]
-
-        optica = self.model.objects.get(id=id_optic)
         cuenta = request.user
+        optica = cuenta.opticuser
 
         form1 = self.form_class(request.POST, instance=optica)
         form2 = self.form_class_secondary(request.POST, instance=cuenta)
@@ -229,6 +235,8 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, CreateView):
         self.object = None
         context = self.get_context_data()
         if 'id' in request.GET:
+            if(EmployeeUser.objects.get(id=request.GET['id']).optic!=request.user.get_opticuser()):
+                raise PermissionDenied()
             context['form'] = self.form_class(
                 instance=Account.objects.get(employeeuser__id=request.GET['id']))
             context['form_employee'] = self.form_class_secondary(
@@ -253,7 +261,7 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, CreateView):
         if id:
             # actualizamos
             instancia_cuenta = Account.objects.get(employeeuser__id=id)
-            password_out=instancia_cuenta.password
+            pass_out=instancia_cuenta.password
             instancia_empleado = EmployeeUser.objects.get(id=id)
             form_user = self.form_class(
                 request.POST, instance=instancia_cuenta,)
@@ -261,8 +269,10 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, CreateView):
                 request.POST, instance=instancia_empleado,)
             if form_user.is_valid() and form_employees.is_valid():
                 cuenta = form_user.save(commit=False)
-                if not (form_user.cleaned_data['password']==password_out):
+                if form_user.cleaned_data['password']:
                     cuenta.set_password(form_user.cleaned_data['password'])
+                else:
+                    cuenta.password=pass_out
                 if 'picture' in request.FILES:
                     cuenta.picture = request.FILES['picture']
                 cuenta.save()
