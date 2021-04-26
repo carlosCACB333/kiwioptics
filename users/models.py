@@ -5,8 +5,8 @@ from .managers import CustomUserManager, EmployeeUserManager
 
 class Account(AbstractUser, PermissionsMixin):
     class Types(models.TextChoices):
-        Optic = 'OPTIC', 'Optic'
-        Employee = 'EMPLOYEE', 'Employee'
+        Optic = 'OPTIC', 'OPTICA'
+        Employee = 'EMPLOYEE', 'EMPLEADO'
 
     first_name = None
     last_name = None

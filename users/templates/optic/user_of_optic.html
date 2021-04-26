@@ -208,14 +208,14 @@
 
             {% if perms.users.add_employeeuser %}
             <button type="submit" class="btn btn-primary text-primary"
-                onclick="$('#id').remove();$('#submit_form_employee').click();">Guardar nuevo empleado</button>
+                onclick="$('#id').remove();$('#submit_form_employee').click();">Guardar nuevo usuario</button>
 
             {% endif %}
 
 
 
             {% if id and perms.users.change_employeeuser %}
-            <button type="submit" class="btn btn-success" id="submit_form_employee">Actualizar empleado</button>
+            <button type="submit" class="btn btn-success" id="submit_form_employee">Actualizar usuario</button>
             {% endif %}
 
 
@@ -235,7 +235,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Empleado</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Usuario</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

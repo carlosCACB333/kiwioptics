@@ -1,5 +1,8 @@
-
+from django.db.models import ProtectedError
+from django.http import JsonResponse
 from rest_framework.response import Response
+from rest_framework import status
+from rest_framework import serializers
 from datetime import datetime, timedelta
 import calendar as c
 
@@ -53,6 +56,11 @@ class PatientDeleteApiView(DestroyAPIView):
     serializer_class = PatientSerializer
     queryset = Patient.objects.all()
 
+    def perform_destroy(self, instance):
+        try:
+            super().perform_destroy(instance)
+        except ProtectedError as e:
+            raise serializers.ValidationError({"error":"El paciente tiene prescripciones"})
 
 class PatientUpdateApiWiew(RetrieveUpdateAPIView):
     """ api para modificar un paciente"""

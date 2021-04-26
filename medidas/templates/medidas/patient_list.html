@@ -68,7 +68,7 @@
             </button>
           </td>
             <td class='text-center px-0'>
-              <a data-toggle='tooltip' data-placement='top' title='Añadir nueva prescripcion' href='{% url 'medidas:patient-add' patient.id %}' class='btn btn-primary border border-primary text-primary'>
+              <a data-toggle='tooltip' data-placement='top' title='Añadir nueva prescripcion' href='{% url 'medidas:patient-add' patient.id %}' class="{% if perms.medidas.add_prescription %}btn btn-primary border border-primary text-primary{% else %}btn bg-transparent disabled border text-muted{% endif %}">
                 <i class="fas fa-file-medical"></i>
               </a>
             </td>
@@ -90,6 +90,7 @@
                     <tr class="table table-primary border">
                       <th class='text-center px-0'>N°</th>
                       <th class='text-center px-0'>Fecha</th>
+                      <th class='text-center px-0'>Tipo</th>
                       <th class='text-center px-0'>Total</th>
                       <th class='text-center px-0' colspan='4'>Opciones</th>
                     </tr>
@@ -101,6 +102,7 @@
                     >
                       <td class='text-center px-0'>{{prescription.prescription_optic_id}}</td>
                       <td class='text-center px-0'>{{prescription.date|date:'d/m/Y'}}</td>
+                      <td class='text-center px-0'>{{prescription.get_prescription_type_display|default_if_none:"--"|truncatechars:12}}</td>
                       <td class='text-center px-0'>S/.{{prescription.get_total}}</td>
                       <td class='text-center px-0'>
                         <a
@@ -121,20 +123,21 @@
                           data-toggle='tooltip'
                           data-placement='top'
                           title='Editar Prescripcion'                        
-              class="btn btn-primary border border-primary text-primary"
+              class="{% if perms.medidas.change_prescription %}btn btn-primary border border-primary text-primary{% else %}btn btn-transparent border text-muted disabled{% endif %}"
               href="{% url 'medidas:prescription-update' prescription.id %}"
               ><i class="far fa-edit"></i
             ></a>
             <button
+              {% if perms.medidas.change_prescription %}{% else %}disabled{% endif %}
               data-toggle="modal"
               data-id="{{prescription.id}}"
               data-prescription-optic-id="{{prescription.prescription_optic_id}}"
               data-target="#prescription_delete"
-              class="btn btn-primary border border-primary text-primary"
+              class="{% if perms.medidas.delete_prescription %}btn btn-primary border border-primary text-primary{% else %}btn btn-transparent border text-muted{% endif %}"
             >
-              <div        data-toggle='tooltip'
+              <div        data-toggle="tooltip"
                           data-placement='top'
-                          title='Eliminar Prescripcion'>
+                          title="{% if perms.medidas.delete_prescription %}Eliminar Prescripcion{% else %}{% endif %}">
                 <i class="far fa-trash-alt"></i>
               </div>
             </button>
@@ -168,8 +171,8 @@
               </div>
               <div class="modal-footer">
 
-                  <button type="submit" name="" class="btn btn-success text-light" onclick="update_patient()" >actualizar</button>
-                  <button type="submit" name="prescription_id" class="btn btn-danger text-light" onclick="delete_patient()">Eliminar</button>
+                  <button {% if perms.medidas.change_patient %}{% else %}disabled{% endif %} type="submit" name="" class="{% if perms.medidas.change_patient %}btn btn-success text-light{% else %}btn border bg-transparent text-muted{% endif %}" onclick="update_patient()" >Actualizar</button>
+                  <button {% if perms.medidas.delete_patient %}{% else %}disabled{% endif %} type="submit" name="prescription_id" class="{% if perms.medidas.delete_patient %}btn btn-danger text-light{% else %}btn border bg-transparent text-muted{% endif %}" onclick="delete_patient()">Eliminar</button>
                 <button
                   type="button"
                   class="btn btn-secondary"
@@ -253,6 +256,25 @@
   </div>          
 </div>
 {% endif %}
+  <!-- Modal -->
+  <div class="modal fade" id="errorModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        {% comment %} <div class="modal-header">
+          <h4 class="modal-title">Modal Header</h4>
+        </div> {% endcomment %}
+        <div class="modal-body p-0">
+        <div class="alert alert-info mb-0" role="alert">
+          <h4 class="alert-heading"><span class='fas fa-info-circle'>&nbsp;</span><span id="error-header"></span><button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button></h4>
+          <p id="error-content"></p>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock content %}
 {% block script %}
 

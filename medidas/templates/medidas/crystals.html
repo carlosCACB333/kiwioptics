@@ -16,7 +16,7 @@
     <h1 class='display-4'>Lista de lunas</h1>
   </div>
   <div class='col-2 align-self-end'>
-    <a href='{% url 'medidas:crystal-add' %}' class='btn btn-primary border border-primary text-primary px-4'>Añadir Luna</a>
+    <a href='{% url 'medidas:crystal-add' %}' class="{% if perms.medidas.add_crystal %}btn btn-primary border border-primary text-primary px-4{% else %}btn bg-transparent border text-muted disabled px-4{% endif %}">Añadir Luna</a>
   </div>
 </div>
 <div class="row no-gutters">
@@ -48,18 +48,19 @@
           {% endif %}
           </td>
           <td class="align-middle text-center px-0"><a data-toggle='tooltip' data-placement='top' title='Editar Luna'
-              class="btn btn-primary text-primary border border-primary"
+              class="{% if perms.medidas.change_crystal %}btn btn-primary text-primary border border-primary{% else %}btn bg-transparent text-muted border disabled{% endif %}"
               href="{% url 'medidas:crystal-update' crystal.id %}"
               ><i class="far fa-edit"></i
             ></a></td>
           <td class="align-middle text-center px-0"><button
+              {% if perms.medidas.delete_crystal %}{% else %}disabled{% endif %}
               data-toggle="modal"
               data-id="{{crystal.id}}"
               data-crystal-optic-id="{{forloop.counter}}"
               data-target="#crystal_delete"
-              class="btn btn-primary border border-primary text-primary"
+              class="{% if perms.medidas.delete_crystal %}btn btn-primary text-primary border border-primary{% else %}btn bg-transparent text-muted border{% endif %}"
             >
-              <div data-toggle='tooltip' data-placement='top' title='Eliminar luna'>
+              <div data-toggle='tooltip' data-placement='top' title="{% if perms.medidas.delete_crystal %}Eliminar Luna{% endif %}">
                 <i class="far fa-trash-alt"></i>
               </div>
             </button></td>
@@ -121,7 +122,7 @@
     var modal = $(this);
     modal
       .find(".modal-body")
-      .text("¿Seguro que desea eliminar la luna N°" + crystal_optic_id + "?");
+      .text("¿Seguro que desea eliminar la luna N°" + crystal_optic_id + "? Las prescripciones que tengan esta luna no se eliminaran, pero su luna quedará vacía");
     modal.find("#crystal_button_id").val(recipient);
   });
       $(function () {

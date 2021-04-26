@@ -16,7 +16,7 @@ from users.mixins import OpticPermissionRequiredMixin
 from termcolor import colored
 from django.contrib import messages
 from .custom_functions import django_admin_keyword_search
-from .decorators import model_owned_required, logout_required, roles_required
+from .decorators import *
 from django.contrib.auth.views import PasswordResetView
 from django.conf import settings
 from django_weasyprint import WeasyTemplateResponseMixin
@@ -476,7 +476,8 @@ class SubsidiaryCreateView(CreateView):
         return super().form_valid(form)
 
 @method_decorator(login_required, 'dispatch')
-@method_decorator(permission_required('medidas.change_subsidiary', raise_exception=True),'dispatch')
+@method_decorator(any_permission_required(['medidas.change_subsidiary','medidas.delete_subsidiary'], raise_exception=True),'dispatch')
+@method_decorator(permission_required('medidas.change_subsidiary', raise_exception=True),'post')
 class SubsidiaryUpdateView(UpdateView):
     model = Subsidiary
     template_name = "medidas/subsidiary_add.html"

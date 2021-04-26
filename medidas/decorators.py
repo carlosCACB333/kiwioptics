@@ -1,5 +1,6 @@
 from termcolor import colored
 from django.http import HttpResponseForbidden
+from django.contrib.auth.decorators import user_passes_test
 from django.core.exceptions import PermissionDenied, RequestAborted
 from django.shortcuts import get_object_or_404, redirect
 from django.db.models import Q
@@ -47,3 +48,22 @@ def roles_required(allowed_roles=[]):
 #                 . 
 #         return wrapper
 #     return decorator
+
+def any_permission_required(perms, login_url=None, raise_exception=False):
+    """
+    A decorator which checks user has any of the given permissions.
+    permission required can not be used in its place as that takes only a
+    single permission.
+    """
+    def check_perms(user):
+        # First check if the user has the permission (even anon users)
+        for perm in perms:
+            perm = (perm,)
+            if user.has_perms(perm):
+                return True
+        # In case the 403 handler should be called raise the exception
+        if raise_exception:
+            raise PermissionDenied
+        # As the last resort, show the login form
+        return False
+    return user_passes_test(check_perms, login_url=login_url)
