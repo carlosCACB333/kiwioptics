@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import OpticUser,Account,EmployeeUser
+from .models import OpticUser,Account,EmployeeUser,Configuration
 from django.contrib.auth.models import Permission
 
 # Register your models here.
@@ -21,6 +21,11 @@ from django.contrib.auth.models import Permission
 
 class AdminAccount(admin.ModelAdmin):
     search_fields=['username','full_name']
+
+@admin.register(Configuration)
+class ConfigurationAdmin(admin.ModelAdmin):
+    list_display = ('account', 'is_dip')
+
 
 admin.site.register(Account,AdminAccount)
 admin.site.register(OpticUser)

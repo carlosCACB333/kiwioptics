@@ -57,7 +57,7 @@
           {% if is_dip %}
           <td class="align-middle" rowspan='2'>{{far_dip|default_if_none:"--"}}</td>
           {% else %}
-          <td>{{prescription_form.get_far_dnp_right_display}}</td>
+          <td>{{prescription.get_far_dnp_right_display|default_if_none:"--"}}</td>
           {% endif %}
         </tr>
         <tr>
@@ -68,7 +68,7 @@
           <td>{{prescription.far_av_left|default_if_none:"--"}}</td>
           {% if is_dip %}
           {% else %}
-          <td>{{prescription_form.get_far_dnp_left_display}}</td>
+          <td>{{prescription.get_far_dnp_left_display|default_if_none:"--"}}</td>
           {% endif %}
         </tr>
       </tbody>
@@ -94,7 +94,7 @@
           {% if is_dip %}
           <td class="align-middle" rowspan='2'>{{intermediate_dip|default_if_none:"--"}}</td>
           {% else %}
-          <td>{{prescription_form.get_intermediate_dnp_right_display}}</td>
+          <td>{{prescription.get_intermediate_dnp_right_display|default_if_none:"--"}}</td>
           {% endif %}
         </tr>
         <tr>
@@ -105,7 +105,7 @@
           <td>{{prescription.intermediate_av_left|default_if_none:"--"}}</td>
           {% if is_dip %}
           {% else %}
-          <td>{{prescription_form.get_intermediate_dnp_left_display}}</td>
+          <td>{{prescription.get_intermediate_dnp_left_display|default_if_none:"--"}}</td>
           {% endif %}
         </tr>
       </tbody>
@@ -131,7 +131,7 @@
           {% if is_dip %}
           <td class="align-middle" rowspan='2'>{{near_dip|default_if_none:"--"}}</td>
           {% else %}
-          <td>{{prescription_form.get_far_dnp_right_display}}</td>
+          <td>{{prescription.get_near_dnp_right_display|default_if_none:"--"}}</td>
           {% endif %}
         </tr>
         <tr>
@@ -142,7 +142,7 @@
           <td>{{prescription.near_av_left|default_if_none:"--"}}</td>
           {% if is_dip %}
           {% else %}
-          <td>{{prescription_form.get_far_dnp_left_display}}</td>
+          <td>{{prescription.get_near_dnp_left_display|default_if_none:"--"}}</td>
           {% endif %}
         </tr>
       </tbody>

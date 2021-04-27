@@ -12,8 +12,33 @@ TREATMENTS = (
     "description":"El tratamiento anti-rayas garantiza la durabilidad y adherencia de las capas de anti-reflejo así como la resistencia a ralladuras",
     },
     {
+    "name":"Tridurex",
+    "description":"Protección antirayas, tratamiento que se puede aplicar a todos los lentes orgánicos o que van ser tratados adicionalmente con un recubrimiento antirreflejo. La aplicación de la capa de protección al rayado ofrece una mayor protección de los lentes y dureza, pero no evitan que por una mala manipulación, éstos se rayen.",
+    },
+    {
     "name":"Antireflex",
     "description":"reduce considerablemente el brillo que afecta tus ojos y reduce la fatiga ocular.",
+    },
+    {
+    "name":"Antireflex SKY",
+    "description":"Elimina los reflejos molestos. Lentes Súper Hidrofóbicos. Visión más clara y nítida. Disponibilidad en todos los materiales. Repele la suciedad y la grasa. Tiene un halo azul para su mayor identificación.",
+    },
+    {
+    "name":"Antireflex16",
+    "description":""" Logra reducir los reflejos de un 8%. a apenas 0.8%.
+ El halo verde característico del AR16 denota al usuario como conocedor
+        de la más alta calidad de lentes disponible en el mercado mundial.
+ Excelentes cualidades cosméticas.
+ Hasta un 99.2%. de transmisión de luz.
+ Posee 16 capas de filtro antirreflejo: 8 capas en la cara anterior
+        y 8 capas en la cara posterior.
+ Disponibilidad en todos los materiales.""",
+    },
+    {
+    "name":"DuraQuarz",
+    "description":"""Somete al lente a baños en lacas de alta dureza.
+ Protege al lente hasta en un 40%. contra las rayas ocasionadas por el uso diario.
+ Disponibilidad en todos los materiales.""",
     },
     {
     "name":"Blue Defense",
@@ -152,12 +177,12 @@ CRYSTALS = (
         "treatments": ("Antireflex","Antirayas","Protección UV"),
     },
     {
-        "name":"Premium: Policarbonato UV",
+        "name":"Policarbonato UV",
         "material":"Policarbonato",
         "treatments": ("Antirayas","Protección UV"),
     },
     {
-        "name":"Pro: Policarbonato Antireflex UV",
+        "name":"Policarbonato Antireflex UV",
         "material":"Policarbonato",
         "treatments": ("Antireflex","Antirayas","Protección UV"),
     },
@@ -198,6 +223,18 @@ CRYSTALS = (
     },
 )
 
+LABORATORIES = (
+    {
+        "laboratory_name":"OXO",
+    },
+    {
+        "laboratory_name":"Trimax",
+    },
+    {
+        "laboratory_name":"Topsa",
+    },
+)
+
 @receiver(post_save, sender=OpticUser)
 def add_crystals(sender, instance, created,**kwargs):
     if created:
@@ -216,6 +253,8 @@ def add_crystals(sender, instance, created,**kwargs):
             for treatment in crystal["treatments"]:
                 crystal_treatment = instance.crystaltreatments_set.get(treatment_name=treatment)
                 new_crystal.treatments.add(crystal_treatment)
+        for laboratory in LABORATORIES:
+            instance.laboratory_set.create(laboratory_name=laboratory["laboratory_name"])
 
 def optic_is_superuser(sender,instance,created,**kwargs):
     if created:

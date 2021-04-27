@@ -9,9 +9,9 @@ from django.views.generic import ListView, UpdateView, TemplateView, CreateView,
 from django.db.models.functions import Concat
 from django.core.serializers import serialize
 from django.core.exceptions import PermissionDenied
-from .forms import PatientForm, PrescriptionForm, CrystalForm, CrystalMaterialForm, CrystalTreatmentsForm, SubsidiaryForm
-from .models import Patient, Prescription, DiagnosisChoices, Crystal, CrystalTreatments, CrystalMaterial, Subsidiary
-from users.models import EmployeeUser
+from .forms import PatientForm, PrescriptionForm, CrystalForm, CrystalMaterialForm, CrystalTreatmentsForm, SubsidiaryForm, LaboratoryForm
+from .models import Patient, Prescription, DiagnosisChoices, Crystal, CrystalTreatments, CrystalMaterial, Subsidiary, Laboratory
+from users.models import EmployeeUser, Configuration
 from users.mixins import OpticPermissionRequiredMixin
 from termcolor import colored
 from django.contrib import messages
@@ -494,6 +494,54 @@ class SubsidiaryUpdateView(UpdateView):
 class SubsidiaryDeleteView(DeleteView):
     model = Subsidiary
     success_url = reverse_lazy('medidas:index')
+
+@method_decorator(login_required, 'dispatch')
+class LaboratoryListView(ListView):
+    model = Laboratory
+    context_object_name = 'laboratories'
+    template_name = "medidas/crystal_laboratories.html"
+
+    def get_queryset(self):
+        opticUser = self.request.user.get_opticuser().id
+        return Laboratory.objects.filter(optic=opticUser)
+
+@method_decorator(login_required, 'dispatch')
+@method_decorator(permission_required('medidas.add_laboratory', raise_exception=True),'dispatch')
+class LaboratoryCreateView(CreateView):
+    model = Laboratory
+    template_name = "medidas/crystal_laboratory_add.html"
+    form_class = LaboratoryForm
+    success_url = reverse_lazy('medidas:laboratories')
+
+    def form_valid(self, form):
+        optic = self.request.user.get_opticuser()
+        form.instance.optic = optic
+        return super().form_valid(form)
+
+@method_decorator(login_required, 'dispatch')
+@method_decorator(permission_required('medidas.change_laboratory', raise_exception=True),'dispatch')
+class LaboratoryUpdateView(UpdateView):
+    model = Laboratory
+    template_name = "medidas/crystal_laboratory_add.html"
+    form_class = LaboratoryForm
+    success_url = reverse_lazy('medidas:laboratories')    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["update"] = True
+        return context
+
+@method_decorator(login_required, 'dispatch')
+@method_decorator(permission_required('medidas.delete_laboratory', raise_exception=True),'dispatch')
+class LaboratoryDeleteView(View):
+    
+    def post(self, request, *args, **kwargs):
+        pk = request.POST.get('laboratory_id')
+        laboratory = get_object_or_404(Laboratory, pk=pk)
+        if laboratory.optic != request.user.get_opticuser():
+            raise PermissionDenied()
+        laboratory.delete()
+        return redirect('medidas:laboratories')
 
 
     

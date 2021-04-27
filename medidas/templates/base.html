@@ -48,10 +48,13 @@
                 <a href="{% url 'medidas:crystals' %}" class="list-group-item list-group-item-action pl-4 p-3 border-0 {% block crystals %}{% endblock crystals %}">Tipos</a>
             </li>
             <li>
-                <a href="{% url 'medidas:materials' %}" class='list-group-item list-group-item-action pl-4 p-3 border-0 {% block materials %}{% endblock materials %}'>Materiales</a>
+                <a href="{% url 'medidas:materials' %}" class="list-group-item list-group-item-action pl-4 p-3 border-0 {% block materials %}{% endblock materials %}">Materiales</a>
             </li>
             <li>
-                <a href="{% url 'medidas:treatments' %}" class='list-group-item list-group-item-action pl-4 p-3 border-0 {% block treatments %}{% endblock treatments %}'>Tratamientos</a>
+                <a href="{% url 'medidas:treatments' %}" class="list-group-item list-group-item-action pl-4 p-3 border-0 {% block treatments %}{% endblock treatments %}">Tratamientos</a>
+            </li>
+            <li>
+                <a href="{% url 'medidas:laboratories' %}" class="list-group-item list-group-item-action pl-4 p-3 border-0 {% block laboratories %}{% endblock laboratories %}">Laboratorios</a>
             </li>
         </ul>
       </div>  
@@ -72,7 +75,7 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
               <li class="nav-item">
-                <a class="nav-link text-dark" href="#"><i style='font-size:1.3em;' class="pt-2 fas fa-cog"></i></a>
+                <a class="nav-link text-dark" href="{% url 'users:configuration' user.configuration.id %}"><i style='font-size:1.3em;' class="pt-2 fas fa-cog"></i></a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link text-dark dropdown-toggle" href="#" id="navbarDropdown" role="button"

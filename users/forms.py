@@ -2,7 +2,7 @@ import unicodedata
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, UserChangeForm, UserChangeForm, AuthenticationForm, PasswordResetForm
 from django.contrib.auth.models import User, Group, Permission
-from .models import OpticUser, Account, EmployeeUser
+from .models import OpticUser, Account, EmployeeUser, Configuration
 
 from validate_email import validate_email
 
@@ -12,6 +12,17 @@ from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib import messages
 
+class ConfigurationForm(forms.ModelForm):
+    
+    class Meta:
+        model = Configuration
+        exclude = ('account',)
+
+    def __init__(self, *args, **kwargs):
+        super(ConfigurationForm, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            field.widget = forms.RadioSelect(choices=[(True, 'Dip.'),(False, 'Dnp.'),])
 
 class OpticaRegisterForm(UserCreationForm):
     username = forms.EmailField(label='Correo electronico', required=True)

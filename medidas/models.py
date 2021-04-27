@@ -72,7 +72,6 @@ class Subsidiary(models.Model):
         return self.subsidiary_name
 
 class Laboratory(models.Model):
-
     laboratory_name = models.CharField("Laboratorio", max_length=40, null=False)
     direction = models.CharField("Dirección",max_length=50, blank=True)
     phone = models.CharField("Telefono", max_length=23, blank=True)

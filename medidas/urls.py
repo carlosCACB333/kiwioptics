@@ -32,7 +32,12 @@ urlpatterns = [
     path('crystals/treatments/add/', views.CrystalTreatmentsCreateView.as_view(), name='treatment-add'),
     path('crystals/treatments/<int:pk>/change/', views.CrystalTreatmentsUpdateView.as_view(), name='treatment-update'),
     path('crystals/treatments/delete/', views.CrystalTreatmentsDeleteView.as_view(), name='treatment-delete'),
-    #subsidiarys
+    #laboratories
+    path('crystals/laboratories/', views.LaboratoryListView.as_view(), name='laboratories'),
+    path('crystals/laboratories/add/', views.LaboratoryCreateView.as_view(), name='laboratory-add'),
+    path('crystals/laboratories/<int:pk>/change/', views.LaboratoryUpdateView.as_view(), name='laboratory-update'),
+    path('crystals/laboratories/delete/', views.LaboratoryDeleteView.as_view(), name='laboratory-delete'),
+    #subsidiaries
     path('subsidiarys/add/', views.SubsidiaryCreateView.as_view(), name='subsidiary-add'),
     path('subsidiarys/<int:pk>/change/', views.SubsidiaryUpdateView.as_view(), name='subsidiary-update'),
     path('subsidiarys/<int:pk>/delete/', views.SubsidiaryDeleteView.as_view(), name='subsidiary-delete'),

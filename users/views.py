@@ -342,3 +342,13 @@ class PasswordResetConfirmView2(PasswordResetConfirmView):
         else:
             return self.form_invalid(form)
 
+class ConfigurationUpdateView(UpdateView):
+    model = Configuration
+    form_class = ConfigurationForm
+    template_name = "users/configuration.html"
+
+    def post(self, request, *args, **kwargs):
+        self.success_url = reverse_lazy('users:configuration', args=[request.user.configuration.id])
+        return super().post(request, *args, **kwargs)
+
+

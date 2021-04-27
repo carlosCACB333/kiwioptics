@@ -16,6 +16,7 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('logout/', rest.LogoutUser.as_view(), name='logout'),
     path('profile/', views.ProfileView.as_view(), name='profile'),
+    path('configuration/<int:pk>/', views.ConfigurationUpdateView.as_view(), name='configuration'),
     path('employeeUpdate/<pk>/',
          views.EmployeeUserUpdateView.as_view(), name='employeeUpdate'),
     path('opticUpdate/<pk>/', views.OpticUserUpdateView.as_view(), name='opticUpdate'),

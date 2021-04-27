@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<h1 class='display-4'>Configuración</h1>
+<hr>
+<form action="" method='POST'>{% csrf_token %}
+<p>
+Distancia nasopupilar o interpupilar:
+</p>
+{% for choice in form.is_dip %}
+{{choice}}
+{% endfor %}
+<hr>
+    <button class='btn btn-primary text-primary border border-primary' type='submit'>Guardar Configuracion</button>
+</form>
+{% endblock content %}

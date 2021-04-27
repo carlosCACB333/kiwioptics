@@ -138,3 +138,14 @@ class SubsidiaryForm(ModelForm):
         for fname, f in self.fields.items():
             f.widget.attrs['class'] = 'form-control form-control-sm'
 
+class LaboratoryForm(ModelForm):
+    
+    class Meta:
+        model = Laboratory
+        exclude = ('optic',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for fname, f in self.fields.items():
+            f.widget.attrs['class'] = 'form-control form-control-sm'
+

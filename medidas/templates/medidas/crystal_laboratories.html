@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block laboratories %}active{% endblock laboratories %}
+{% block styles %}
+<style>
+  table, th, td, tbody, thead {
+        border-collapse: collapse;
+    }
+    section {
+        line-height: 1.2;
+    }
+</style>
+{% endblock styles %}
+{% block content %}
+<div class='row justify-content-between mb-2'>
+  <div class='col-8'>
+    <h1 class='display-4'>Lista de Laboratorios</h1>
+  </div>
+  <div class='col-4 align-self-end text-right pl-0'>
+    <a href='{% url 'medidas:laboratory-add' %}' class="{% if perms.medidas.add_laboratory %}btn btn-primary border border-primary text-primary{% else %}btn border text-muted disabled{% endif %}">Añadir Laboratorio</a>
+  </div>
+</div>
+<div class="row no-gutters">
+    <div class="col-12">
+      <table class="table table-hover table-responsive-md">
+        <thead class='table-primary'>
+        <tr class="">
+          <th class="text-center align-middle" scope="col">N°</th>
+          <th class="align-middle p-0" scope="col">Laboratorio</th>
+          <th class="align-middle" scope="col">Direccion</th>
+          <th class="align-middle" scope="col">Celular</th>
+          <th colspan="2" class="align-middle text-center" scope="col">Opciones</th>
+        </tr>
+        </thead>
+        {% for laboratory in laboratories %}
+        <tr class="">
+          <th class="text-center align-middle p-auto" >{{forloop.counter}}</th>
+          <td style='max-width:12vw; word-wrap: break-word;' class="align-middle">{{laboratory.laboratory_name|title}}</td>
+          <td class="align-middle" style="max-width: 45vw"><div style='overflow:auto; max-height: 100px; word-wrap: break-word; width: 100%'>{{laboratory.direction|default_if_none:"--"}}</div></td>
+          <td style='width:10vw' class="align-middle">{{laboratory.phone|default_if_none:"--"}}</td>
+          <td class="align-middle text-center px-0"><a data-toggle='tooltip' data-placement='top' title='Editar Laboratorio'
+              class="{% if perms.medidas.change_laboratory %}btn btn-primary text-primary border border-primary{% else %}btn text-muted border disabled{% endif %}"
+              href="{% url 'medidas:laboratory-update' laboratory.id %}"
+              ><i class="far fa-edit"></i
+            ></a></td>
+          <td class="align-middle text-center px-0"><button
+              {% if perms.medidas.delete_laboratory %}{% else %}disabled{% endif %}
+              data-toggle="modal"
+              data-id="{{laboratory.id}}"
+              data-laboratory-optic-id="{{forloop.counter}}"
+              data-target="#laboratory_delete"
+              class="{% if perms.medidas.delete_laboratory %}btn btn-primary border border-primary text-primary{% else %}btn border text-muted bg-transparent{% endif %}"
+            >
+              <div data-toggle='tooltip' data-placement='top' title="{% if perms.medidas.delete_laboratory %}Eliminar Laboratorio{% endif %}">
+                <i class="far fa-trash-alt"></i>
+              </div>
+            </button></td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+</div>
+        <div
+          class="modal fade"
+          id="laboratory_delete"
+          tabindex="-1"
+          role="dialog"
+          aria-labelledby="laboratory_delete_title"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Confirmar eliminación</h5>
+              </div>
+              <div class="modal-body"></div>
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Cerrar
+                </button>
+                <form
+                  method="POST"
+                  action="{% url 'medidas:laboratory-delete' %}"
+                >
+                  {% csrf_token %}
+                  <button
+                    val=""
+                    id="laboratory_button_id"
+                    type="submit"
+                    name="laboratory_id"
+                    class="btn btn-danger text-light"
+                  >
+                    Eliminar
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+{% endblock content %}
+{% block script %}
+<script>
+  $("#laboratory_delete").on("show.bs.modal", function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var recipient = button.data("id"); // Extract info from data-* attributes
+    var laboratory_optic_id = button.data("laboratory-optic-id")
+    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    var modal = $(this);
+    modal
+      .find(".modal-body")
+      .text("¿Seguro que desea eliminar el laboratorio N°" + laboratory_optic_id + "? Las prescripciones que tengan este laboratorio no se eliminarán, pero su campo laboratorio quedará vacío.");
+    modal.find("#laboratory_button_id").val(recipient);
+  });
+      $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+{% endblock script %}
