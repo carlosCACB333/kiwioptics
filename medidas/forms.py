@@ -1,7 +1,7 @@
 from django.forms import ModelForm, ModelChoiceField, ModelMultipleChoiceField, DecimalField, ChoiceField
 from django.contrib.auth.forms import PasswordResetForm
 from django.core.exceptions import ValidationError
-from .models import Patient, Prescription, Crystal, CrystalTreatments, CrystalMaterial, Subsidiary
+from .models import Patient, Prescription, Crystal, CrystalTreatments, CrystalMaterial, Subsidiary, Laboratory
 from termcolor import colored
 from users.models import Account
 
@@ -52,6 +52,9 @@ class PrescriptionForm(ModelForm):
             optic=self.request.user.get_opticuser()
         )
         self.fields['subsidiary'].queryset = Subsidiary.objects.filter(
+            optic=self.request.user.get_opticuser()
+        )
+        self.fields['laboratory'].queryset = Laboratory.objects.filter(
             optic=self.request.user.get_opticuser()
         )
         for fname, f in self.fields.items():

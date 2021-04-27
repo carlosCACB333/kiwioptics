@@ -71,6 +71,20 @@ class Subsidiary(models.Model):
     def __str__(self):
         return self.subsidiary_name
 
+class Laboratory(models.Model):
+
+    laboratory_name = models.CharField("Laboratorio", max_length=40, null=False)
+    direction = models.CharField("Dirección",max_length=50, blank=True)
+    phone = models.CharField("Telefono", max_length=23, blank=True)
+    optic = models.ForeignKey(OpticUser, verbose_name="Optica", on_delete=models.CASCADE, null=False)
+
+    class Meta:
+        verbose_name = "Laboratorio"
+        verbose_name_plural = "Laboratorios"
+
+    def __str__(self):
+        return self.laboratory_name
+
 class CrystalTreatments(models.Model):
     treatment_name = models.CharField("Nombre del tratamiento", max_length=50)
     description = models.TextField("Descripcion", blank=True)
@@ -157,6 +171,7 @@ class Prescription(models.Model):
     is_dip = models.BooleanField('Dip o Dnp')
     patient = models.ForeignKey(Patient, on_delete=models.PROTECT, verbose_name="Paciente")
     subsidiary = models.ForeignKey(Subsidiary, on_delete=models.SET_NULL, verbose_name="Sucursal", blank=True, null=True)
+    laboratory = models.ForeignKey(Laboratory, verbose_name="Laboratorio", on_delete=models.SET_NULL, null=True, blank=True)
     doctor = models.ForeignKey(Account, verbose_name="Doctor", on_delete=models.SET_NULL, blank=True, null=True)
     prescription_optic_id = models.PositiveIntegerField(blank=True)
     prescription_type = models.CharField("Tipo", max_length=50, choices=PrescriptionType.choices, null=True, blank=True)

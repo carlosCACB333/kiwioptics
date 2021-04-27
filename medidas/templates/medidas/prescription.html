@@ -79,6 +79,15 @@ medica {% endblock title %}
                 <h6 class="mb-0"><i class="fas fa-glasses"></i> Lunas y Montura</h6>
             </div>
             <div class="card-body">
+                {{prescription_form.laboratory.label_tag}}
+                {% if prescription_form.laboratory.errors %}
+                    {{prescription_form.laboratory|attr:"class:form-control form-control-sm is-invalid"}}
+                    <div id="{{ prescription_form.laboratory.id_for_label }}" class="invalid-feedback">
+                    {{prescription_form.laboratory.errors}}
+                    </div>
+                {% else %}
+                    {{prescription_form.laboratory}}
+                {% endif %}
                 {{prescription_form.crystals.label_tag}}
                 {% if prescription_form.crystals.errors %}
                     {{prescription_form.crystals|attr:"class:form-control form-control-sm is-invalid"}}
