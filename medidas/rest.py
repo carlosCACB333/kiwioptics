@@ -20,8 +20,8 @@ from rest_framework.generics import (
 from rest_framework.permissions import IsAuthenticated
 
 from .functions import monthdelta, Day, Week, Month, Year, Hour,Dayname
-from .models import Patient, Prescription
-from .serializers import PatientSerializer, PrescriptionSerializer
+from .models import Patient, Prescription,Subsidiary
+from .serializers import PatientSerializer, PrescriptionSerializer,SubsidiaryPrescriptionSerializer
 
 
 MESES = {1: 'Enero', 2: 'Febrero', 3: 'Marzo', 4: 'Abril', 5: 'Mayo', 6: 'Junio',
@@ -232,12 +232,13 @@ class ReportSubsidiaryPrescription(ListAPIView):
     """ reporte de prescripciones de las subsidiarias por dia,semana,mes y año """
 
     permission_classes = [IsAuthenticated]
-    serializer_class = PrescriptionSerializer
+    serializer_class = SubsidiaryPrescriptionSerializer
     current = None
     current_year = None
     current_month = None
     label = None
     size=None
+    subsididiary=None
 
     def get_queryset(self):
 
@@ -246,6 +247,8 @@ class ReportSubsidiaryPrescription(ListAPIView):
         option = self.request.GET.get('option', '')
         hoy = datetime.today()
         optica=self.request.user.get_opticuser()
+        self.subsididiary=Prescription.objects.filter(optic=optica).distinct('subsidiary_id').values('subsidiary__subsidiary_name')
+
 
         if(calendar == 'month'):
             self.label = 'Mes'
@@ -277,8 +280,9 @@ class ReportSubsidiaryPrescription(ListAPIView):
                         self.current = MESES[12]
                         self.current_year -= 1
             self.size= c.monthrange(self.current_year, list(MESES.keys())[list(MESES.values()).index(self.current)])[1]
-            query = Prescription.objects.filter(optic=optica,date__month=list(MESES.keys())[list(MESES.values()).index(self.current)], date__year=self.current_year).annotate(
-                dato=Day('date')).values('dato').annotate(total=Count('date')).order_by('dato')
+            query = Prescription.objects.filter(optic=optica,date__month=list(MESES.keys())[list(MESES.values()).index(self.current)], date__year=self.current_year).annotate(dato=Day('date')).values('subsidiary','dato').annotate(total =Count('id')).order_by('dato')
+
+           
         elif calendar == 'year':
             self.size=12
             self.label = 'Año'
@@ -294,7 +298,7 @@ class ReportSubsidiaryPrescription(ListAPIView):
                     self.current = int(actual)-1
 
             query = Prescription.objects.filter(optic=optica,date__year=self.current).annotate(dato=Month(
-                'date')).values('dato').annotate(total=Count('date')).order_by('dato')
+                'date')).values('subsidiary','dato').annotate(total=Count('id')).order_by('dato')
         elif calendar == 'week':
             self.size=7
             self.label = 'Semana'
@@ -320,12 +324,8 @@ class ReportSubsidiaryPrescription(ListAPIView):
                         self.current = 53
                         self.current_year -= 1
             query = Prescription.objects.filter(optic=optica,date__week=self.current, date__year=self.current_year).annotate(
-                dato=ExtractIsoWeekDay('date')).values('dato').annotate(total=Count('date')).order_by('dato')
-            query2 = Prescription.objects.filter(optic=optica,date__week=self.current, date__year=self.current_year).annotate(
-                dato=ExtractIsoWeekDay('date')).values('dato','date__iso_week_day')
-            print("lllllllllllllllllllllllll",query2)    
-            for i in query2 :
-                print(i)
+                dato=ExtractIsoWeekDay('date')).values('subsidiary','dato').annotate(total=Count('id')).order_by('dato')
+            
         elif calendar == 'day':
             self.size=24
             self.label = 'Dia'
@@ -364,7 +364,7 @@ class ReportSubsidiaryPrescription(ListAPIView):
                             self.current_year, self.current_month)[1]
 
             query = Prescription.objects.filter(optic=optica,date__day=self.current, date__year=self.current_year,date__month=self.current_month).annotate(dato=Hour(
-                'time')).values('dato').annotate(total=Count('time')).order_by('dato')
+                'time')).values('subsidiary','dato').annotate(total=Count('id')).order_by('dato')
 
         return query
 
@@ -383,6 +383,7 @@ class ReportSubsidiaryPrescription(ListAPIView):
             'current_month': self.current_month,
             'label': self.label,
             'size':self.size,
+            'subsididiary':self.subsididiary
         }
         data = {'data': serializer.data, 'options': new}
         return Response(data)

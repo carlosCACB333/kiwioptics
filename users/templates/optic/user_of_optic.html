@@ -48,7 +48,7 @@
     #id_user_permissions,
     #id_groups{
         overflow: auto;
-        height: 200px;
+        max-height: 200px;
     }
 
     #id_permissions li label,
@@ -162,15 +162,27 @@
             </div>
 
             {% endif %}
+
+            <div class="form-row ">
+                <div class="form-group col-md-12">
+            
+                    <label for="">Grupos de Permisos</label>
+                    {{form.groups}}
+                    <div class='col-12 invalid-feedback d-block'>
+                        {% for error in form.groups.errors %} {{error}} {% endfor %}
+                    </div>
+
+                </div>
+            </div>
             <p>
                 <a class="text-primary font-weight-bold" data-toggle="collapse" href="#advancedOptions" role="button" aria-expanded="false" aria-controls="advancedOptions">
-                  Opciones avanzadas
+                  Permisos avanzadas
                 </a>
               </p>
               <div class="collapse" id="advancedOptions">
                 <div class="card card-body ">
                     <div class="form-row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-12">
                             <label for="">Permisos del empleado</label>
                             {{form.user_permissions}}
                             <div class='col-12 invalid-feedback d-block'>
@@ -178,15 +190,7 @@
                             </div>
         
                         </div>
-                        <div class="form-group col-md-6">
-        
-                            <label for="">Grupos de Permisos</label>
-                            {{form.groups}}
-                            <div class='col-12 invalid-feedback d-block'>
-                                {% for error in form.groups.errors %} {{error}} {% endfor %}
-                            </div>
-        
-                        </div>
+                      
                     </div>
                 </div>
               </div>
