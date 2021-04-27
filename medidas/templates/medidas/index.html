@@ -16,7 +16,7 @@ Optica
 #table_subsidiary {
   max-height: 250px;
 } {% endcomment %}
-.table-responsive{height:300px;overflow:auto;} 
+.table-responsive{height:430px;overflow:auto;} 
 thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index: 10;}
 </style>
 {% endblock styles %}
@@ -108,7 +108,7 @@ thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index
   <div class="row mb-3">
 
     <!-- Tabla usuarios -->
-    <div class="col-xl-7 col-lg-12 container-table-responsive">
+    <div class="col-xl-5 col-lg-12 container-table-responsive">
 
       {% if user.get_opticuser.employeeuser_set.all %}
 
@@ -224,7 +224,7 @@ thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index
     <!-- Fin mensajes -->
 
     <!-- graficas prescripciones por dia-->
-    <div class="col-xl-5 col-lg-12 text-center">
+    <div class="col-xl-7 col-lg-12 text-center">
    <div class="card mb-5 shadow-sm border-0 shadow-hover">
        <div class="card-header bg-light border-0 pt-3 pb-0">
        <div style="float: right;">
@@ -266,7 +266,7 @@ thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index
 
   <div class="row mb-3">
     <!-- Tabla Sucursales -->
-    <div class="col-xl-7 col-lg-12">
+    <div class="col-xl-5 col-lg-12">
       <div class="table-responsive" id='table_subsidiary'>
         <table id='' class="table">
           <thead>
@@ -302,7 +302,7 @@ thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index
     <!-- Fin Sucursales -->
 
     <!-- graficas de sucursales -->
-    <div class="col-xl-5 col-lg-12 text-center">
+    <div class="col-xl-7 col-lg-12 text-center">
       <div class="card mb-5 shadow-sm border-0 shadow-hover">
           <div class="card-header bg-light border-0 pt-3 pb-0">
           <div style="float: right;">
@@ -312,16 +312,16 @@ thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index
              <input type="hidden" value="{% url 'medidas:rest-report-subsidiary-prescription' %}" id="url_rest_subsidiary_prescription">
              <div class="btn-group btn-group-toggle" data-toggle="buttons" id="subsidiary_radio_calendar">
                <label class="btn btn-primary btn-sm text-primary">
-                   <input type="radio" name="calendar" value="day" autocomplete="off"> dia
+                   <input type="radio" name="calendar2" value="day" autocomplete="off"> dia
                </label>
                <label class="btn btn-primary btn-sm text-primary">
-                   <input type="radio" name="calendar" value="week" autocomplete="off"> semana
+                   <input type="radio" name="calendar2" value="week" autocomplete="off"> semana
                </label>
                <label class="btn btn-primary btn-sm text-primary">
-                   <input type="radio" name="calendar" value="month" autocomplete="off" checked> mes
+                   <input type="radio" name="calendar2" value="month" autocomplete="off" checked> mes
                </label>
                <label class="btn btn-primary btn-sm text-primary">
-                   <input type="radio" name="calendar" value="year" autocomplete="off"> año
+                   <input type="radio" name="calendar2" value="year" autocomplete="off"> año
                </label>
 
             </div>

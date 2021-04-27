@@ -1,10 +1,10 @@
 myChart=null;
 charSucursal=null;
 tipo='line'
-charSucursalType='line';
-function graficar(labels,datasets,canvas){
+charSucursalType='bar';
+function graficar(labels,datasets,canvas,type){
     const config = {
-        type: tipo,
+        type: type,
         data: {
             labels: labels,
             datasets: datasets
@@ -37,10 +37,10 @@ function char_prescriptions(url){
         url: url,
         dataType: "json",
         success: function(response_data) {
-        console.log(response_data)
+        // console.log(response_data)
         let labels=[]
         let data=[]
-        contador=0;
+        let contador=0;
         for (let i=1;i<=response_data.options.size;++i){
             if (response_data.data[contador] != undefined && response_data.data[contador].dato==i){
                 data.push(response_data.data[contador].total)
@@ -76,7 +76,7 @@ function char_prescriptions(url){
             borderColor: 'rgba(0, 123, 255, .5)',
             borderWidth: 3,
         }];
-        myChart= graficar(labels,datasets,canva)                
+        myChart= graficar(labels,datasets,canva,tipo)                
         
         $("#id_current").val(response_data.options.current)
         $("#id_current_year").val(response_data.options.current_year)
@@ -98,45 +98,19 @@ function char_prescriptions(url){
 }
 
 
+
 $(document).ready(function(){
-    let calendar=$('input:radio[name=calendar]:checked').val();
+    let calendar=$('#radio-calendar input:radio[name=calendar]:checked').val();
     let url=$("#url_rest_patient_list").val()+'?calendar='+calendar;
     char_prescriptions(url);
 
 
     //sucursales
-    const etiquetas = ["Enero", "Febrero", "Marzo", "Abril"]
-    const const1 = {
-        label: "sucursal norte",
-        data: [5000, 1500, 8000, 5102], // La data es un arreglo que debe tener la misma cantidad de valores que la cantidad de etiquetas
-        backgroundColor: 'rgba(54, 162, 235, 0.2)', // Color de fondo
-        borderColor: 'rgba(54, 162, 235, 1)', // Color del borde
-        borderWidth: 1,// Ancho del borde
-    };
-    const const2 = {
-        label: "sucursal gozu",
-        data: [10000, 1700, 5000, 5989], // La data es un arreglo que debe tener la misma cantidad de valores que la cantidad de etiquetas
-        backgroundColor: 'rgba(255, 159, 64, 0.2)',// Color de fondo
-        borderColor: 'rgba(255, 159, 64, 1)',// Color del borde
-        borderWidth: 1,// Ancho del borde
-    };
-    const const3 = {
-        label: "sucursal sur",
-        data: [3000, 2500, 9000, 10582], // La data es un arreglo que debe tener la misma cantidad de valores que la cantidad de etiquetas
-        backgroundColor: 'rgba(255, 159, 64, 0.2)',// Color de fondo
-        borderColor: 'rgba(25, 19, 64, 1)',// Color del borde
-        borderWidth: 1,// Ancho del borde
-    };
-    const const4= {
-        label: "sucursal ra",
-        data: [2563, 5281, 9635, 4526], // La data es un arreglo que debe tener la misma cantidad de valores que la cantidad de etiquetas
-        backgroundColor: 'rgba(54, 162, 235, 0.2)', // Color de fondo
-        borderColor: 'rgba(54, 162, 235, 1)', // Color del borde
-        borderWidth: 1,// Ancho del borde
-    };
-   
-    let canva=document.getElementById('subsidiary').getContext('2d');
-    graficar(etiquetas,[const1,const2,const3,const4],canva    )
+    let calendar2=$('#subsidiary_radio_calendar input:radio[name=calendar2]:checked').val();
+    let url2=$("#url_rest_subsidiary_prescription").val()+'?calendar='+calendar2;
+    char_subsidiary_prescriptions(url2);
+
+    
 });
 
 $("#radio-calendar input").on("click", function(){
@@ -164,12 +138,139 @@ $("#id_next").click(function(){
 })
 
 // GRAFICA DE SUCURSALES Y LA CANTIDAD DE PRESCRIPCIONES POR FECHAS
+function char_subsidiary_prescriptions(url){
+  
+    $.ajax({
+        type: "GET",        
+        url: url,
+        dataType: "json",
+        success: function(response_data) {
+
+            console.log(response_data)
+            let labels=[]
+            let data=[]
+            let sucursales=[];
+            let grupo_data=[];
+            $.each(response_data.options.subsididiary, function( index, value ) {
+                if(value.subsidiary__subsidiary_name!=null){
+                    sucursales.push(value.subsidiary__subsidiary_name)
+                }else{
+                    sucursales.push('Desconocido')
+                }
+                grupo_data.push([])
+            });
+
+            $.each(grupo_data, function( index, value ) {
+                value.length=response_data.options.size   
+                value.fill(0,0,response_data.options.size)
+            });
+
+            console.log(sucursales)
+
+
+            for (let i=1;i<=response_data.options.size;++i){
+                if (response_data.options.label=='Semana'){
+                    labels.push( SEMANAS[i-1]);  
+                }else if(response_data.options.label=='Mes'){
+                    if(i<10){
+                        labels.push('0'+i);  
+                    } else{
+                        labels.push(i);  
+                    }
+                }else if(response_data.options.label=='Año'){
+                    labels.push( MESES[i-1]); 
+                }else if (response_data.options.label=='Dia'){
+                    labels.push(i+"h");
+                }
+                
+            }
+
+       
+      
+
+        
+        $.each(response_data.data, function( index, value ) {
+            console.log(value)
+            mi_indice=sucursales.indexOf(value.subsidiary.subsidiary_name);
+            console.log(value.total)
+            grupo_data[mi_indice][value.dato-1]=value.total
+        });
+
+        console.log(grupo_data)
+
+       
+        let datsets=[]
+        $.each(grupo_data, function( index, value ) {
+            let color=colorRGB();
+            let datos={
+                label: sucursales[index],
+                data: value,
+                backgroundColor: color,// Color de fondo
+                borderColor:color,// Color del borde
+                borderWidth: .5,// Ancho del borde
+            }
+            datsets.push(datos);
+        });
+
+        console.log(datsets)
+        console.log(labels)
+
+        let canva=document.getElementById('subsidiary').getContext('2d');
+        if (charSucursal!=null){
+            charSucursal.destroy();
+        }
+
+        charSucursal= graficar(labels,datsets,canva,charSucursalType)                
+        
+        $("#subsidiary_current").val(response_data.options.current)
+        $("#subsidiary_current_year").val(response_data.options.current_year)
+        $("#subsidiary_current_month").val(response_data.options.current_month)
+        
+        if($("#subsidiary_current_year").val().length==0){
+            $("#subsidiary_current_year").hide()
+        }else{
+            $("#subsidiary_current_year").show()
+        }
+        if($("#subsidiary_current_month").val().length==0){
+            $("#subsidiary_current_month").hide()
+        }else{
+            $("#subsidiary_current_month").show()
+        }
+        }, //End of AJAX Success function
+    });
+    
+}
 
 $("#subsidiary_radio_calendar input").on("click", function(){
-    alert("Value is " + this.value);
-    // alert($('input:radio[name=calendar]:checked').val());
-    // let calendar=this.value;
-    // let url=$("#url_rest_patient_list").val()+'?calendar='+calendar;
-    // char_prescriptions(url);
 
+    let calendar=this.value;
+    let url=$("#url_rest_subsidiary_prescription").val()+'?calendar='+calendar;
+    char_subsidiary_prescriptions(url);
 });
+
+$("#subsidiary_previus").click(function(){
+    let calendar=$('input:radio[name=calendar2]:checked').val();
+    let current= $("#subsidiary_current").val();
+    let current_year= $("#subsidiary_current_year").val();
+    let url=$("#url_rest_subsidiary_prescription").val()+'?calendar='+calendar+'&option=previus&current='+current+'&current_year='+current_year+'&current_month='+$("#subsidiary_current_month").val();
+    char_subsidiary_prescriptions(url);
+})
+$("#subsidiary_next").click(function(){
+    let calendar=$('input:radio[name=calendar2]:checked').val();
+    let current= $("#subsidiary_current").val();
+    let current_year= $("#subsidiary_current_year").val();
+    let url=$("#url_rest_subsidiary_prescription").val()+'?calendar='+calendar+'&option=next&current='+current+'&current_year='+current_year+'&current_month='+$("#subsidiary_current_month").val();
+    char_subsidiary_prescriptions(url);
+})
+
+
+// ra
+
+function generarNumero(numero){
+	return (Math.random()*numero).toFixed(0);
+}
+
+function colorRGB(){
+	var coolor = "("+generarNumero(255)+"," + generarNumero(255) + "," + generarNumero(255) +")";
+	return "rgb" + coolor;
+}

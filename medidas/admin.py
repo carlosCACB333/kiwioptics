@@ -1,7 +1,10 @@
 from django.contrib import admin
-from .models import Prescription, Patient, Crystal, CrystalMaterial, CrystalTreatments
+from .models import Prescription, Patient, Crystal, CrystalMaterial, CrystalTreatments,Subsidiary
 from users.models import Account
 # Register your models here.
+
+
+admin.site.register(Subsidiary)
 
 # @admin.register(Crystal)
 # class CrystalAdmin(admin.ModelAdmin):
