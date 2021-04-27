@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, FileResponse
 from django.urls import reverse_lazy
+import random
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -411,6 +412,8 @@ class PrescriptionPDFDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        random_choices = ['.','','-','+','+-','1','0','...','_']
+        context["random"] = random.choice(random_choices)
         context["is_dip"] = self.object.is_dip
         if self.object.is_dip:
             if self.object.far_dnp_left:

@@ -8,10 +8,6 @@
     <style>
     @page {
   margin: 1.5cm;
-  @bottom-left {
-    color: #4ca2ff;
-    font-family: Arial;
-    content: '♥ Gracias!'; }
   @bottom-right {
     color: #a9a;
     content: '{{prescription.subsidiary.subsidiary_name}} | {{prescription.subsidiary.phone}} | {{prescription.subsidiary.direction}}';
@@ -20,11 +16,11 @@
     </style>
   </head>
   <body>
+    {{random}}
     <h1>{{prescription.optic|title}}</h1>
     <aside>
       <address id="from">
-        Número: <span style='color: #000'>{{prescription.prescription_optic_id}}</span> <br>
-        Fecha: <span style='color: #000'>{{prescription.date}} </span><br>
+        Fecha: <span style='color: #000'>{{prescription.date}} </span>
         Paciente: <span style='color: #000'>{{prescription.patient.full_name}}</span>
       </address>
 
