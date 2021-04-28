@@ -155,12 +155,12 @@ thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index
                   {% if empleado.account.is_active %}
                   Activo
                   {% else %}
-                  Inactivo
+                  Inactivo 
                   {% endif %}
                 </span></td>
               <td class="align-middle">
                 <a data-toggle='tooltip' data-placement='top' title='Editar Usuario' href="{% url 'users:userOfOptic' %}?id={{empleado.id}}" class="shadow-hover {% if perms.medidas.add_subsidiary %}{% else %}disabled{% endif %}"><span
-                    class="badge badge-primary {% if perms.medidas.add_subsidiary %}text-primary{% else %}text-muted{% endif %}">Editar <i class="icon ion-md-settings ml-2"></i></span></a>
+                    class="{% if user.user_type == 'OPTIC' %}badge badge-primary text-primary{% else %}badge badge-secondary text-muted{% endif %}">Editar <i class="icon ion-md-settings ml-2"></i></span></a>
               </td>
             </tr>
 
@@ -275,9 +275,9 @@ thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index
                     <div class='' style='position:absolute ;display: inline-block ;top: 5px;'><a
                         href="{% url 'medidas:subsidiary-add' %}"
                         data-toggle='tooltip' data-placement='top' title='Añadir Sucursal'
-                        class='circle-sm rounded-circle bg-primary align-self-center d-flex p-0 mx-2'><i
+                        class="circle-sm rounded-circle {% if perms.medidas.add_subsidiary %}bg-primary{% else %}bg-transparent disabled{% endif %} align-self-center d-flex p-0 mx-2"><i
                           style='font-size:1rem'
-                          class='fas fa-plus text-primary align-self-center mx-auto lead'></i></a></div>
+                          class="fas fa-plus {% if perms.medidas.add_subsidiary %}text-primary{% else %}text-muted{% endif %} align-self-center mx-auto lead"></i></a></div>
               </th>
               <th scope="col"><small class="font-weight-bold">Telefono<small></th>
               <th scope="col"><small class="font-weight-bold">Configuración<small></th>
@@ -290,8 +290,8 @@ thead tr:nth-child(1) th{background: whitesmoke; position: sticky;top: 0;z-index
                 </td>
                 <td class="align-middle"><span class="text-dark"><small>{{subsidiary.phone}}</small></span></td>
                 <td class="align-middle">
-        <a data-toggle='tooltip' data-placement='top' title='Editar Sucursal' href="{% url 'medidas:subsidiary-update' subsidiary.id %}" class="shadow-hover "><span
-            class="badge badge-primary text-primary">Editar <i class="icon ion-md-settings ml-2"></i></span></a>
+        <a data-toggle='tooltip' data-placement='top' title="{% if perms.medidas.change_subsidiary or perms.medidas.delete_subsidiary %}Editar Sucursal{% endif %}" href="{% url 'medidas:subsidiary-update' subsidiary.id %}" class="shadow-hover {% if perms.medidas.change_subsidiary or perms.medidas.delete_subsidiary %}{% else %}disabled{% endif %}"><span
+            class="{% if perms.medidas.change_subsidiary or perms.medidas.delete_subsidiary %}badge badge-primary text-primary{% else %}badge badge-secondary text-muted{% endif %}">Editar <i class="icon ion-md-settings ml-2"></i></span></a>
       </td>
               </tr>
             {% endfor %}
