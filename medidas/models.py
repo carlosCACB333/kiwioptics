@@ -266,7 +266,7 @@ class Prescription(models.Model):
         if self.crystals_price is None:
             crystals_price = 0
         else:
-            crystals_price = self.measure_price
+            crystals_price = self.crystals_price
 
         if self.measure_price is None:
             measure_price = 0

@@ -16,11 +16,15 @@
           {{field.errors}}
           </div>
       {% else %}
-          {% if perms.medidas.change_subsidiary %}
-          {{field}}
-          {% else %}
-          {{field|attr:"disabled"}}
-          {% endif %}
+        {% if update %}
+            {% if perms.medidas.change_subsidiary %}
+                {{field}}
+            {% else %}
+                {{field|attr:"disabled"}}
+            {% endif %}
+        {% else %}
+                {{field}}
+        {% endif %} 
       {% endif %}    
     {% endfor %}
     <br>

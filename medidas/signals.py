@@ -1,8 +1,8 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from users.models import OpticUser,Account
-from medidas.models import Crystal, CrystalTreatments, CrystalMaterial, Prescription
-
+from medidas.models import Crystal, CrystalTreatments, CrystalMaterial, Prescription, Subsidiary
+import re
 from PIL import Image
 
 
@@ -234,6 +234,14 @@ LABORATORIES = (
         "laboratory_name":"Topsa",
     },
 )
+
+@receiver(post_save, sender=Subsidiary)
+def add_subsidiary(sender, instance, created, **kwargs):
+    subsidiary_name = instance.subsidiary_name
+    if re.search("\d$",subsidiary_name):
+        subsidiary_name += '.'
+        instance.subsidiary_name = subsidiary_name
+        instance.save()
 
 @receiver(post_save, sender=OpticUser)
 def add_crystals(sender, instance, created,**kwargs):
