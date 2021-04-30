@@ -45,7 +45,19 @@ function update_patient() {
 
             }, //End of AJAX Success function
         }).fail(function(e) {
-            console.log(e.message)
+            $(".errors").remove();
+            $.each(e.responseJSON, function( index, value ) {
+                let html_error="<div class='col-12 invalid-feedback d-block errors'>"
+                $.each(value, function( index, value ) {
+                    html_error+=value;
+                });
+                html_error+="</div>"
+
+                console.log(html_error);
+                $("#id_"+index).after(html_error);
+               
+            });
+
         });
 
     }

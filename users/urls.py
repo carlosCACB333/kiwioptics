@@ -22,8 +22,6 @@ urlpatterns = [
     path('opticUpdate/<pk>/', views.OpticUserUpdateView.as_view(), name='opticUpdate'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html',
                                                 redirect_authenticated_user=True, form_class=AccountAutenticateForm), name='login'),
-    path('valivateEmail/<id>/<codigo>/',
-         views.ValidateEmail.as_view(), name='validateEmail'),
     path('google/', views.RegisterGoogleUserCreateView.as_view(), name='google'),
     path('userOfOptic/', views.UserOfOpticCreateView.as_view(), name='userOfOptic'),
     path('userOfOpticDelete/<id>/',
@@ -31,11 +29,13 @@ urlpatterns = [
     # recuperar cuenta
     path('reset/form/', PasswordResetView.as_view(
         template_name="registrations/password_change_form.html",
-        email_template_name='registrations/password_reset_email.html',
+        html_email_template_name  ='registrations/password_reset_email.html',
+        email_template_name='registrations/email_body.html',
         form_class=PasswordResetForm2,
         success_url = '.',from_email=settings.EMAIL_HOST_USER), name='password-reset-form'),
 
     path('reset/confirm/<uidb64>/<token>/',views.PasswordResetConfirmView2.as_view(), name='password-reset-confirm'),
+    path('validate/email/<uidb64>/<token>/',views.ValidateEmailView.as_view(), name='validate-email'),
 
     # api rest framework
     path('api/loginGoogle', rest.GoogleLoginValidateView.as_view(),
