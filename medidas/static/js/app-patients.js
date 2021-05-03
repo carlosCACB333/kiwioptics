@@ -52,9 +52,12 @@ function update_patient() {
                     html_error+=value;
                 });
                 html_error+="</div>"
-
-                console.log(html_error);
-                $("#id_"+index).after(html_error);
+                
+                if('non_field_errors'==index){
+                    $("#id_dni").after(html_error);
+                }else{
+                    $("#id_"+index).after(html_error);
+                }
                
             });
 

@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
-from django.contrib.auth import login, update_session_auth_hash
+from django.contrib.auth import login, update_session_auth_hash,logout
 from django.contrib.auth.models import Permission, Group
 from django.core.paginator import Paginator
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
@@ -57,6 +57,12 @@ def signup(request):
         return render(request, 'users/signup.html', {
             'form': OpticaRegisterForm(),
         })
+
+
+class LogoutUser(View):
+    def get(self, request, *args, **kwargs):
+        logout(self.request)
+        return HttpResponseRedirect(reverse_lazy('users:login'))
 
 
 class ValidateEmailView(View):

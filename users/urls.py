@@ -14,7 +14,7 @@ app_name = 'users'
 
 urlpatterns = [
     path('signup/', views.signup, name='signup'),
-    path('logout/', rest.LogoutUser.as_view(), name='logout'),
+    path('logout/', views.LogoutUser.as_view(), name='logout'),
     path('profile/', views.ProfileView.as_view(), name='profile'),
     path('configuration/<int:pk>/', views.ConfigurationUpdateView.as_view(), name='configuration'),
     path('employeeUpdate/<pk>/',
@@ -40,8 +40,6 @@ urlpatterns = [
     # api rest framework
     path('api/loginGoogle', rest.GoogleLoginValidateView.as_view(),
          name='login-google'),
-    path('api/registerGoogle', rest.GoogleLRegisterView.as_view(),
-         name='register-google'),
     path('api/pictureUpdate/<pk>/', rest.PictureUpdateAPIView.as_view(),
          name='rest-picture-update'),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

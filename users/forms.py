@@ -132,7 +132,7 @@ class UserOfOpticForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserOfOpticForm, self).__init__(*args, **kwargs)
         self.fields['password'].required = False 
-        self.fields['user_permissions'].queryset=Permission.objects.all().exclude(Q(codename__icontains="view_")|Q(codename__icontains="_Token")|Q(codename__icontains="_session")|Q(codename__icontains="_contenttype")|Q(codename__icontains='_logentry')|Q(codename__icontains='_permission')|Q(codename__icontains='_group')|Q(codename__icontains='_account')|Q(codename__icontains='_opticuser')|Q(codename__icontains='_configuration')|Q(codename__icontains='_employeeuser')|Q(codename__icontains='_subsidiary')|Q(codename__icontains='_laboratory'));
+        self.fields['user_permissions'].queryset=Permission.objects.all().exclude(Q(codename__icontains="view_")|Q(codename__icontains="_Token")|Q(codename__icontains="_session")|Q(codename__icontains="_contenttype")|Q(codename__icontains='_logentry')|Q(codename__icontains='_permission')|Q(codename__icontains='_group')|Q(codename__icontains='_account')|Q(codename__icontains='_opticuser')|Q(codename__icontains='_configuration')|Q(codename__icontains='_employeeuser')|Q(codename__icontains='_subsidiary')|Q(codename__icontains='_laboratory')|Q(codename__icontains='_patient'));
             
         for field_name, field in self.fields.items():
             field.widget.attrs['placeholder'] = field.label

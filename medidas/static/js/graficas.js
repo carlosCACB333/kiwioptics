@@ -205,18 +205,15 @@ function char_subsidiary_prescriptions(url){
 
         
         $.each(response_data.data, function( index, value ) {
-            console.log(value)
             mi_indice=sucursales.indexOf(value.subsidiary.subsidiary_name);
-            console.log(value.total)
             grupo_data[mi_indice][value.dato-1]=value.total
         });
-
-        console.log(grupo_data)
 
        
         let datsets=[]
         $.each(grupo_data, function( index, value ) {
-            let color=colorRGB();
+            console.log(index,response_data.options.subsididiary.length)
+            let color=colorRGB(index,response_data.options.subsididiary.length);
             let datos={
                 label: sucursales[index],
                 data: value,
@@ -226,9 +223,6 @@ function char_subsidiary_prescriptions(url){
             }
             datsets.push(datos);
         });
-
-        console.log(datsets)
-        console.log(labels)
 
         let canva=document.getElementById('subsidiary').getContext('2d');
         if (charSucursal!=null){
@@ -285,7 +279,10 @@ function generarNumero(numero){
 	return (Math.random()*numero).toFixed(0);
 }
 
-function colorRGB(){
-	var coolor = "("+generarNumero(255)+"," + generarNumero(255) + "," + generarNumero(255) +")";
-	return "rgb" + coolor;
+function colorRGB(index,len){
+    let r=0+index*(220/len);
+    let g=120+index*(120/len);
+    let b=250;
+	let color = "("+r+"," + g + "," + b +")";
+	return "rgb" + color;
 }
