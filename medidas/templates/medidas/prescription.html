@@ -97,6 +97,15 @@ medica {% endblock title %}
                 {% else %}
                     {{prescription_form.crystals}}
                 {% endif %}
+                {{prescription_form.crystals_cost.label_tag}}
+                {% if prescription_form.crystals_cost.errors %}
+                    {{prescription_form.crystals_cost|attr:"class:form-control form-control-sm is-invalid"}}
+                    <div id="{{ prescription_form.crystals_cost.id_for_label }}" class="invalid-feedback">
+                    {{prescription_form.crystals_cost.errors}}
+                    </div>
+                {% else %}
+                    {{prescription_form.crystals_cost}}
+                {% endif %}
                 {{prescription_form.crystals_price.label_tag}}
                 {% if prescription_form.crystals_price.errors %}
                     {{prescription_form.crystals_price|attr:"class:form-control form-control-sm is-invalid"}}

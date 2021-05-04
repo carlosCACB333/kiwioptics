@@ -282,11 +282,13 @@ class Prescription(models.Model):
                                         MinValueValidator(0, 'No se permite el valor ingresado')], blank=True, null=True)
     crystals = models.ForeignKey(
         Crystal, on_delete=models.SET_NULL, verbose_name="Lunas", blank=True, null=True)
-    crystals_price = models.DecimalField('Precio de las lunas', max_digits=10, decimal_places=2, validators=[
+    crystals_cost = models.DecimalField('Costo de las lunas', max_digits=10, decimal_places=2, validators=[
+        MinValueValidator(0, 'No se permite el valor ingresado')], blank=True, null=True)
+    crystals_price = models.DecimalField('Precio de venta de las lunas', max_digits=10, decimal_places=2, validators=[
                                          MinValueValidator(0, 'No se permite el valor ingresado')], blank=True, null=True)
     frame = models.CharField("Descripcion de la montura",
                              max_length=120, null=True, blank=True)
-    frame_price = models.DecimalField('Precio de la montura', max_digits=10, decimal_places=2, validators=[
+    frame_price = models.DecimalField('Precio de venta de la montura', max_digits=10, decimal_places=2, validators=[
                                       MinValueValidator(0, 'No se permite el valor ingresado')], blank=True, null=True)
 
     class Meta:
