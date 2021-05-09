@@ -4,7 +4,7 @@ from users.models import Account
 from django.conf import settings
 import json
 
-USERNAME = 'techi211706@gmail.com'
+USERNAME = 'solanito2000@hotmail.com'
 FILE = settings.BASE_DIR.joinpath('migrate.json')
 
 
@@ -32,6 +32,8 @@ class Command(BaseCommand):
                 dip = float(dip)
             if new_data["date"] is None:
                 new_data.pop('date')
+            if new_data["patient_notes"] is None:
+                new_data.pop('patient_notes')
             print(new_data)
             prescription = Prescription(
                 optic=optic, patient=patient, subsidiary=subsidiary, is_dip=True, **new_data
