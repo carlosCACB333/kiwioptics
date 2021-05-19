@@ -7,7 +7,7 @@ Software web en django para la gestion de prescripciones de medidas de la vista.
 * Git
 ### Procedimiento
 1. Clone este proyecto, usando el comando:
-> git clone url_repositorio_example
+> git clone <https://github.com/SolanoJason/kiwioptics.git>
 2. Instalar los packages necesarios usando el comando:
 > pip install -r requirements.txt
 3. Generar un secret_key para nuestro proyecto, la manera más fácil a través de [djecrety](https://djecrety.ir/)
