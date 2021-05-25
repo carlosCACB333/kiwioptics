@@ -1,18 +1,15 @@
-<!doctype html>
-<html lang="es">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+{% load static %}
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-        .container {
-            margin-top: 50px;
-            margin-bottom: 50px;
-        }
-
+       
         .btn {
             color: #fff !important;
             display: block;
@@ -35,18 +32,25 @@
 </head>
 
 <body>
-    <div class="container">
+    <div style="margin-top: 50px;margin-bottom: 50px;">
 
         <div style="color: #004085;background-color: #cce5ff;border-color: #b8daff;text-align: center;padding: 10px;">
             <h1>kiwiOptics</h1>
+           
             <p class="">Administra las prescripciones de los pacientes de tu Optica desde cualquier lugar del mundo y
-                más</p>
+                más en: <strong><a href="{{ sitio }}">{{site_name}}</a></strong></p>
         </div>
 
         <div style="text-align:center;">
-            <h2>Hola {{username}}. Presiona confirmar email para validar su identidad en nuestro sistema</h2>
-            <a href="{{ruta}}" class="btn"> Confimar Email</a>
+            <h2>Hola {{user.full_name}}. Presiona confirmar email para validar su identidad en nuestro sistema</h2>
+
+            <h4>cuenta : {{user.username}}</h4>
+            <a href="{{ sitio }}{% url 'users:validate-email' uidb64=uid token=token %}" class="btn"> Confimar Email</a>
         </div>
+
+
+        <p>¡Gracias por usar nuestro sitio!</p>
+        <p>El equipo de <strong>{{site_name}}</strong></p>
     </div>
 
 

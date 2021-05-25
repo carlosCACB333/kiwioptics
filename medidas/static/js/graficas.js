@@ -15,7 +15,8 @@ function graficar(labels,datasets,canvas,type){
                     beginAtZero: true
                 }
             },
-            responsive: true
+            responsive: true,
+        
         }
     };
     let grafica = new Chart(canvas,config);
@@ -27,7 +28,7 @@ function graficar(labels,datasets,canvas,type){
 
 
 const SEMANAS=['lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
-const MESES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre']
+const MESES=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Set','Oct','Nov','Dic']
 
 // GRAFICA DE REPORTE DE PRESCRIPCIONES POR FECHAS
 function char_prescriptions(url){
@@ -68,13 +69,18 @@ function char_prescriptions(url){
         if (myChart!=null){
             myChart.destroy();
         }
-
+        let gradientStroke=gradient_color(canva,"#448AFF","#00BCD4","#1DE9B6","#8EEEEE");
         let datasets=[{
             label: 'PRescripciones',
             data: data,
-            backgroundColor: 'rgba(0, 123, 255, .5)',
-            borderColor: 'rgba(0, 123, 255, .5)',
+            backgroundColor: gradientStroke,
+            borderColor: gradientStroke,
+            pointBorderColor: gradientStroke,
+            pointBackgroundColor: gradientStroke,
+            pointHoverBackgroundColor: gradientStroke,
+            pointHoverBorderColor: gradientStroke,
             borderWidth: 3,
+            
         }];
         myChart= graficar(labels,datasets,canva,tipo)                
         
@@ -96,6 +102,16 @@ function char_prescriptions(url){
     });
     
 }
+
+function gradient_color(ctx,firstColour,secondColour,thirdColour,fourthColour){
+    let width = window.innerWidth || document.body.clientWidth;
+    let  gradientStroke = ctx.createLinearGradient(0, 0, width, 0);
+    gradientStroke.addColorStop(0, firstColour);
+    gradientStroke.addColorStop(0.3, secondColour);
+    gradientStroke.addColorStop(0.6, thirdColour);
+    gradientStroke.addColorStop(1, fourthColour);
+    return gradientStroke;
+    }
 
 
 
@@ -148,7 +164,6 @@ function char_subsidiary_prescriptions(url){
 
             console.log(response_data)
             let labels=[]
-            let data=[]
             let sucursales=[];
             let grupo_data=[];
             $.each(response_data.options.subsididiary, function( index, value ) {
@@ -190,18 +205,15 @@ function char_subsidiary_prescriptions(url){
 
         
         $.each(response_data.data, function( index, value ) {
-            console.log(value)
             mi_indice=sucursales.indexOf(value.subsidiary.subsidiary_name);
-            console.log(value.total)
             grupo_data[mi_indice][value.dato-1]=value.total
         });
-
-        console.log(grupo_data)
 
        
         let datsets=[]
         $.each(grupo_data, function( index, value ) {
-            let color=colorRGB();
+            console.log(index,response_data.options.subsididiary.length)
+            let color=colorRGB(index,response_data.options.subsididiary.length);
             let datos={
                 label: sucursales[index],
                 data: value,
@@ -211,9 +223,6 @@ function char_subsidiary_prescriptions(url){
             }
             datsets.push(datos);
         });
-
-        console.log(datsets)
-        console.log(labels)
 
         let canva=document.getElementById('subsidiary').getContext('2d');
         if (charSucursal!=null){
@@ -270,7 +279,10 @@ function generarNumero(numero){
 	return (Math.random()*numero).toFixed(0);
 }
 
-function colorRGB(){
-	var coolor = "("+generarNumero(255)+"," + generarNumero(255) + "," + generarNumero(255) +")";
-	return "rgb" + coolor;
+function colorRGB(index,len){
+    let r=0+index*(220/len);
+    let g=120+index*(120/len);
+    let b=250;
+	let color = "("+r+"," + g + "," + b +")";
+	return "rgb" + color;
 }

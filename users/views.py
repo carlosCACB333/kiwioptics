@@ -8,23 +8,34 @@ from django.contrib.auth.views import PasswordChangeView, PasswordResetConfirmVi
 from django.views.generic import (
     UpdateView, CreateView, ListView, View
 )
+from django.views.generic.edit import FormView
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
-from django.contrib.auth import login
+from django.contrib.auth import login, update_session_auth_hash,logout
 from django.contrib.auth.models import Permission, Group
 from django.core.paginator import Paginator
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.http import Http404
 from termcolor import colored
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
+from django.views.decorators.cache import never_cache
+from django.utils.decorators import method_decorator
+from django.views.decorators.debug import sensitive_post_parameters
 
 from .forms import *
 from .models import Account, OpticUser, EmployeeUser, Configuration
 from .mixins import OpticPermitMixin, OpticPermissionRequiredMixin
 from .serializer import LoginSocialSerializer
+from django.middleware.csrf import rotate_token
 
 # Create your views here.
+UserModel = get_user_model()
+INTERNAL_RESET_SESSION_TOKEN = '_password_reset_token'
 
 
 def signup(request):
@@ -48,21 +59,63 @@ def signup(request):
         })
 
 
-class ValidateEmail(View):
+class LogoutUser(View):
     def get(self, request, *args, **kwargs):
-        id_cuenta = kwargs['id']
-        codigo = kwargs['codigo']
+        logout(self.request)
+        return HttpResponseRedirect(reverse_lazy('users:login'))
 
+
+class ValidateEmailView(View):
+    reset_url_token = 'verify-email'
+    token_generator = default_token_generator
+
+    @method_decorator(sensitive_post_parameters())
+    @method_decorator(never_cache)
+    def dispatch(self, request, *args, **kwargs):
+        assert 'uidb64' in kwargs and 'token' in kwargs
+        self.user = self.get_user(kwargs['uidb64'])
+
+        if self.user is not None:
+            token = kwargs['token']
+            if token == self.reset_url_token:
+                session_token = self.request.session.get(
+                    INTERNAL_RESET_SESSION_TOKEN)
+                if self.token_generator.check_token(self.user, session_token):
+                    # If the token is valid, display the password reset form.
+                    self.user.verify_email = True
+                    self.user.save()
+                    self.destroy_link()
+                    messages.success(
+                        request, f'Tu correo ha sido verificado con éxito. Inicia sesion con tu cuenta!')
+                    return HttpResponseRedirect(reverse_lazy("users:login"))
+            else:
+                if self.token_generator.check_token(self.user, token):
+
+                    # Store the token in the session and redirect to the
+                    # password reset form at a URL without the token. That
+                    # avoids the possibility of leaking the token in the
+                    # HTTP Referer header.
+                    self.request.session[INTERNAL_RESET_SESSION_TOKEN] = token
+                    redirect_url = self.request.path.replace(
+                        token, self.reset_url_token)
+                    return HttpResponseRedirect(redirect_url)
+
+        # no se pudo validar los datos
+        messages.error(
+            request, f'link inválido o caducado. Genere un nuevo link de verifición  para recuperar su cuenta!')
+        return HttpResponseRedirect(reverse_lazy("users:password-reset-form"))
+
+    def get_user(self, uidb64):
         try:
-            cuenta = Account.objects.get(
-                id=id_cuenta, verification_code=codigo)
-            cuenta.verify_email = True
-            cuenta.save()
-            messages.success(
-                request, f'Tu email a sido verificado con éxito')
-        except Account.DoesNotExist:
-            messages.error(request, f'Error al verificar el email')
-        return HttpResponseRedirect(reverse_lazy("users:login"))
+            # urlsafe_base64_decode() decodes to bytestring
+            uid = urlsafe_base64_decode(uidb64).decode()
+            user = UserModel._default_manager.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist, ValidationError):
+            user = None
+        return user
+
+    def destroy_link(self):
+        del self.request.session[INTERNAL_RESET_SESSION_TOKEN]
 
 
 class RegisterGoogleUserCreateView(CreateView):
@@ -164,17 +217,16 @@ class EmployeeUserUpdateView(OpticPermitMixin, UpdateView):
         messages.success(
             self.request, f'Tus datos han sido actuliazados correctamente')
         self.object = form.save()
-        cuenta=self.object.account
-        cuenta.full_name=form.cleaned_data['full_name']
+        cuenta = self.object.account
+        cuenta.full_name = form.cleaned_data['full_name']
         cuenta.save()
         return super().form_valid(form)
 
     def post(self, request, *args, **kwargs):
-        if int(kwargs.get('pk'))==request.user.employeeuser.id:
+        if int(kwargs.get('pk')) == request.user.employeeuser.id:
             return super().post(request, *args, **kwargs)
         else:
-            raise PermissionDenied()     
-
+            raise PermissionDenied()
 
 
 class OpticUserUpdateView(OpticPermitMixin, UpdateView):
@@ -235,14 +287,14 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, CreateView):
         self.object = None
         context = self.get_context_data()
         if 'id' in request.GET:
-            if(EmployeeUser.objects.get(id=request.GET['id']).optic!=request.user.get_opticuser()):
+            if(EmployeeUser.objects.get(id=request.GET['id']).optic != request.user.get_opticuser()):
                 raise PermissionDenied()
             context['form'] = self.form_class(
                 instance=Account.objects.get(employeeuser__id=request.GET['id']))
             context['form_employee'] = self.form_class_secondary(
                 instance=EmployeeUser.objects.get(id=request.GET['id']))
             context['id'] = request.GET['id']
-            self.permission_required=('users.change_employeeuser',)
+            self.permission_required = ('users.change_employeeuser',)
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
@@ -261,7 +313,7 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, CreateView):
         if id:
             # actualizamos
             instancia_cuenta = Account.objects.get(employeeuser__id=id)
-            pass_out=instancia_cuenta.password
+            pass_out = instancia_cuenta.password
             instancia_empleado = EmployeeUser.objects.get(id=id)
             form_user = self.form_class(
                 request.POST, instance=instancia_cuenta,)
@@ -272,7 +324,7 @@ class UserOfOpticCreateView(OpticPermissionRequiredMixin, CreateView):
                 if form_user.cleaned_data['password']:
                     cuenta.set_password(form_user.cleaned_data['password'])
                 else:
-                    cuenta.password=pass_out
+                    cuenta.password = pass_out
                 if 'picture' in request.FILES:
                     cuenta.picture = request.FILES['picture']
                 cuenta.save()
@@ -337,10 +389,12 @@ class PasswordResetConfirmView2(PasswordResetConfirmView):
     def post(self, request, *args, **kwargs):
         form = self.get_form()
         if form.is_valid():
-            messages.success(request, f'Su contraseña a sido recuperado con éxito. Inicie sesión con su nueva clave')
+            messages.success(
+                request, f'Su contraseña a sido recuperado con éxito. Inicie sesión con su nueva clave')
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
 
 class ConfigurationUpdateView(UpdateView):
     model = Configuration
@@ -348,7 +402,6 @@ class ConfigurationUpdateView(UpdateView):
     template_name = "users/configuration.html"
 
     def post(self, request, *args, **kwargs):
-        self.success_url = reverse_lazy('users:configuration', args=[request.user.configuration.id])
+        self.success_url = reverse_lazy('users:configuration', args=[
+                                        request.user.configuration.id])
         return super().post(request, *args, **kwargs)
-
-

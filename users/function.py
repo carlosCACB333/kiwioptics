@@ -1,14 +1,9 @@
-import random
-import string
-from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
-
+from django.template import loader
 
 def create_mail(user_mail, subject, template_name, context):
-    template = get_template(template_name)
-    content = template.render(context)
-
+    
     message = EmailMultiAlternatives(
         subject=subject,
         body='',
@@ -19,9 +14,9 @@ def create_mail(user_mail, subject, template_name, context):
         cc=[]
     )
 
-    message.attach_alternative(content, 'text/html')
+    html_email = loader.render_to_string(template_name, context)
+    message.attach_alternative(html_email, 'text/html')
     return message
 
 
-def code_generator(size=8, chars=string.ascii_uppercase+string.digits):
-    return ''.join(random.choice(chars) for _ in range(size))
+

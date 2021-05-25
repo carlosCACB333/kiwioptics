@@ -160,11 +160,12 @@
         >
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-              <div class="modal-header">
+              <div class="modal-header flex-column">
                 <h5 class="modal-title">Datos del paciente</h5>
               </div>
-              <div class="modal-body">
+              <div class="modal-body" >
               <form action="" id="prescription_form">
+                
                   <input type="hidden" id="id_patient" name="id" data-url-update="{% url 'medidas:rest-patient-update' 0 %}" data-url-delete="{% url 'medidas:rest-patient-delete' 0 %}">
                 {{patient_form}}
               </form>

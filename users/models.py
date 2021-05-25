@@ -23,7 +23,6 @@ class Account(AbstractUser, PermissionsMixin):
         "perfil", upload_to="account", blank=True, null=True, max_length=255)
     user_type = models.CharField(
         choices=Types.choices, max_length=10, blank=False, null=False)
-    verification_code = models.CharField('codigo de verificacion', max_length=8,blank=True,null=True)
     verify_email = models.BooleanField('email verificado',default=False)
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []

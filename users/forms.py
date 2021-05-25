@@ -11,6 +11,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.contrib import messages
+from django.db.models import Q
 
 class ConfigurationForm(forms.ModelForm):
     
@@ -131,9 +132,7 @@ class UserOfOpticForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserOfOpticForm, self).__init__(*args, **kwargs)
         self.fields['password'].required = False 
-        self.fields['user_permissions'].queryset=Permission.objects.all().exclude(
-            codename__icontains="view_"
-            ).exclude(codename__icontains="_Token").exclude(codename__icontains="_session").exclude(codename__icontains="_contenttype").exclude(codename__icontains='_logentry')
+        self.fields['user_permissions'].queryset=Permission.objects.all().exclude(Q(codename__icontains="view_")|Q(codename__icontains="_Token")|Q(codename__icontains="_session")|Q(codename__icontains="_contenttype")|Q(codename__icontains='_logentry')|Q(codename__icontains='_permission')|Q(codename__icontains='_group')|Q(codename__icontains='_account')|Q(codename__icontains='_opticuser')|Q(codename__icontains='_configuration')|Q(codename__icontains='_employeeuser')|Q(codename__icontains='_subsidiary')|Q(codename__icontains='_laboratory')|Q(codename__icontains='_patient'));
             
         for field_name, field in self.fields.items():
             field.widget.attrs['placeholder'] = field.label
