@@ -6,14 +6,22 @@ from django.shortcuts import get_object_or_404, redirect
 from django.db.models import Q
 from django.contrib.auth.models import Permission
 
+
 def logout_required(func):
+    """
+    decorador, solo pueden acceder los usuarios no auntenticados
+    """
     def wrapper(request):
         if request.user.is_authenticated:
             return redirect('medidas:index')
         return func(request)
     return wrapper
 
+
 def model_owned_required(model):
+    """
+    Las opticas solo pueden acceder a sus modelos
+    """
     def decorator(func):
         def wrapper(request, pk):
             model_instance = get_object_or_404(model, pk=pk)
@@ -23,7 +31,11 @@ def model_owned_required(model):
         return wrapper
     return decorator
 
+
 def roles_required(allowed_roles=[]):
+    """
+    Solo pueden acceder los usuarios con los permisos requeridos
+    """
     def decorator(func):
         def wrapper(request, *args, **kwargs):
             if request.user.user_type == 'OPTIC':
@@ -45,9 +57,10 @@ def roles_required(allowed_roles=[]):
 #             else:
 #                 user = request.user
 #                 user_permissions = Permission.objects.filter(Q(user=user) | Q(group__user=user)).distinct().values_list('codename', flat=True)
-#                 . 
+#                 .
 #         return wrapper
 #     return decorator
+
 
 def any_permission_required(perms, login_url=None, raise_exception=False):
     """

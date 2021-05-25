@@ -7,7 +7,9 @@ from users.models import Account
 
 
 class PatientForm(ModelForm):
-
+    """
+    Formulario que se desplegara en el frontend del cliente"
+    """
     class Meta:
         model = Patient
         exclude = ('optic', 'patient_optic_id')
@@ -28,7 +30,9 @@ class PatientForm(ModelForm):
 
 
 class PrescriptionForm(ModelForm):
-
+    """
+    Formulario dinamico con los campos de las prescripciones según la configuración
+    """
     dip_choices = Prescription.dnp_choices[:]
     for i in range(len(dip_choices)):
         dip_choices[i] = list(dip_choices[i])
@@ -88,7 +92,9 @@ class PrescriptionForm(ModelForm):
 
 
 class CrystalForm(ModelForm):
-
+    """
+    Formulario de los tipos de luna
+    """
     class Meta:
         model = Crystal
         fields = ['crystal_name', 'material', 'treatments', 'default_price']
@@ -105,7 +111,9 @@ class CrystalForm(ModelForm):
 
 
 class CrystalMaterialForm(ModelForm):
-
+    """
+    Formulario de los materiales de la luna
+    """
     class Meta:
         model = CrystalMaterial
         exclude = ('optic',)
@@ -118,7 +126,9 @@ class CrystalMaterialForm(ModelForm):
 
 
 class CrystalTreatmentsForm(ModelForm):
-
+    """
+    Formulario de los tratamientos de las lunas
+    """
     class Meta:
         model = CrystalTreatments
         exclude = ('optic',)
@@ -131,7 +141,9 @@ class CrystalTreatmentsForm(ModelForm):
 
 
 class SubsidiaryForm(ModelForm):
-
+    """
+    Formulario de las sucursales 
+    """
     class Meta:
         model = Subsidiary
         exclude = ('optic',)
@@ -143,7 +155,9 @@ class SubsidiaryForm(ModelForm):
 
 
 class LaboratoryForm(ModelForm):
-
+    """
+    Formulario de los laboratorios
+    """
     class Meta:
         model = Laboratory
         exclude = ('optic',)

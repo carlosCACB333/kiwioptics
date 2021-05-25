@@ -1,8 +1,7 @@
 from django.contrib import admin
 from .models import Prescription, Patient, Crystal, CrystalMaterial, CrystalTreatments, Laboratory, Subsidiary
-# Register your models here.
 
-
+# Registramos al modelo sucursales
 admin.site.register(Subsidiary)
 
 # @admin.register(Crystal)
@@ -18,10 +17,11 @@ admin.site.register(Subsidiary)
 
 #     def get_treatments(self, obj):
 #         return ", ".join([p.name for p in obj.treatments.all()])
-    
+
 #     get_treatments.short_description = 'Tratamientos'
 
 
+# Registramos al modelo pacientes
 @admin.register(Patient)
 class PatientAdmin(admin.ModelAdmin):
     list_display = (
@@ -44,7 +44,6 @@ class PatientAdmin(admin.ModelAdmin):
         return f"{obj.full_name}"
 
 
-
 # @admin.register(Laboratory)
 # class LaboratoryAdmin(admin.ModelAdmin):
 #     list_display = (
@@ -59,10 +58,11 @@ class PatientAdmin(admin.ModelAdmin):
 #         'name',
 #     )
 
-
+# Registramos al modelo de prescripciones
 @admin.register(Prescription)
 class PrescriptionAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in Prescription._meta.get_fields() if field.name != 'observation']
+    list_display = [field.name for field in Prescription._meta.get_fields(
+    ) if field.name != 'observation']
     fieldsets = (
         (None, {
             "fields": (
@@ -74,8 +74,8 @@ class PrescriptionAdmin(admin.ModelAdmin):
                 'collapse',
             ),
             "fields": (
-                ('far_spherical_right','far_cylinder_right','far_axis_right'),
-                ('far_spherical_left','far_cylinder_left','far_axis_left'),
+                ('far_spherical_right', 'far_cylinder_right', 'far_axis_right'),
+                ('far_spherical_left', 'far_cylinder_left', 'far_axis_left'),
             ),
         }),
         ('Medidas de Cerca', {
@@ -83,8 +83,8 @@ class PrescriptionAdmin(admin.ModelAdmin):
                 'collapse',
             ),
             "fields": (
-                ('near_spherical_right','near_cylinder_right','near_axis_right'),
-                ('near_spherical_left','near_cylinder_left','near_axis_left'),
+                ('near_spherical_right', 'near_cylinder_right', 'near_axis_right'),
+                ('near_spherical_left', 'near_cylinder_left', 'near_axis_left'),
             ),
         }),
         ('Otros', {
@@ -92,16 +92,16 @@ class PrescriptionAdmin(admin.ModelAdmin):
                 'collapse',
             ),
             "fields": (
-                'intermediate_add','near_add','patient_notes','laboratory_notes','optic_notes'
+                'intermediate_add', 'near_add', 'patient_notes', 'laboratory_notes', 'optic_notes'
             ),
         }),
         ('Lunas y monturas', {
             "fields": (
-                'measure_price', 'crystals','crystals_price','frame','frame_price'
+                'measure_price', 'crystals', 'crystals_price', 'frame', 'frame_price'
             ),
         }),
     )
-    
+
     list_display_links = (
         'id',
         'patient',
@@ -116,4 +116,6 @@ class PrescriptionAdmin(admin.ModelAdmin):
     # list_filter = ('job','habilidades')
     # filter_vertical = ('habilidades',)
 
+
+# Registramos al modelo de laboratorios
 admin.site.register(Laboratory)

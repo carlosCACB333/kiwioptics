@@ -10,7 +10,9 @@ from termcolor import colored
 
 
 class Patient(models.Model):
-
+    """
+    Tabla con los campos del paciente
+    """
     class Gender(models.TextChoices):
         MALE = 'MALE', 'Masculino'
         FEMALE = 'FEMALE', 'Femenino'
@@ -49,6 +51,9 @@ class Patient(models.Model):
 
 
 class DiagnosisChoices(models.TextChoices):
+    """
+    Diagnosticos a sugerir
+    """
     MYOPIA = 'MYOPIA', 'Miopía'
     ASTIGMATISM = 'ASTIGMATISM', 'Astigmatismo'
     FARSIGHTEDNESS = 'FARSIGHTEDNESS', 'Hipermetropía'
@@ -67,6 +72,9 @@ class DiagnosisChoices(models.TextChoices):
 
 
 class Subsidiary(models.Model):
+    """
+    Tabla de sucursales
+    """
     subsidiary_name = models.CharField(
         "Nombre Sucursal", max_length=30, blank=True)
     direction = models.CharField("Dirección", max_length=50, blank=True)
@@ -83,6 +91,9 @@ class Subsidiary(models.Model):
 
 
 class Laboratory(models.Model):
+    """
+    Tabla de laboratorio
+    """
     laboratory_name = models.CharField(
         "Laboratorio", max_length=40, null=False)
     direction = models.CharField("Dirección", max_length=50, blank=True)
@@ -99,6 +110,9 @@ class Laboratory(models.Model):
 
 
 class CrystalTreatments(models.Model):
+    """
+    Tabla de tratamiento
+    """
     treatment_name = models.CharField("Nombre del tratamiento", max_length=50)
     description = models.TextField("Descripcion", blank=True)
     optic = models.ForeignKey(
@@ -113,7 +127,9 @@ class CrystalTreatments(models.Model):
 
 
 class CrystalMaterial(models.Model):
-
+    """
+    Tabla de material
+    """
     material_name = models.CharField("Nombre del Material", max_length=50)
     refractive_index = models.DecimalField(
         "Indice de refracción", max_digits=4, decimal_places=3, blank=True, null=True)
@@ -132,7 +148,9 @@ class CrystalMaterial(models.Model):
 
 
 class Crystal(models.Model):
-
+    """
+    Tabla de lunas
+    """
     crystal_name = models.CharField("Nombre Luna", max_length=70)
     material = models.ForeignKey(
         CrystalMaterial, verbose_name="Material", on_delete=models.SET_NULL, null=True, blank=True)
@@ -159,6 +177,9 @@ class Crystal(models.Model):
 
 
 class Prescription(models.Model):
+    """
+    Tabla de prescripcion
+    """
     class PrescriptionType(models.TextChoices):
         MONOFOCAL = 'MONOFOCAL', 'Monofocal'
         BIFOCAL = 'BIFOCAL', 'Bifocal'
@@ -350,6 +371,9 @@ class Prescription(models.Model):
         return total
 
     def has_far_table(self):
+        """
+        Comprueba si la prescripcion tiene tabla de lejos
+        """
         if (self.far_spherical_right is not None or self.far_cylinder_right is not None
             or self.far_axis_right is not None or self.far_av_right is not None or
             self.far_dnp_right is not None
@@ -360,6 +384,9 @@ class Prescription(models.Model):
         return False
 
     def has_intermediate_table(self):
+        """
+        Comprueba si la repscripciones tiene tabla intermedia
+        """
         if (self.intermediate_spherical_right is not None or self.intermediate_cylinder_right is not None
             or self.intermediate_axis_right is not None or self.intermediate_av_right is not None or
             self.intermediate_dnp_right is not None
@@ -370,6 +397,9 @@ class Prescription(models.Model):
         return False
 
     def has_near_table(self):
+        """
+        Comprueba si la prescripcion tiene tabla de cerca
+        """
         if (self.near_spherical_right is not None or self.near_cylinder_right is not None
             or self.near_axis_right is not None or self.near_av_right is not None or
             self.near_dnp_right is not None
