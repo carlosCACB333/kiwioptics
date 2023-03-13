@@ -8,9 +8,10 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/asgi/
 """
 
 import os
-
+from decouple import config
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myOptica.settings.prod')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE',
+                      f'myOptica.settings.{config("ENVIRONMENT", default="local")}')
 
 application = get_asgi_application()
